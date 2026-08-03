@@ -5,77 +5,74 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>九九乘法小游戏</title>
+<title>九九乘法学习闯关</title>
 
 
 <style>
 
 body{
-
-margin:0;
-padding:20px;
-
-background:#eef6ff;
-
-font-family:
-Arial,
-"Microsoft YaHei";
-
-text-align:center;
-
+    margin:0;
+    padding:20px;
+    background:#eaf4ff;
+    font-family:"Microsoft YaHei",Arial;
+    text-align:center;
 }
 
 
 .box{
 
-max-width:420px;
-
-margin:auto;
-
-background:white;
-
-border-radius:20px;
-
-padding:25px;
+    max-width:430px;
+    margin:auto;
+    background:white;
+    border-radius:25px;
+    padding:25px;
+    box-shadow:0 5px 20px #ccc;
 
 }
 
 
 h1{
 
-font-size:30px;
+    font-size:30px;
 
 }
 
 
-.info{
+.level{
 
-font-size:22px;
-
-line-height:40px;
-
-}
-
-
-#question{
-
-font-size:45px;
-
-margin:30px;
+    font-size:22px;
+    color:#3478f6;
+    margin:10px;
 
 }
 
 
 
-#answer{
+.progress{
 
-height:45px;
+    font-size:18px;
+    margin:15px;
 
-font-size:35px;
+}
 
-color:#3478f6;
+
+
+.question{
+
+    font-size:45px;
+    font-weight:bold;
+    margin:30px;
+
+}
+
+
+
+.answer{
+
+    font-size:35px;
+    color:#3478f6;
 
 }
 
@@ -83,12 +80,9 @@ color:#3478f6;
 
 .buttons{
 
-display:grid;
-
-grid-template-columns:
-repeat(3,1fr);
-
-gap:10px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
 
 }
 
@@ -96,17 +90,12 @@ gap:10px;
 
 button{
 
-height:60px;
-
-font-size:28px;
-
-border:0;
-
-border-radius:15px;
-
-background:#3478f6;
-
-color:white;
+    height:60px;
+    border:0;
+    border-radius:15px;
+    font-size:28px;
+    background:#3478f6;
+    color:white;
 
 }
 
@@ -114,7 +103,23 @@ color:white;
 
 button:active{
 
-transform:scale(0.95);
+    transform:scale(0.95);
+
+}
+
+
+
+.control{
+
+    margin-top:20px;
+
+}
+
+
+
+.clear{
+
+    background:#ff9800;
 
 }
 
@@ -122,30 +127,52 @@ transform:scale(0.95);
 
 .submit{
 
-background:#28a745;
+    background:#28a745;
 
 }
 
 
-.clear{
 
-background:#ff9800;
+.message{
+
+    height:45px;
+    font-size:25px;
+    margin-top:20px;
 
 }
 
 
-#message{
 
-height:40px;
+.star{
 
-font-size:25px;
+    font-size:35px;
+    margin:10px;
 
-margin-top:20px;
+}
+
+
+
+.reset{
+
+    background:#777;
+    font-size:18px;
+    height:45px;
+    margin-top:10px;
+
+}
+
+
+
+.tip{
+
+    color:#666;
+    font-size:16px;
 
 }
 
 
 </style>
+
 
 </head>
 
@@ -157,35 +184,30 @@ margin-top:20px;
 
 
 <h1>
-🎮 九九乘法小游戏
+🎮 九九乘法学习
 </h1>
 
 
 
-<div class="info">
+<div class="level" id="level">
 
-⭐ 得分：
-<span id="score">
-0
-</span>
-
-<br>
-
-
-❤️ 生命：
-
-<span id="life">
-❤️❤️❤️
-</span>
-
+第1组：1的口诀
 
 </div>
 
 
 
-<div id="question">
+<div class="progress" id="progress">
 
-准备开始
+学习进度
+
+</div>
+
+
+
+<div class="question" id="question">
+
+1 × 1 = ?
 
 </div>
 
@@ -193,21 +215,26 @@ margin-top:20px;
 
 <div>
 
-你的答案：
+答案：
 
-<span id="answer"></span>
+<span class="answer" id="answer">
+
+</span>
 
 </div>
 
 
-<br>
-
-
-
-<div class="buttons" id="buttons"></div>
-
 
 <br>
+
+
+<div class="buttons" id="buttons">
+
+</div>
+
+
+
+<div class="control">
 
 
 <button class="clear" onclick="clearAnswer()">
@@ -217,6 +244,7 @@ margin-top:20px;
 </button>
 
 
+
 <button class="submit" onclick="submitAnswer()">
 
 提交
@@ -224,57 +252,68 @@ margin-top:20px;
 </button>
 
 
-<div id="message"></div>
+</div>
 
 
+
+<div class="message" id="message">
 
 </div>
 
 
 
+<div class="star" id="stars">
+
+⭐⭐⭐
+
+</div>
+
+
+
+<div class="tip">
+
+答对获得星星 ⭐
+
+</div>
+
+
+
+<button class="reset" onclick="resetGame()">
+
+重新开始
+
+</button>
+
+
+</div>
+
+
 <script>
 
 
-let a,b;
+// ===== 游戏数据 =====
+
+
+let group =
+Number(localStorage.getItem("group")) || 1;
+
+
+let index =
+Number(localStorage.getItem("index")) || 1;
+
 
 let userAnswer="";
 
-let score=0;
 
-let life=3;
-
-
-
-function newQuestion(){
+let stars =
+Number(localStorage.getItem("stars")) || 0;
 
 
-a=Math.floor(Math.random()*9)+1;
-
-b=Math.floor(Math.random()*9)+1;
+let correctAnswer=0;
 
 
-document.getElementById("question")
-.innerHTML=
 
-a+" × "+b+" = ?";
-
-
-userAnswer="";
-
-
-document.getElementById("answer")
-.innerHTML="";
-
-
-document.getElementById("message")
-.innerHTML="";
-
-
-createButtons();
-
-
-}
-
+// 创建数字按钮
 
 
 function createButtons(){
@@ -286,11 +325,9 @@ let html="";
 for(let i=1;i<=9;i++){
 
 
-html+=
+html += `
 
-`
-
-<button onclick="input(${i})">
+<button onclick="inputNumber(${i})">
 
 ${i}
 
@@ -301,11 +338,9 @@ ${i}
 }
 
 
-html+=
+html += `
 
-`
-
-<button onclick="input(0)">
+<button onclick="inputNumber(0)">
 
 0
 
@@ -314,8 +349,7 @@ html+=
 `;
 
 
-document.getElementById("buttons")
-.innerHTML=html;
+document.getElementById("buttons").innerHTML=html;
 
 
 }
@@ -323,17 +357,64 @@ document.getElementById("buttons")
 
 
 
-function input(num){
+// 出题
+
+function newQuestion(){
+
+
+document.getElementById("level").innerHTML=
+
+"第 "+group+" 组："+group+" 的口诀";
+
+
+document.getElementById("question").innerHTML=
+
+group+" × "+index+" = ?";
+
+
+correctAnswer=
+
+group*index;
+
+
+userAnswer="";
+
+
+document.getElementById("answer").innerHTML="";
+
+
+document.getElementById("message").innerHTML="";
+
+
+showProgress();
+
+
+createButtons();
+
+
+document.getElementById("stars").innerHTML=
+
+"⭐".repeat(Math.min(stars,10));
+
+
+}
+
+
+
+// 输入答案
+
+function inputNumber(num){
 
 
 if(userAnswer.length<2){
 
 
-userAnswer+=num;
+userAnswer += num;
 
 
-document.getElementById("answer")
-.innerHTML=userAnswer;
+document.getElementById("answer").innerHTML=
+
+userAnswer;
 
 
 }
@@ -342,6 +423,8 @@ document.getElementById("answer")
 }
 
 
+
+// 清除答案
 
 function clearAnswer(){
 
@@ -349,100 +432,396 @@ function clearAnswer(){
 userAnswer="";
 
 
-document.getElementById("answer")
-.innerHTML="";
+document.getElementById("answer").innerHTML="";
 
 
 }
 
 
 
+// 提交答案
+
 function submitAnswer(){
 
 
-if(userAnswer==""){
+
+if(userAnswer===""){
 
 return;
 
 }
 
 
-let correct=a*b;
+
+if(Number(userAnswer)===correctAnswer){
 
 
-if(Number(userAnswer)==correct){
+
+playGoodSound();
 
 
-score+=10;
+
+stars++;
 
 
-document.getElementById("message")
-.innerHTML=
 
-"⭐ 答对啦";
+document.getElementById("message").innerHTML=
+
+"🎉 答对啦！";
+
+
+document.getElementById("stars").innerHTML=
+
+"⭐".repeat(Math.min(stars,10));
+
+
+
+setTimeout(nextQuestion,700);
+
 
 
 }else{
 
 
-life--;
+
+playErrorSound();
 
 
-document.getElementById("message")
-.innerHTML=
 
-"❌ 正确答案："+correct;
+document.getElementById("message").innerHTML=
+
+"❌ 再想想哦";
+
+
+}
 
 
 }
 
 
 
-document.getElementById("score")
-.innerHTML=score;
 
+// 下一题
 
-document.getElementById("life")
-.innerHTML=
-
-"❤️".repeat(life);
+function nextQuestion(){
 
 
 
-if(life<=0){
+index++;
 
 
-alert(
-"游戏结束！得分："+score
-);
+
+// 完成当前口诀
+
+if(index>9){
 
 
-score=0;
+group++;
 
-life=3;
+
+index=1;
+
+
+
+playWinSound();
+
+
+
+if(group>9){
+
+
+document.getElementById("message").innerHTML=
+
+"🏆 恭喜完成全部九九乘法！";
+
+
+localStorage.clear();
+
+
+return;
 
 
 }
 
 
 
-setTimeout(
-newQuestion,
-800
-);
-
-
-
 }
 
+
+
+saveProgress();
 
 
 newQuestion();
+
+
+}
+
+
+
+
+// 保存学习进度
+
+
+function saveProgress(){
+
+
+localStorage.setItem(
+
+"group",
+
+group
+
+);
+
+
+localStorage.setItem(
+
+"index",
+
+index
+
+);
+
+
+localStorage.setItem(
+
+"stars",
+
+stars
+
+);
+
+
+}
+
+
+
+
+// 显示进度
+
+function showProgress(){
+
+
+let done=index-1;
+
+
+let text="";
+
+
+for(let i=1;i<=9;i++){
+
+
+if(i<=done){
+
+text+="✅";
+
+}else{
+
+text+="⬜";
+
+}
+
+
+}
+
+
+document.getElementById("progress").innerHTML=
+
+"进度："+text;
+
+
+}
+
+
+
+// 普通答对声音
+
+function playGoodSound(){
+
+
+let ctx=
+new(window.AudioContext||window.webkitAudioContext)();
+
+
+
+let osc=ctx.createOscillator();
+
+
+let gain=ctx.createGain();
+
+
+
+osc.connect(gain);
+
+
+gain.connect(ctx.destination);
+
+
+
+osc.frequency.value=880;
+
+
+gain.gain.value=0.15;
+
+
+
+osc.start();
+
+
+osc.stop(
+
+ctx.currentTime+0.15
+
+);
+
+
+}
+
+
+
+// 错误声音
+
+function playErrorSound(){
+
+
+let ctx=
+new(window.AudioContext||window.webkitAudioContext)();
+
+
+
+let osc=ctx.createOscillator();
+
+
+let gain=ctx.createGain();
+
+
+
+osc.connect(gain);
+
+
+gain.connect(ctx.destination);
+
+
+
+osc.frequency.value=220;
+
+
+gain.gain.value=0.15;
+
+
+
+osc.start();
+
+
+osc.stop(
+
+ctx.currentTime+0.2
+
+);
+
+
+}
+
+// 完成一组奖励声音
+
+function playWinSound(){
+
+
+let ctx=
+new(window.AudioContext||window.webkitAudioContext)();
+
+
+
+let notes=[600,800,1000];
+
+
+notes.forEach(function(note,i){
+
+
+let osc=ctx.createOscillator();
+
+
+let gain=ctx.createGain();
+
+
+
+osc.connect(gain);
+
+
+gain.connect(ctx.destination);
+
+
+
+osc.frequency.value=note;
+
+
+gain.gain.value=0.15;
+
+
+
+osc.start(
+
+ctx.currentTime+i*0.15
+
+);
+
+
+
+osc.stop(
+
+ctx.currentTime+i*0.15+0.15
+
+);
+
+
+});
+
+
+}
+
+
+
+// 重新开始
+
+function resetGame(){
+
+
+if(confirm("确定重新开始学习吗？")){
+
+
+localStorage.clear();
+
+
+group=1;
+
+
+index=1;
+
+
+stars=0;
+
+
+newQuestion();
+
+
+}
+
+
+}
+
+
+
+// 启动游戏
+
+newQuestion();
+
 
 
 </script>
 
 
 </body>
+
 
 </html>

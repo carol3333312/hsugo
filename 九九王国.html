@@ -2,544 +2,120 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>九九成长树 · 真实果实版</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>九九成长树 V1.0</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{
-  height:100vh;
-  overflow:hidden;
-  font-family:"Microsoft YaHei",sans-serif;
-  background:linear-gradient(#87ceeb 0%,#c8e6c9 60%,#a5d6a7 100%);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-.game{
-  width:100%;
-  max-width:420px;
-  height:100%;
-  max-height:920px;
-  padding:10px;
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-}
-.top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  font-weight:bold;
-  font-size:17px;
-  background:#ffffffcc;
-  padding:8px 12px;
-  border-radius:14px;
-  backdrop-filter:blur(4px);
-}
-.scene{
-  flex:1;
-  min-height:180px;
-  position:relative;
-  background:linear-gradient(#87ceeb 0%,#b3e5fc 40%,#c8e6c9 70%,#81c784 100%);
-  border-radius:18px;
-  overflow:hidden;
-  box-shadow:inset 0 -20px 30px rgba(0,0,0,0.05);
-}
-.sun{
-  position:absolute;
-  top:12px;
-  left:16px;
-  font-size:34px;
-  filter:drop-shadow(0 0 8px #ffeb3b);
-}
-.cloud{
-  position:absolute;
-  top:18px;
-  right:20px;
-  font-size:26px;
-  opacity:0.85;
-}
-/* ===== 真实的树 ===== */
-.tree-area{
-  position:absolute;
-  bottom:0;
-  left:50%;
-  transform:translateX(-50%);
-  width:220px;
-  height:100%;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:flex-end;
-}
-.canopy{
-  position:relative;
-  width:180px;
-  height:140px;
-  background:radial-gradient(circle at 50% 40%, #66bb6a 0%, #43a047 70%, #2e7d32 100%);
-  border-radius:50% 50% 45% 45%;
-  box-shadow:
-    inset -15px -10px 20px rgba(0,0,0,0.15),
-    0 8px 15px rgba(0,0,0,0.1);
-  transition:all 0.5s ease;
-  z-index:2;
-}
-.canopy::before{
-  content:"";
-  position:absolute;
-  width:90px;
-  height:70px;
-  background:#4caf50;
-  border-radius:50%;
-  top:-20px;
-  left:10px;
-  box-shadow:40px -10px 0 #66bb6a, 70px 15px 0 #43a047;
-}
-.trunk{
-  width:28px;
-  height:70px;
-  background:linear-gradient(90deg,#8d6e63,#6d4c41,#5d4037);
-  border-radius:4px 4px 0 0;
-  position:relative;
-  z-index:1;
-  box-shadow:inset -4px 0 6px rgba(0,0,0,0.25);
-}
-.ground{
-  position:absolute;
-  bottom:0;
-  left:0;
-  right:0;
-  height:28px;
-  background:linear-gradient(#81c784,#66bb6a);
-  border-radius:0 0 18px 18px;
-}
-/* 果实 */
-.fruit{
-  position:absolute;
-  font-size:22px;
-  z-index:5;
-  animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards;
-  filter:drop-shadow(0 2px 2px rgba(0,0,0,0.2));
-  cursor:default;
-  user-select:none;
-}
-@keyframes popIn{
-  0%{transform:scale(0) rotate(-20deg);opacity:0}
-  70%{transform:scale(1.2) rotate(8deg)}
-  100%{transform:scale(1) rotate(0);opacity:1}
-}
-.hero{
-  position:absolute;
-  bottom:22px;
-  right:18px;
-  font-size:36px;
-  z-index:6;
-}
-.info{
-  background:#ffffffee;
-  border-radius:14px;
-  padding:8px 10px;
-  text-align:center;
-}
-.info-row{
-  display:flex;
-  justify-content:space-around;
-  font-weight:bold;
-  margin-bottom:5px;
-  font-size:14px;
-}
-.progress{
-  height:11px;
-  background:#e8f5e9;
-  border-radius:10px;
-  overflow:hidden;
-}
-.bar{
-  height:100%;
-  width:0%;
-  background:linear-gradient(90deg,#66bb6a,#43a047);
-  transition:width 0.4s ease;
-  border-radius:10px;
-}
-.card{
-  background:#ffffffee;
-  border-radius:16px;
-  padding:10px;
-  text-align:center;
-  box-shadow:0 2px 10px rgba(0,0,0,0.06);
-}
-.kou{
-  font-size:26px;
-  font-weight:bold;
-  color:#2e7d32;
-  margin:2px 0 4px;
-}
-.question{
-  font-size:28px;
-  font-weight:bold;
-  margin:4px 0 8px;
-}
-.input-area{
-  display:flex;
-  justify-content:center;
-  margin-bottom:6px;
-}
-#ans{
-  width:110px;
-  height:40px;
-  font-size:24px;
-  text-align:center;
-  border-radius:12px;
-  border:2px solid #81c784;
-  background:#fff;
-}
-.keys{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:5px;
-}
-button{
-  border:0;
-  border-radius:11px;
-  height:40px;
-  font-size:17px;
-  font-weight:bold;
-  cursor:pointer;
-}
-.key{background:#fff;border:1px solid #e0e0e0}
-.ok{background:#43a047;color:#fff}
-.del{background:#ffcc80;color:#333}
-.clear{background:#ef9a9a;color:#333}
-.restart{background:#90caf9;color:#1565c0;font-size:14px}
-.msg{
-  height:22px;
-  font-size:14px;
-  font-weight:bold;
-  color:#2e7d32;
-}
-.overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.5);
-  display:none;
-  justify-content:center;
-  align-items:center;
-  z-index:99;
-}
-.overlay.show{display:flex}
-.modal{
-  background:#fff;
-  border-radius:20px;
-  padding:26px 22px;
-  text-align:center;
-  max-width:300px;
-  width:90%;
-  box-shadow:0 12px 32px rgba(0,0,0,0.2);
-}
-.modal h2{margin-bottom:10px;color:#2e7d32;font-size:22px}
-.modal p{margin-bottom:16px;line-height:1.5;font-size:15px}
-.modal button{
-  background:#43a047;
-  color:#fff;
-  padding:0 26px;
-  height:42px;
-  font-size:16px;
-}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(#a9e3ff,#eaffd0);font-family:"Microsoft YaHei",sans-serif}
+.app{max-width:390px;height:100vh;margin:auto;padding:8px;display:flex;flex-direction:column;overflow:hidden}
+.scene{background:#ffffffaa;border-radius:25px;flex:1;text-align:center;padding:10px;display:flex;flex-direction:column}
+.top{display:flex;justify-content:space-between;font-weight:bold}
+.hero{font-size:40px}
+.tree{font-size:100px;line-height:110px}
+.fruit{font-size:30px;height:35px}
+.info{font-size:16px}
+.barbg{height:12px;background:#ddd;border-radius:10px}
+.bar{height:100%;background:#4caf50;width:0}
+.kou{font-size:34px;font-weight:bold;margin:8px;color:#111}
+.question{font-size:35px;font-weight:bold}
+input{width:110px;height:40px;font-size:25px;text-align:center}
+.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px}
+button{border:0;border-radius:12px;height:38px;font-size:16px}
+.key{background:#eef5ff}
+.main{background:#4caf50;color:white}
+.msg{color:#2e7d32;height:24px}
 </style>
 </head>
 <body>
-<div class="game">
+<div class="app">
+<div class="scene">
+<div class="top"><span>🌱九九成长树</span><span id="group"></span></div>
+<div>⭐<span id="score">0</span></div>
+<div class="hero">👦</div>
+<div id="tree" class="tree">🌰</div>
+<div id="fruit" class="fruit"></div>
 
-  <div class="top">
-    <div>🌱 九九成长树</div>
-    <div id="group">一的乘法村</div>
-  </div>
+<div id="progress"></div>
+<div class="barbg"><div id="bar" class="bar"></div></div>
 
-  <div class="scene">
-    <div class="sun">☀️</div>
-    <div class="cloud">☁️</div>
+<div class="kou" id="kou"></div>
+<button onclick="voice()">🔊口诀</button>
 
-    <div class="tree-area">
-      <div class="canopy" id="canopy">
-        <!-- 果实会动态插入这里 -->
-      </div>
-      <div class="trunk" id="trunk"></div>
-    </div>
+<div id="q" class="question"></div>
+<input id="ans" readonly>
 
-    <div class="ground"></div>
-    <div class="hero">👦💧</div>
-  </div>
-
-  <div class="info">
-    <div class="info-row">
-      <span>⭐ <b id="score">0</b></span>
-      <span>本组 <b id="pt">0/9</b></span>
-      <span>关卡 <b id="level">1/9</b></span>
-      <span>🍎 <b id="fruitCount">0</b></span>
-    </div>
-    <div class="progress"><div id="bar" class="bar"></div></div>
-  </div>
-
-  <div class="card">
-    <div style="font-size:13px;color:#666">📖 口诀</div>
-    <div id="kou" class="kou">一一得一</div>
-    <button onclick="speak()" style="background:#e3f2fd;color:#1565c0;width:auto;padding:0 14px;height:32px;font-size:14px">🔊 朗读</button>
-  </div>
-
-  <div class="card">
-    <div id="q" class="question">1 × 1 = ?</div>
-    <div class="input-area">
-      <input id="ans" readonly placeholder="?">
-    </div>
-    <div class="msg" id="msg"></div>
-    <div class="keys">
-      <button class="key" onclick="add(1)">1</button>
-      <button class="key" onclick="add(2)">2</button>
-      <button class="key" onclick="add(3)">3</button>
-      <button class="key" onclick="add(4)">4</button>
-      <button class="key" onclick="add(5)">5</button>
-      <button class="key" onclick="add(6)">6</button>
-      <button class="key" onclick="add(7)">7</button>
-      <button class="key" onclick="add(8)">8</button>
-      <button class="key" onclick="add(9)">9</button>
-      <button class="key" onclick="add(0)">0</button>
-      <button class="del" onclick="del()">⌫</button>
-      <button class="clear" onclick="clearAns()">清空</button>
-      <button class="ok" onclick="check()">提交</button>
-      <button class="restart" onclick="restart()">重新开始</button>
-    </div>
-  </div>
-
+<div class="keys">
+<button class="key" onclick="add(1)">1</button>
+<button class="key" onclick="add(2)">2</button>
+<button class="key" onclick="add(3)">3</button>
+<button class="key" onclick="add(4)">4</button>
+<button class="key" onclick="add(5)">5</button>
+<button class="key" onclick="add(6)">6</button>
+<button class="key" onclick="add(7)">7</button>
+<button class="key" onclick="add(8)">8</button>
+<button class="key" onclick="add(9)">9</button>
+<button class="key" onclick="add(0)">0</button>
+<button class="key" onclick="del()">⌫</button>
 </div>
 
-<div class="overlay" id="passModal">
-  <div class="modal">
-    <h2 id="passTitle">🎉 过关啦！</h2>
-    <p id="passText">恭喜完成一的乘法！</p>
-    <button onclick="nextLevel()">继续下一关</button>
-  </div>
+<button class="main" onclick="check()">💧提交答案</button>
+<button onclick="restart()">🔄重新开始</button>
+<div class="msg" id="msg"></div>
 </div>
-
-<div class="overlay" id="winModal">
-  <div class="modal">
-    <h2>🏆 全部通关！</h2>
-    <p>你种出了最茂盛的九九成长树！<br>
-       一共结出了 <b id="finalFruits">0</b> 颗果实<br>
-       成长值：<b id="finalScore">0</b></p>
-    <button onclick="restart()">再玩一次</button>
-  </div>
 </div>
 
 <script>
-const nums = ["","一","二","三","四","五","六","七","八","九"];
-const groupNames = ["","一的乘法村","二的乘法村","三的乘法村","四的乘法村","五的乘法村","六的乘法村","七的乘法村","八的乘法村","九的乘法村"];
+const nums=["","一","二","三","四","五","六","七","八","九"];
+let group=1,index=1,done=0,score=0;
 
-// 果实可能出现的位置（相对树冠的百分比）
-const fruitPositions = [
-  {left:22, top:28}, {left:48, top:18}, {left:72, top:32},
-  {left:15, top:52}, {left:38, top:42}, {left:58, top:48},
-  {left:78, top:55}, {left:28, top:68}, {left:55, top:65},
-  {left:70, top:72}, {left:42, top:30}, {left:65, top:40},
-  {left:20, top:40}, {left:50, top:55}, {left:35, top:22},
-  {left:80, top:45}, {left:12, top:60}, {left:60, top:25},
-  {left:45, top:70}, {left:75, top:20}, {left:30, top:50},
-  {left:52, top:38}, {left:18, top:35}, {left:68, top:60},
-  {left:40, top:15}, {left:25, top:75}, {left:62, top:70},
-];
-
-let level = 1;
-let i = 1;
-let done = 0;
-let score = 0;
-let fruitCount = 0;
-let usedPositions = [];
-
-const canopy = document.getElementById("canopy");
-const trunk = document.getElementById("trunk");
-const kouEl = document.getElementById("kou");
-const qEl = document.getElementById("q");
-const ansEl = document.getElementById("ans");
-const msgEl = document.getElementById("msg");
-const scoreEl = document.getElementById("score");
-const ptEl = document.getElementById("pt");
-const barEl = document.getElementById("bar");
-const groupEl = document.getElementById("group");
-const levelEl = document.getElementById("level");
-const fruitCountEl = document.getElementById("fruitCount");
-
-function playTone(freq, duration, type="sine", vol=0.28){
-  try{
-    const ctx = new (window.AudioContext||window.webkitAudioContext)();
-    const o = ctx.createOscillator();
-    const g = ctx.createGain();
-    o.type = type;
-    o.frequency.value = freq;
-    g.gain.value = vol;
-    o.connect(g);
-    g.connect(ctx.destination);
-    o.start();
-    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
-    o.stop(ctx.currentTime + duration);
-  }catch(e){}
+function cn(n){
+if(n<=9)return nums[n];
+if(n==10)return"十";
+return nums[Math.floor(n/10)]+"十"+(n%10?nums[n%10]:"");
 }
-function soundCorrect(){
-  playTone(523,0.1); setTimeout(()=>playTone(659,0.1),90); setTimeout(()=>playTone(784,0.18),180);
+function kou(a,b){
+let r=a*b;
+if(r<10)return nums[a]+nums[b]+"得"+nums[r];
+return nums[a]+nums[b]+cn(r);
 }
-function soundWrong(){ playTone(180,0.22,"square",0.12); }
-function soundLevelUp(){
-  [523,659,784,1046].forEach((f,idx)=>setTimeout(()=>playTone(f,0.16),idx*110));
-}
-function soundWin(){
-  [523,659,784,1046,1318].forEach((f,idx)=>setTimeout(()=>playTone(f,0.2),idx*130));
-}
-function soundFruit(){
-  playTone(880,0.08); setTimeout(()=>playTone(1100,0.12),80);
-}
-
-function getKouText(a,b){
-  const p = a*b;
-  if(p<=10) return nums[a]+nums[b]+"得"+nums[p];
-  return nums[a]+nums[b]+nums[Math.floor(p/10)]+nums[p%10];
-}
-
-function growTree(){
-  // 树冠和树干随成长变大
-  const scale = 1 + Math.min(score/400, 0.45);
-  canopy.style.transform = `scale(${scale})`;
-  trunk.style.height = (70 + Math.min(score/15, 35)) + "px";
-  trunk.style.width = (28 + Math.min(score/40, 10)) + "px";
-}
-
-function addFruit(){
-  if(usedPositions.length >= fruitPositions.length) return;
-
-  // 找一个还没用过的位置
-  let posIndex;
-  do {
-    posIndex = Math.floor(Math.random()*fruitPositions.length);
-  } while(usedPositions.includes(posIndex));
-  usedPositions.push(posIndex);
-
-  const pos = fruitPositions[posIndex];
-  const fruit = document.createElement("div");
-  fruit.className = "fruit";
-  fruit.innerText = "🍎";
-  fruit.style.left = pos.left + "%";
-  fruit.style.top = pos.top + "%";
-  // 轻微随机旋转
-  fruit.style.transform = `rotate(${Math.random()*30-15}deg)`;
-  canopy.appendChild(fruit);
-
-  fruitCount++;
-  fruitCountEl.innerText = fruitCount;
-  soundFruit();
-}
-
-function clearFruits(){
-  canopy.querySelectorAll(".fruit").forEach(f=>f.remove());
-  usedPositions = [];
-  fruitCount = 0;
-  fruitCountEl.innerText = 0;
-}
-
 function render(){
-  kouEl.innerText = getKouText(level,i);
-  qEl.innerText = level + " × " + i + " = ?";
-  ptEl.innerText = done + "/9";
-  barEl.style.width = (done/9*100) + "%";
-  scoreEl.innerText = score;
-  groupEl.innerText = groupNames[level];
-  levelEl.innerText = level + "/9";
-  growTree();
+groupEl.innerText="第"+group+"组："+nums[group]+"的乘法";
+kouEl.innerText=kou(group,index);
+qEl.innerText=group+" × "+index+" = ?";
+progress.innerText=done+"/9";
+bar.style.width=(done/9*100)+"%";
+scoreEl.innerText=score;
+tree.innerText=score<30?"🌰":score<80?"🌱":score<150?"🌿":"🌳";
+fruit.innerText=score>=150?"🍎🍊🍉":"";
 }
-
-function add(n){
-  if(ansEl.value.length < 3) ansEl.value += n;
-}
-function del(){ ansEl.value = ansEl.value.slice(0,-1); }
-function clearAns(){ ansEl.value=""; msgEl.innerText=""; }
-
-function showMsg(text, color="#2e7d32"){
-  msgEl.innerText = text;
-  msgEl.style.color = color;
-  setTimeout(()=>{ if(msgEl.innerText===text) msgEl.innerText=""; },1600);
-}
-
+function add(n){ans.value+=n}
+function del(){ans.value=ans.value.slice(0,-1)}
 function check(){
-  if(ansEl.value==="") return;
-  const val = Number(ansEl.value);
-
-  if(val === level * i){
-    score += 10;
-    done++;
-    soundCorrect();
-    showMsg("太棒了！🍎 +10", "#2e7d32");
-    ansEl.value = "";
-
-    // ★ 真正在树上长出一颗果实
-    addFruit();
-
-    if(done >= 9){
-      soundLevelUp();
-      if(level >= 9){
-        document.getElementById("finalScore").innerText = score;
-        document.getElementById("finalFruits").innerText = fruitCount;
-        document.getElementById("winModal").classList.add("show");
-        soundWin();
-      }else{
-        document.getElementById("passTitle").innerText = "🎉 过关啦！";
-        document.getElementById("passText").innerHTML = `恭喜完成「${groupNames[level]}」！<br>树上已经结了 ${fruitCount} 颗果实～`;
-        document.getElementById("passModal").classList.add("show");
-      }
-      return;
-    }
-
-    i++;
-    if(i>9) i=1;
-    render();
-  }else{
-    soundWrong();
-    showMsg("再想想口诀哦～", "#c62828");
-  }
+if(Number(ans.value)==group*index){
+score+=10;done++;
+msg.innerText="✨答对啦！小树成长";
+if(done==9){
+msg.innerText="🎉通关！进入下一关";
+group++;done=0;
+if(group>9)group=1;
+index=1;
+}else index++;
+ans.value="";
+render();
+}else{
+msg.innerText="😊再想想口诀";
 }
-
-function nextLevel(){
-  document.getElementById("passModal").classList.remove("show");
-  level++;
-  i=1;
-  done=0;
-  render();
 }
-
+function voice(){
+let u=new SpeechSynthesisUtterance(kou(group,index));
+u.lang="zh-CN";speechSynthesis.speak(u);
+}
 function restart(){
-  document.getElementById("passModal").classList.remove("show");
-  document.getElementById("winModal").classList.remove("show");
-  level=1; i=1; done=0; score=0;
-  clearFruits();
-  ansEl.value="";
-  msgEl.innerText="";
-  canopy.style.transform = "scale(1)";
-  trunk.style.height = "70px";
-  trunk.style.width = "28px";
-  render();
+group=1;index=1;done=0;score=0;ans.value="";
+render();
 }
-
-function speak(){
-  if(!window.speechSynthesis) return;
-  speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(kouEl.innerText);
-  u.lang="zh-CN";
-  u.rate=0.9;
-  speechSynthesis.speak(u);
-}
-
-document.addEventListener("keydown",e=>{
-  if(e.key>="0"&&e.key<="9") add(+e.key);
-  else if(e.key==="Backspace") del();
-  else if(e.key==="Enter") check();
-  else if(e.key==="Escape") clearAns();
-});
-
+let groupEl=document.getElementById("group"),kouEl=document.getElementById("kou"),qEl=document.getElementById("q"),scoreEl=document.getElementById("score");
+let tree=document.getElementById("tree"),fruit=document.getElementById("fruit"),bar=document.getElementById("bar"),progress=document.getElementById("progress"),msg=document.getElementById("msg"),ans=document.getElementById("ans");
 render();
 </script>
 </body>

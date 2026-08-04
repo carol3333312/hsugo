@@ -5,9 +5,9 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-<title>小悟课堂 V4 九九乘法</title>
+<title>小悟课堂V5</title>
 
 
 <style>
@@ -28,6 +28,7 @@ font-family:"Microsoft YaHei",sans-serif;
 }
 
 
+
 .app{
 
 width:92%;
@@ -43,8 +44,6 @@ padding:25px;
 border-radius:25px;
 
 text-align:center;
-
-box-shadow:0 5px 20px rgba(0,0,0,.08);
 
 }
 
@@ -68,19 +67,17 @@ border-radius:15px;
 
 font-size:20px;
 
-line-height:1.6;
-
 }
 
 
 
 .lesson{
 
-font-size:34px;
+font-size:36px;
 
 font-weight:bold;
 
-margin:25px 0;
+margin:25px;
 
 }
 
@@ -96,8 +93,6 @@ border-radius:20px;
 
 overflow:hidden;
 
-margin:15px 0;
-
 }
 
 
@@ -106,9 +101,9 @@ margin:15px 0;
 
 height:100%;
 
-background:#4caf50;
-
 width:0%;
+
+background:#4caf50;
 
 transition:.5s;
 
@@ -118,9 +113,9 @@ transition:.5s;
 
 .info{
 
-font-size:20px;
-
 margin:15px;
+
+font-size:20px;
 
 }
 
@@ -130,7 +125,7 @@ button{
 
 width:90%;
 
-padding:14px;
+padding:15px;
 
 margin:8px;
 
@@ -150,11 +145,11 @@ font-size:20px;
 
 input{
 
-width:150px;
-
-padding:10px;
+width:160px;
 
 font-size:28px;
+
+padding:10px;
 
 text-align:center;
 
@@ -166,22 +161,22 @@ border:1px solid #ccc;
 
 
 
-.result{
-
-font-size:22px;
-
-min-height:35px;
-
-margin:20px;
-
-}
-
-
 .hide{
 
 display:none;
 
 }
+
+
+
+.result{
+
+font-size:22px;
+
+margin:20px;
+
+}
+
 
 
 </style>
@@ -190,18 +185,21 @@ display:none;
 </head>
 
 
+
 <body>
 
 
 <div class="app">
 
 
-<h1>🧠 小悟课堂</h1>
+<h1>
+🧠 小悟课堂
+</h1>
 
 
-<div class="teacher" id="teacher">
+<div class="teacher" id="message">
 
-准备开始学习
+准备学习
 
 </div>
 
@@ -225,16 +223,9 @@ display:none;
 
 <div class="progress">
 
-<div class="green" id="progress">
+<div class="green" id="bar">
 
 </div>
-
-</div>
-
-
-<div id="percent">
-
-0%
 
 </div>
 
@@ -242,23 +233,24 @@ display:none;
 
 <div class="info">
 
-⭐ <span id="stars">0</span>
+<span id="progressText">
 
-</div>
+0/45
+
+</span>
 
 
+&nbsp;&nbsp;
 
-<div>
 
-已掌握：
+⭐
 
-<span id="count">
+<span id="stars">
 
 0
 
 </span>
 
-/45
 
 </div>
 
@@ -266,23 +258,30 @@ display:none;
 
 
 
-<button id="learn">
+<div id="action">
+
+
+<button id="mainBtn">
 
 📖 学口诀
 
 </button>
 
 
-
-<div id="memoryBox" class="hide">
-
-
-<input id="memoryInput" placeholder="补全口诀">
+</div>
 
 
-<button id="memoryBtn">
 
-🧠 确认补全
+
+<div id="inputBox" class="hide">
+
+
+<input id="answerInput">
+
+
+<button id="submitBtn">
+
+提交
 
 </button>
 
@@ -291,28 +290,11 @@ display:none;
 
 
 
+<button id="restart">
 
-
-<div id="testBox" class="hide">
-
-
-<h2 id="question">
-
-</h2>
-
-
-<input id="answer" type="number" placeholder="答案">
-
-
-<button id="testBtn">
-
-✏️ 提交答案
+🔄重新开始
 
 </button>
-
-
-</div>
-
 
 
 
@@ -322,12 +304,11 @@ display:none;
 </div>
 
 
-
 </div>
 
 
 <script>
-// ================================
+  // ================================
 // 九九乘法数据
 // ================================
 
@@ -344,6 +325,7 @@ const table=[
 ["一八得八",1,8,8],
 ["一九得九",1,9,9],
 
+
 ["二二得四",2,2,4],
 ["二三得六",2,3,6],
 ["二四得八",2,4,8],
@@ -353,6 +335,7 @@ const table=[
 ["二八十六",2,8,16],
 ["二九十八",2,9,18],
 
+
 ["三三得九",3,3,9],
 ["三四十二",3,4,12],
 ["三五十五",3,5,15],
@@ -361,6 +344,7 @@ const table=[
 ["三八二十四",3,8,24],
 ["三九二十七",3,9,27],
 
+
 ["四四十六",4,4,16],
 ["四五二十",4,5,20],
 ["四六二十四",4,6,24],
@@ -368,23 +352,28 @@ const table=[
 ["四八三十二",4,8,32],
 ["四九三十六",4,9,36],
 
+
 ["五五二十五",5,5,25],
 ["五六三十",5,6,30],
 ["五七三十五",5,7,35],
 ["五八四十",5,8,40],
 ["五九四十五",5,9,45],
 
+
 ["六六三十六",6,6,36],
 ["六七四十二",6,7,42],
 ["六八四十八",6,8,48],
 ["六九五十四",6,9,54],
 
+
 ["七七四十九",7,7,49],
 ["七八五十六",7,8,56],
 ["七九六十三",7,9,63],
 
+
 ["八八六十四",8,8,64],
 ["八九七十二",8,9,72],
+
 
 ["九九八十一",9,9,81]
 
@@ -398,7 +387,12 @@ const table=[
 // ================================
 
 
-let lessons=table.map((x,i)=>({
+let lessons=
+
+table.map((x,i)=>{
+
+
+return {
 
 
 id:i,
@@ -423,12 +417,12 @@ mastery:0,
 
 
 
-// 当前学习阶段
+// 当前阶段
 
-// 0 未学习
-// 1 已学习
-// 2 已补全
-// 3 已测试
+// 0 学习
+// 1 补全
+// 2 测试
+// 3 完成
 
 stage:0,
 
@@ -440,38 +434,32 @@ correct:0,
 wrong:0,
 
 
-
-streak:0,
-
+lastTime:0
 
 
-review:0
+};
 
 
-}));
+});
 
 
 
 
-// 当前题目
+
+
+// 当前口诀编号
 
 let current=0;
 
 
 
-// 当前阶段
-
-let stage=0;
-
-
-
-// 星星
+// 当前星星
 
 let stars=0;
 
 
 
-// 错题池
+// 错题队列
 
 let wrongQueue=[];
 
@@ -479,46 +467,18 @@ let wrongQueue=[];
 
 
 
-
 // ================================
-// 数据保存
+// 当前任务
 // ================================
 
 
-function save(){
+function currentLesson(){
 
 
-localStorage.setItem(
-
-"xw_v4_lessons",
-
-JSON.stringify(lessons)
-
-);
-
-
-
-localStorage.setItem(
-
-"xw_v4_stars",
-
-stars
-
-);
-
-
-
-localStorage.setItem(
-
-"xw_v4_wrong",
-
-JSON.stringify(wrongQueue)
-
-);
+return lessons[current];
 
 
 }
-
 
 
 
@@ -526,83 +486,42 @@ JSON.stringify(wrongQueue)
 
 
 // ================================
-// 数据读取
+// 设置阶段
 // ================================
 
 
-function load(){
+function setStage(value){
 
 
-try{
-
-
-let a=
-
-localStorage.getItem(
-"xw_v4_lessons"
-);
-
-
-
-if(a){
-
-lessons=JSON.parse(a);
-
-}
-
-
-
-
-let b=
-
-localStorage.getItem(
-"xw_v4_stars"
-);
-
-
-
-if(b){
-
-stars=Number(b);
-
-}
-
-
-
-
-let c=
-
-localStorage.getItem(
-"xw_v4_wrong"
-);
-
-
-
-if(c){
-
-wrongQueue=JSON.parse(c);
-
-}
-
-
-
-}catch(e){
-
-
-console.log("读取失败");
+currentLesson().stage=value;
 
 
 }
 
 
 
-}
 
 
-
-load();
 // ================================
-// 语音系统
+// 掌握数量
+// ================================
+
+
+function masteredCount(){
+
+
+return lessons.filter(x=>{
+
+
+return x.mastery>=90;
+
+
+}).length;
+
+
+}
+// ================================
+// 语音模块
 // ================================
 
 
@@ -619,8 +538,8 @@ return;
 speechSynthesis.cancel();
 
 
-
 let u=
+
 new SpeechSynthesisUtterance(text);
 
 
@@ -631,30 +550,8 @@ u.lang="zh-CN";
 u.rate=0.75;
 
 
-u.pitch=1.1;
-
-
 
 speechSynthesis.speak(u);
-
-
-
-}
-
-
-
-
-
-
-// ================================
-// 当前口诀
-// ================================
-
-
-function item(){
-
-
-return lessons[current];
 
 
 }
@@ -673,12 +570,14 @@ return lessons[current];
 function showLesson(){
 
 
-let x=item();
+let x=currentLesson();
+
 
 
 document
 .getElementById("lesson")
 .innerText=x.text;
+
 
 
 }
@@ -689,25 +588,35 @@ document
 
 
 
-
 // ================================
-// 学口诀
+// 主按钮控制
 // ================================
 
 
 document
-.getElementById("learn")
+.getElementById("mainBtn")
 .onclick=function(){
 
 
-let x=item();
+
+let x=currentLesson();
 
 
-stage=1;
+
+// 阶段0：学习
+
+if(x.stage===0){
 
 
-x.stage=1;
+setStage(1);
 
+
+
+document
+.getElementById("message")
+.innerText=
+
+"认真记住口诀";
 
 
 showLesson();
@@ -728,25 +637,19 @@ x.text
 
 
 
-document
-.getElementById("teacher")
-.innerText=
-
-"记住口诀："+x.text;
-
-
-
-
-// 自动进入补全阶段
+// 自动进入补全
 
 setTimeout(()=>{
 
 
-openMemory();
+openInput("memory");
 
 
-},3000);
+},2500);
 
+
+
+}
 
 
 };
@@ -757,135 +660,145 @@ openMemory();
 
 
 
+
 // ================================
-// 打开补全
+// 打开输入区域
 // ================================
 
 
-function openMemory(){
+function openInput(type){
 
 
 
-stage=1;
-
-
+let inputBox=
 
 document
-.getElementById("memoryBox")
-.classList
+.getElementById("inputBox");
+
+
+
+inputBox.classList
 .remove("hide");
-
-
-
-document
-.getElementById("testBox")
-.classList
-.add("hide");
-
-
-
-let x=item();
-
-
-
-let blank=
-
-x.text.substring(
-
-0,
-
-x.text.length-2
-
-);
-
-
-
-document
-.getElementById("memoryInput")
-.value="";
-
-
-
-document
-.getElementById("memoryInput")
-.placeholder=
-
-blank+"？";
-
-
-
-}
-
-
-
-
-
-
-
-// ================================
-// 补全口诀
-// ================================
-
-
-document
-.getElementById("memoryBtn")
-.onclick=function(){
-
-
-let x=item();
-
-
-
-let blank=
-
-x.text.substring(
-
-0,
-
-x.text.length-2
-
-);
 
 
 
 let input=
 
 document
-.getElementById("memoryInput")
+.getElementById("answerInput");
+
+
+
+input.value="";
+
+
+
+
+
+if(type==="memory"){
+
+
+
+document
+.getElementById("message")
+.innerText=
+
+"补全口诀";
+
+
+
+input.placeholder=
+
+"请输入缺少的口诀";
+
+
+
+}
+
+
+
+if(type==="test"){
+
+
+
+document
+.getElementById("message")
+.innerText=
+
+"计算答案";
+
+
+
+input.placeholder=
+
+"请输入答案";
+
+
+
+}
+
+
+
+}
+
+
+
+
+
+
+
+
+
+// ================================
+// 提交按钮
+// ================================
+
+
+document
+.getElementById("submitBtn")
+.onclick=function(){
+
+
+
+let x=currentLesson();
+
+
+
+let value=
+
+document
+.getElementById("answerInput")
 .value
 .trim();
 
 
 
-if(input===""){
+// 阶段1：补全
 
-
-return;
-
-}
+if(x.stage===1){
 
 
 
+let blank=
 
-if(blank+input===x.text){
+x.text.substring(
 
+0,
 
+x.text.length-2
 
-x.mastery+=20;
-
-
-if(x.mastery>100){
-
-x.mastery=100;
-
-}
+);
 
 
 
-x.stage=2;
+if(blank+value===x.text){
 
 
-stage=2;
+
+x.mastery+=30;
+
+
+setStage(2);
 
 
 
@@ -893,18 +806,13 @@ document
 .getElementById("result")
 .innerText=
 
-"🎉 背诵正确！";
+"🎉 口诀记住了！";
 
 
 
 speak(
-
-"正确。"+
-x.text
-
+"正确"
 );
-
-
 
 
 
@@ -913,41 +821,29 @@ x.text
 setTimeout(()=>{
 
 
-openTest();
+openInput("test");
 
 
-
-},500);
-
-
+},300);
 
 
 
 }
 
 else{
-
 
 
 x.wrong++;
 
 
-x.streak=0;
-
-
-
 document
 .getElementById("result")
 .innerText=
 
-"再想一下";
+"再试一次";
 
 
-speak(
-
-"再听一次"
-
-);
+}
 
 
 
@@ -956,193 +852,27 @@ speak(
 
 
 
-save();
 
+// 阶段2：测试
 
-update();
 
+else if(x.stage===2){
 
 
-};
 
+if(Number(value)===x.answer){
 
 
 
-
-
-
-// ================================
-// 打开测试
-// ================================
-
-
-function openTest(){
-
-
-document
-.getElementById("memoryBox")
-.classList
-.add("hide");
-
-
-
-document
-.getElementById("testBox")
-.classList
-.remove("hide");
-
-
-
-let x=item();
-
-
-
-document
-.getElementById("question")
-.innerText=
-
-x.a+
-" × "+
-x.b+
-" = ?";
-
-
-
-document
-.getElementById("answer")
-.value="";
-
-
-}
-// ================================
-// 测试提交
-// ================================
-
-
-document
-.getElementById("testBtn")
-.onclick=function(){
-
-
-let x=item();
-
-
-
-let answer=
-
-Number(
-document
-.getElementById("answer")
-.value
-);
-
-
-
-if(answer===x.answer){
-
-
-
-successTest(x);
-
-
-
-}
-
-else{
-
-
-failTest(x);
-
-
-
-}
-
-
-
-
-save();
-
-update();
-
-
-
-};
-
-
-
-
-
-
-
-// ================================
-// 测试正确
-// ================================
-
-
-function successTest(x){
-
+x.mastery+=50;
 
 
 x.correct++;
 
 
-x.streak++;
+setStage(3);
 
 
-x.stage=3;
-
-
-
-// 增加掌握度
-
-
-x.mastery+=30;
-
-
-
-if(x.mastery>100){
-
-x.mastery=100;
-
-}
-
-
-
-
-// 奖励
-
-
-stars+=2;
-
-
-
-document
-.getElementById("stars")
-.innerText=
-
-stars;
-
-
-
-document
-.getElementById("result")
-.innerText=
-
-"🎉 答对了！⭐+2";
-
-
-
-speak(
-
-"回答正确"
-
-);
-
-
-
-
-
-// 完成当前口诀
 
 finishLesson();
 
@@ -1150,68 +880,20 @@ finishLesson();
 
 }
 
-
-
-
-
-
-
-// ================================
-// 测试错误
-// ================================
-
-
-function failTest(x){
-
+else{
 
 
 x.wrong++;
-
-
-x.streak=0;
-
-
-
-x.mastery-=5;
-
-
-
-if(x.mastery<0){
-
-x.mastery=0;
-
-}
-
-
-
-
-// 加入错题池
-
-
-if(!wrongQueue.includes(x.id)){
-
-
-wrongQueue.push(x.id);
-
-
-}
-
-
 
 
 document
 .getElementById("result")
 .innerText=
 
-"再试一次："+x.text;
+"答案不正确";
 
 
-
-speak(
-
-"再想一想"
-
-);
+}
 
 
 
@@ -1219,61 +901,74 @@ speak(
 
 
 
+save();
+
+
+update();
 
 
 
-
+};
 // ================================
 // 完成当前口诀
-// 自动下一题
 // ================================
 
 
 function finishLesson(){
 
 
-
-let x=item();
-
+let x=currentLesson();
 
 
-if(x.mastery>=90){
+
+x.mastery=100;
 
 
-stars+=3;
+
+stars+=2;
+
 
 
 document
 .getElementById("result")
 .innerText=
 
-"🌟 完全掌握！+3星";
-
-
-}
+"🎉 掌握成功 ⭐+2";
 
 
 
-// 隐藏当前区域
+speak(
+"太棒了"
+);
 
+
+
+// 保存学习时间
+
+x.lastTime=Date.now();
+
+
+
+// 隐藏输入
 
 document
-.getElementById("testBox")
+.getElementById("inputBox")
 .classList
 .add("hide");
 
 
 
-document
-.getElementById("memoryBox")
-.classList
-.add("hide");
+
+// 更新界面
+
+update();
+
+save();
 
 
 
 
 // 自动下一题
-
 
 setTimeout(()=>{
 
@@ -1281,8 +976,7 @@ setTimeout(()=>{
 nextLesson();
 
 
-showLesson();
-
+resetLesson();
 
 
 },500);
@@ -1298,7 +992,7 @@ showLesson();
 
 
 // ================================
-// 下一题选择
+// 选择下一题
 // ================================
 
 
@@ -1306,15 +1000,25 @@ function nextLesson(){
 
 
 
-// 优先错题
+// 第一优先：错误题
 
 
-if(wrongQueue.length>0){
+let weak=
+
+lessons.filter(x=>{
 
 
-current=
+return x.wrong>0 && x.mastery<90;
 
-wrongQueue.shift();
+
+});
+
+
+
+if(weak.length>0){
+
+
+current=weak[0].id;
 
 
 return;
@@ -1324,20 +1028,42 @@ return;
 
 
 
-// 正常顺序
-
-
-current++;
 
 
 
-if(current>=lessons.length){
+// 第二：未完成口诀
 
 
-current=0;
+let unlearn=
+
+lessons.filter(x=>{
+
+
+return x.mastery<90;
+
+
+});
+
+
+
+if(unlearn.length>0){
+
+
+current=unlearn[0].id;
+
+
+return;
 
 
 }
+
+
+
+
+
+// 全部完成
+
+current=0;
 
 
 
@@ -1350,7 +1076,58 @@ current=0;
 
 
 // ================================
-// 进度计算
+// 重置当前状态
+// ================================
+
+
+function resetLesson(){
+
+
+let x=currentLesson();
+
+
+
+x.stage=0;
+
+
+
+document
+.getElementById("message")
+.innerText=
+
+"准备学习";
+
+
+
+document
+.getElementById("result")
+.innerText="";
+
+
+
+document
+.getElementById("mainBtn")
+.innerText=
+
+"📖 学口诀";
+
+
+
+showLesson();
+
+
+
+}
+
+
+
+
+
+
+
+
+// ================================
+// 更新进度
 // ================================
 
 
@@ -1361,25 +1138,11 @@ function update(){
 let total=0;
 
 
-let count=0;
-
-
 
 lessons.forEach(x=>{
 
 
 total+=x.mastery;
-
-
-
-if(x.mastery>=90){
-
-
-count++;
-
-
-}
-
 
 
 });
@@ -1397,7 +1160,7 @@ total/(lessons.length)
 
 
 document
-.getElementById("progress")
+.getElementById("bar")
 .style.width=
 
 percent+"%";
@@ -1405,18 +1168,12 @@ percent+"%";
 
 
 document
-.getElementById("percent")
+.getElementById("progressText")
 .innerText=
 
-percent+"%";
-
-
-
-document
-.getElementById("count")
-.innerText=
-
-count;
+masteredCount()
++
+"/45";
 
 
 
@@ -1431,65 +1188,6 @@ stars;
 }
 
 
-// ================================
-// 艾宾浩斯复习
-// ================================
-
-
-function setReview(x){
-
-
-let now=Date.now();
-
-
-
-if(x.mastery<40){
-
-
-x.review=now;
-
-
-}
-
-else if(x.mastery<70){
-
-
-x.review=
-
-now+
-
-86400000;
-
-
-}
-
-else if(x.mastery<90){
-
-
-x.review=
-
-now+
-
-86400000*3;
-
-
-}
-
-else{
-
-
-x.review=
-
-now+
-
-86400000*7;
-
-
-}
-
-
-}
-
 
 
 
@@ -1497,75 +1195,205 @@ now+
 
 
 // ================================
-// 获取复习口诀
+// 保存
 // ================================
 
 
-function getReview(){
-
-
-let now=Date.now();
+function save(){
 
 
 
-return lessons.filter(x=>{
+localStorage.setItem(
+
+"xw_v5_lessons",
+
+JSON.stringify(lessons)
+
+);
 
 
-return x.review<=now;
+
+localStorage.setItem(
+
+"xw_v5_stars",
+
+stars
+
+);
+
+
+
+localStorage.setItem(
+
+"xw_v5_wrong",
+
+JSON.stringify(wrongQueue)
+
+);
+
+
+}
+// ================================
+// 读取数据
+// ================================
+
+
+function load(){
+
+
+try{
+
+
+let a=
+
+localStorage.getItem(
+"xw_v5_lessons"
+);
+
+
+
+if(a){
+
+lessons=
+
+JSON.parse(a);
+
+}
+
+
+
+
+let b=
+
+localStorage.getItem(
+"xw_v5_stars"
+);
+
+
+
+if(b){
+
+stars=
+
+Number(b);
+
+}
+
+
+
+
+let c=
+
+localStorage.getItem(
+"xw_v5_wrong"
+);
+
+
+
+if(c){
+
+wrongQueue=
+
+JSON.parse(c);
+
+}
+
+
+
+}catch(e){
+
+
+console.log(
+"数据恢复失败"
+);
+
+
+}
+
+
+
+}
+
+
+
+
+
+
+// ================================
+// 重新开始
+// ================================
+
+
+document
+.getElementById("restart")
+.onclick=function(){
+
+
+
+let ok=
+
+confirm(
+"确定重新开始学习吗？"
+);
+
+
+
+if(!ok){
+
+return;
+
+}
+
+
+
+
+lessons.forEach(x=>{
+
+
+x.mastery=0;
+
+x.stage=0;
+
+x.correct=0;
+
+x.wrong=0;
+
+x.lastTime=0;
 
 
 });
 
 
-}
+
+stars=0;
+
+
+wrongQueue=[];
+
+
+current=0;
 
 
 
+save();
 
 
+resetLesson();
 
 
-// ================================
-// 每日提示
-// ================================
+update();
 
-
-function dailyMessage(){
-
-
-let list=getReview();
-
-
-
-if(list.length>0){
 
 
 document
-.getElementById("teacher")
+.getElementById("message")
 .innerText=
 
-"今天加强"+
-list.length+
-"个口诀";
+"重新开始学习";
 
 
-}
 
-else{
-
-
-document
-.getElementById("teacher")
-.innerText=
-
-"开始新的口诀学习";
-
-
-}
-
-
-}
-
+};
 
 
 
@@ -1582,17 +1410,11 @@ function init(){
 
 
 
-let review=getReview();
+load();
 
 
 
-if(review.length>0){
-
-
-current=review[0].id;
-
-
-}
+current=0;
 
 
 
@@ -1602,7 +1424,12 @@ showLesson();
 update();
 
 
-dailyMessage();
+
+document
+.getElementById("message")
+.innerText=
+
+"准备学习九九乘法";
 
 
 
@@ -1614,10 +1441,7 @@ dailyMessage();
 
 
 
-// ================================
-// 自动保存
-// ================================
-
+// 自动保存保护
 
 setInterval(()=>{
 
@@ -1631,8 +1455,6 @@ save();
 
 
 
-
-
 window.onbeforeunload=function(){
 
 
@@ -1640,7 +1462,6 @@ save();
 
 
 };
-
 
 
 

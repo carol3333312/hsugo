@@ -1,78 +1,186 @@
-from pathlib import Path
-
-html = """<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>九九王国测试版</title>
+<title>九九成长树 V0.3</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:linear-gradient(#8ed8ff,#dff7c8);font-family:"Microsoft YaHei",sans-serif}
-.game{width:94%;max-width:430px;margin:15px auto}
-.panel{background:#ffffffdd;border-radius:25px;padding:15px;margin-bottom:12px;box-shadow:0 8px 20px #0002}
-.title{text-align:center;font-size:28px;font-weight:bold}
-.info{display:flex;justify-content:space-around;font-size:18px}
-.map{background:#65b94b;border-radius:25px;padding:15px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.land{height:90px;background:#a8df75;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:45px}
-.lock{background:#999}
-.question{font-size:38px;font-weight:bold;margin:15px}
-button{border:0;border-radius:15px;padding:12px 20px;background:#ffb300;font-size:18px}
-.message{color:#2e7d32;font-size:20px;margin-top:10px}
+body{
+margin:0;
+height:100vh;
+overflow:hidden;
+font-family:"Microsoft YaHei",sans-serif;
+background:linear-gradient(#9edcff 0%,#eaffd0 100%);
+}
+.game{
+width:100%;
+max-width:420px;
+height:100vh;
+margin:auto;
+padding:10px;
+position:relative;
+display:flex;
+flex-direction:column;
+}
+.top{
+display:flex;
+justify-content:space-between;
+font-weight:bold;
+font-size:18px;
+}
+.scene{
+flex:1;
+position:relative;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+.sun{position:absolute;top:10px;font-size:40px}
+.hero{position:absolute;bottom:90px;font-size:45px}
+.tree{
+font-size:130px;
+position:relative;
+}
+.fruits{
+position:absolute;
+font-size:30px;
+top:20px;
+left:20px;
+}
+.info{
+text-align:center;
+font-weight:bold;
+}
+.progress{
+height:12px;
+background:#ffffff99;
+border-radius:10px;
+overflow:hidden;
+}
+.bar{
+height:100%;
+width:0;
+background:#4caf50;
+}
+.card{
+background:#ffffffcc;
+border-radius:18px;
+padding:8px;
+text-align:center;
+margin-top:6px;
+}
+.kou{
+font-size:34px;
+font-weight:bold;
+}
+.question{
+font-size:32px;
+font-weight:bold;
+}
+input{
+width:100px;
+height:40px;
+font-size:25px;
+text-align:center;
+border-radius:10px;
+border:1px solid #ccc;
+}
+.keys{
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:5px;
+}
+button{
+border:0;
+border-radius:10px;
+height:38px;
+font-size:17px;
+}
+.key{background:#fff}
+.ok{background:#4caf50;color:white}
 </style>
 </head>
 <body>
 <div class="game">
-<div class="panel">
-<div class="title">🏰 九九王国</div>
+
+<div class="top">
+<div>🌱 九九成长树</div>
+<div id="group">一的乘法村</div>
+</div>
+
+<div class="scene">
+<div class="sun">☀️</div>
+<div class="tree" id="tree">🌱
+<div class="fruits" id="fruits"></div>
+</div>
+<div class="hero">👦💧</div>
+</div>
+
 <div class="info">
-<div>⭐金币 <span id="coin">50</span></div>
-<div>🏠等级 <span id="lv">1</span></div>
+<div>⭐成长值 <span id="score">0</span></div>
+<div>进度 <span id="pt">0/9</span></div>
+<div class="progress"><div id="bar" class="bar"></div></div>
+</div>
+
+<div class="card">
+<div>📖口诀</div>
+<div id="kou" class="kou">一一得一</div>
+<button onclick="speak()">🔊</button>
+</div>
+
+<div class="card">
+<div id="q" class="question">1 × 1 = ?</div>
+<input id="ans" readonly>
+<div class="keys">
+<button class="key" onclick="add(1)">1</button>
+<button class="key" onclick="add(2)">2</button>
+<button class="key" onclick="add(3)">3</button>
+<button class="key" onclick="add(4)">4</button>
+<button class="key" onclick="add(5)">5</button>
+<button class="key" onclick="add(6)">6</button>
+<button class="key" onclick="add(7)">7</button>
+<button class="key" onclick="add(8)">8</button>
+<button class="key" onclick="add(9)">9</button>
+<button class="key" onclick="add(0)">0</button>
+<button class="ok" onclick="check()">提交</button>
 </div>
 </div>
 
-<div class="panel">
-<h3>我的领地</h3>
-<div class="map">
-<div class="land">🏠</div>
-<div class="land">🌱</div>
-<div class="land lock">🔒</div>
-<div class="land">🌱</div>
-<div class="land lock">🔒</div>
-<div class="land">🌳</div>
-</div>
-</div>
-
-<div class="panel" style="text-align:center">
-<h3>⚔️ 土地挑战</h3>
-<div class="question">7 × 8 = ?</div>
-<input id="answer" type="number" style="width:120px;height:45px;font-size:25px;text-align:center">
-<br><br>
-<button onclick="check()">攻击土地</button>
-<div id="msg" class="message"></div>
-</div>
 </div>
 
 <script>
-let coin=50;
-let level=1;
-function check(){
- let value=Number(document.getElementById("answer").value);
- let msg=document.getElementById("msg");
- if(value===56){
-  coin+=10;
-  level++;
-  document.getElementById("coin").innerText=coin;
-  document.getElementById("lv").innerText=level;
-  msg.innerText="🎉 答对！获得新土地！";
- }else{
-  msg.innerText="😊 再想一下口诀";
- }
-}
-</script>
-</body>
-</html>"""
+let i=1,done=0,score=0;
+const nums=["","一","二","三","四","五","六","七","八","九"];
 
-path=Path("/mnt/data/九九王国_PaGamO风格测试版.html")
-path.write_text(html,encoding="utf-8")
-str(path)
+function render(){
+kou.innerText=nums[1]+nums[i]+(1*i<=10?"得":"")+nums[1*i];
+q.innerText="1 × "+i+" = ?";
+pt.innerText=done+"/9";
+bar.style.width=done/9*100+"%";
+scoreEl();
+tree.innerText=score<30?"🌱":score<80?"🌿":"🌳";
+fruits.innerText=score>=80?"🍎🍎":"";
+}
+function scoreEl(){score=document.getElementById("score").innerText=score}
+function add(n){ans.value+=n}
+function check(){
+if(Number(ans.value)==i){
+score+=10;done++;
+if(done>=9){done=0}
+i++;if(i>9)i=1;
+ans.value="";
+render();
+}else{
+alert("再想想口诀");
+}}
+function speak(){
+let u=new SpeechSynthesisUtterance(kou.innerText);
+u.lang="zh-CN";
+speechSynthesis.speak(u);
+}
+render();
+</script>
+</div>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>九九成长树 V1.2</title>
+<title>九九成长树 V1.1</title>
 <style>
 *{box-sizing:border-box}
 body{
@@ -11,75 +11,126 @@ margin:0;
 height:100vh;
 overflow:hidden;
 font-family:"Microsoft YaHei",sans-serif;
-background:linear-gradient(#9ddfff,#eaffd7);
-transition:.8s;
+background:linear-gradient(#9edcff,#eaffd5);
 }
-.night{background:linear-gradient(#26345c,#53627d)}
 .app{
 max-width:390px;
 height:100vh;
 margin:auto;
 padding:8px;
+display:flex;
+flex-direction:column;
 }
-.box{
-height:100%;
-background:#ffffffb8;
+.world{
+flex:1;
+background:rgba(255,255,255,.35);
 border-radius:25px;
-padding:12px;
-text-align:center;
+position:relative;
+overflow:hidden;
+padding:10px;
 }
-.top{display:flex;justify-content:space-between;font-weight:bold}
-.treeArea{height:260px;position:relative}
-.sun{font-size:40px;transition:.5s}
-.moon{display:none;font-size:40px}
+.top{
+display:flex;
+justify-content:space-between;
+font-weight:bold;
+}
+.hero{
+position:absolute;
+left:45px;
+top:130px;
+font-size:45px;
+}
+.treeBox{
+height:250px;
+display:flex;
+align-items:center;
+justify-content:center;
+position:relative;
+}
 .tree{
-font-size:120px;
-margin-top:20px;
-transition:.5s;
+font-size:130px;
 }
-.fruit{font-size:35px;position:absolute;top:120px;width:100%}
-.hero{font-size:42px}
-.progress{height:12px;background:#ddd;border-radius:10px}
-.bar{height:100%;background:#4caf50;width:0}
-.kou{font-size:36px;font-weight:bold;color:#111}
-.question{font-size:34px;font-weight:bold}
+.fruits{
+position:absolute;
+top:50px;
+font-size:35px;
+}
+.progress{
+height:12px;
+background:#ffffffaa;
+border-radius:20px;
+overflow:hidden;
+}
+.bar{
+height:100%;
+background:#43a047;
+width:0;
+}
+.kou{
+text-align:center;
+font-size:34px;
+font-weight:bold;
+color:#222;
+}
+.question{
+text-align:center;
+font-size:35px;
+font-weight:bold;
+}
 input{
-width:110px;height:42px;font-size:25px;text-align:center
+display:block;
+margin:auto;
+width:110px;
+height:42px;
+font-size:25px;
+text-align:center;
+border-radius:12px;
+border:1px solid #aaa;
 }
-.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px}
+.keys{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:5px;
+margin-top:8px;
+}
 button{
-height:38px;border:0;border-radius:12px;font-size:16px
+border:0;
+height:38px;
+border-radius:12px;
+font-size:16px;
 }
-.key{background:#edf5ff}
-.submit{background:#4caf50;color:white}
-.msg{height:25px;color:#388e3c}
+.key{background:white}
+.main{background:#4caf50;color:white}
+.msg{text-align:center;color:#388e3c;height:22px}
 </style>
 </head>
 <body>
 <div class="app">
-<div class="box">
+<div class="world">
 
 <div class="top">
 <div>🌱 九九成长树</div>
-<div id="chapter">第1组：一的乘法</div>
+<div id="chapter">一的乘法村</div>
 </div>
 
-<div class="treeArea">
-<div id="sun" class="sun">☀️</div>
-<div id="moon" class="moon">🌙</div>
-<div id="tree" class="tree">🌱</div>
-<div id="fruit" class="fruit"></div>
+<div class="treeBox">
+<div class="tree" id="tree">🌱</div>
+<div class="fruits" id="fruits"></div>
 </div>
 
 <div class="hero">👦💧</div>
 
-<div>⭐成长值 <span id="score">0</span></div>
+<div style="text-align:center">
+⭐成长值 <span id="score">0</span>
+</div>
 
-<div id="progressText">0 / 9</div>
+<div id="progressText">第1组 0/9</div>
 <div class="progress"><div id="bar" class="bar"></div></div>
 
-<div class="kou" id="kou">一一得一</div>
-<button onclick="voice()">🔊口诀</button>
+<div style="text-align:center">📖口诀</div>
+<div id="kou" class="kou">一一得一</div>
+
+<button onclick="voice()">🔊听口诀</button>
 
 <div id="question" class="question">1 × 1 = ?</div>
 
@@ -99,7 +150,7 @@ height:38px;border:0;border-radius:12px;font-size:16px
 <button class="key" onclick="delA()">⌫</button>
 </div>
 
-<button class="submit" onclick="check()">💧提交答案</button>
+<button class="main" onclick="check()">💧浇水成长</button>
 <button onclick="restart()">🔄重新开始</button>
 
 <div id="msg" class="msg"></div>
@@ -110,16 +161,6 @@ height:38px;border:0;border-radius:12px;font-size:16px
 <script>
 const nums=["","一","二","三","四","五","六","七","八","九"];
 let group=1,index=1,done=0,score=0;
-
-const success=new Audio();
-const fail=new Audio();
-
-function say(t){
-let u=new SpeechSynthesisUtterance(t);
-u.lang="zh-CN";
-speechSynthesis.cancel();
-speechSynthesis.speak(u);
-}
 
 function cn(n){
 if(n<=9)return nums[n];
@@ -134,44 +175,35 @@ return nums[a]+nums[b]+cn(r);
 }
 
 function render(){
-chapter.innerText="第"+group+"组："+nums[group]+"的乘法";
+chapter.innerText="第"+group+"组："+nums[group]+"的乘法村";
 kouEl.innerText=kou(group,index);
 question.innerText=group+" × "+index+" = ?";
-progressText.innerText=done+"/9";
+progressText.innerText="第"+group+"组 "+done+"/9";
 bar.style.width=done/9*100+"%";
 scoreEl.innerText=score;
 
 if(score<30)tree.innerText="🌱";
-else if(score<100)tree.innerText="🌳🌿";
-else if(score<200){
-tree.innerText="🌳";
-fruit.innerText="🍎";
-}
-else{
-tree.innerText="🌳";
-fruit.innerText="🍎🍊";
+else if(score<80)tree.innerText="🌿";
+else if(score<150){tree.innerText="🌳";fruits.innerText="🌸";}
+else if(score<300){tree.innerText="🌳";fruits.innerText="🍎🍎";}
+else{tree.innerText="🌳";fruits.innerText="🍎🍊";}
 }
 
-if(score>=150){
-document.body.className="night";
-sun.style.display="none";
-moon.style.display="block";
+function add(n){
+answer.value+=n;
 }
+function delA(){
+answer.value=answer.value.slice(0,-1);
 }
-
-function add(n){answer.value+=n}
-function delA(){answer.value=answer.value.slice(0,-1)}
 
 function check(){
 if(Number(answer.value)==group*index){
 score+=10;
 done++;
-msg.innerText="✨叮！答对啦，小树喝到水了";
-say("答对啦");
+msg.innerText="🎵 叮！答对啦，小树喝到水了";
 
 if(done>=9){
-say("恭喜通关");
-msg.innerText="🎉通关！进入下一组";
+msg.innerText="🎉 通关！进入下一片森林";
 group++;
 done=0;
 index=1;
@@ -179,24 +211,24 @@ if(group>9)group=1;
 }else{
 index++;
 }
+
 answer.value="";
 render();
+
 }else{
-msg.innerText="😊再想想口诀";
-say("再想一下");
+msg.innerText="😊 再看看口诀";
 }
 }
 
 function voice(){
-say(kou(group,index));
+let u=new SpeechSynthesisUtterance(kou(group,index));
+u.lang="zh-CN";
+speechSynthesis.cancel();
+speechSynthesis.speak(u);
 }
 
 function restart(){
 group=1;index=1;done=0;score=0;
-answer.value="";
-document.body.className="";
-sun.style.display="block";
-moon.style.display="none";
 render();
 }
 
@@ -206,12 +238,10 @@ let question=document.getElementById("question");
 let answer=document.getElementById("answer");
 let scoreEl=document.getElementById("score");
 let tree=document.getElementById("tree");
-let fruit=document.getElementById("fruit");
+let fruits=document.getElementById("fruits");
 let bar=document.getElementById("bar");
 let progressText=document.getElementById("progressText");
 let msg=document.getElementById("msg");
-let sun=document.getElementById("sun");
-let moon=document.getElementById("moon");
 
 render();
 </script>

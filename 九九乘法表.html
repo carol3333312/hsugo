@@ -7,7 +7,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>小悟课堂 V3.1 九九乘法</title>
+<title>小悟课堂 V3.2 九九乘法</title>
 
 
 <style>
@@ -47,6 +47,7 @@ text-align:center;
 box-shadow:0 5px 20px rgba(0,0,0,.08);
 
 }
+
 
 
 h1{
@@ -208,6 +209,7 @@ min-height:30px;
 }
 
 
+
 .level{
 
 font-size:18px;
@@ -223,7 +225,6 @@ color:#555;
 </head>
 
 
-
 <body>
 
 
@@ -233,7 +234,6 @@ color:#555;
 <h1>🧠 小悟课堂</h1>
 
 
-
 <div class="teacher" id="teacher">
 
 今天学习九九乘法口诀
@@ -241,13 +241,11 @@ color:#555;
 </div>
 
 
-
 <div class="lesson" id="lesson">
 
 准备开始
 
 </div>
-
 
 
 
@@ -268,20 +266,22 @@ color:#555;
 
 
 <div id="percent">
+
 0%
-</div>
-
 
 </div>
 
 
+</div>
 
 
-<div class="info">
+
+<div class="star">
 
 ⭐ <span id="stars">0</span>
 
 </div>
+
 
 
 <div class="level">
@@ -289,12 +289,12 @@ color:#555;
 等级：
 
 <span id="level">
+
 数学小苗
+
 </span>
 
-
 </div>
-
 
 
 
@@ -305,7 +305,6 @@ color:#555;
 </button>
 
 
-
 <button id="listen">
 
 🔊 听老师读
@@ -313,21 +312,11 @@ color:#555;
 </button>
 
 
-
-<button id="repeat">
-
-🗣 跟我读
-
-</button>
-
-
-
 <button id="memory">
 
 🧠 补全口诀
 
 </button>
-
 
 
 <button id="test">
@@ -338,13 +327,10 @@ color:#555;
 
 
 
-
 <div id="box" class="hide">
 
 
-<h2 id="question">
-
-</h2>
+<h2 id="question"></h2>
 
 
 <input id="answer"
@@ -363,11 +349,9 @@ placeholder="答案">
 
 
 
-
 <div class="result" id="result">
 
 </div>
-
 
 
 </div>
@@ -375,13 +359,11 @@ placeholder="答案">
 
 
 <script>
-// ================================
+  // ================================
 // 九九乘法数据
 // ================================
 
-
 const table=[
-
 
 ["一一得一",1,1,1],
 ["一二得二",1,2,2],
@@ -393,7 +375,6 @@ const table=[
 ["一八得八",1,8,8],
 ["一九得九",1,9,9],
 
-
 ["二二得四",2,2,4],
 ["二三得六",2,3,6],
 ["二四得八",2,4,8],
@@ -403,7 +384,6 @@ const table=[
 ["二八十六",2,8,16],
 ["二九十八",2,9,18],
 
-
 ["三三得九",3,3,9],
 ["三四十二",3,4,12],
 ["三五十五",3,5,15],
@@ -412,7 +392,6 @@ const table=[
 ["三八二十四",3,8,24],
 ["三九二十七",3,9,27],
 
-
 ["四四十六",4,4,16],
 ["四五二十",4,5,20],
 ["四六二十四",4,6,24],
@@ -420,28 +399,23 @@ const table=[
 ["四八三十二",4,8,32],
 ["四九三十六",4,9,36],
 
-
 ["五五二十五",5,5,25],
 ["五六三十",5,6,30],
 ["五七三十五",5,7,35],
 ["五八四十",5,8,40],
 ["五九四十五",5,9,45],
 
-
 ["六六三十六",6,6,36],
 ["六七四十二",6,7,42],
 ["六八四十八",6,8,48],
 ["六九五十四",6,9,54],
 
-
 ["七七四十九",7,7,49],
 ["七八五十六",7,8,56],
 ["七九六十三",7,9,63],
 
-
 ["八八六十四",8,8,64],
 ["八九七十二",8,9,72],
-
 
 ["九九八十一",9,9,81]
 
@@ -449,14 +423,12 @@ const table=[
 
 
 
-
 // ================================
-// 学习记录
+// 学习数据
 // ================================
 
 
 let lessons=table.map((x,i)=>({
-
 
 id:i,
 
@@ -468,45 +440,23 @@ b:x[2],
 
 answer:x[3],
 
-
-// 掌握程度
-
 mastery:0,
-
-
-// 连续答对
 
 streak:0,
 
-
-// 总答对
-
 correct:0,
-
-
-// 错误次数
 
 wrong:0,
 
-
-// 下次复习
-
-review:Date.now(),
-
-
-// 是否已经奖励
+review:0,
 
 reward:false
-
 
 }));
 
 
 
 let stars=0;
-
-
-// 当前口诀
 
 let current=0;
 
@@ -519,7 +469,7 @@ let wrongQueue=[];
 
 
 // ================================
-// 数据保存
+// 保存
 // ================================
 
 
@@ -528,7 +478,7 @@ function save(){
 
 localStorage.setItem(
 
-"xiaowu_v31_lessons",
+"xiaowu_v32_lessons",
 
 JSON.stringify(lessons)
 
@@ -538,9 +488,19 @@ JSON.stringify(lessons)
 
 localStorage.setItem(
 
-"xiaowu_v31_stars",
+"xiaowu_v32_stars",
 
 stars
+
+);
+
+
+
+localStorage.setItem(
+
+"xiaowu_v32_wrong",
+
+JSON.stringify(wrongQueue)
 
 );
 
@@ -548,6 +508,12 @@ stars
 }
 
 
+
+
+
+// ================================
+// 读取
+// ================================
 
 
 function load(){
@@ -559,9 +525,8 @@ try{
 let a=
 
 localStorage.getItem(
-"xiaowu_v31_lessons"
+"xiaowu_v32_lessons"
 );
-
 
 
 if(a){
@@ -575,7 +540,7 @@ lessons=JSON.parse(a);
 let b=
 
 localStorage.getItem(
-"xiaowu_v31_stars"
+"xiaowu_v32_stars"
 );
 
 
@@ -588,11 +553,28 @@ stars=Number(b);
 
 
 
+
+let c=
+
+localStorage.getItem(
+"xiaowu_v32_wrong"
+);
+
+
+
+if(c){
+
+wrongQueue=JSON.parse(c);
+
+}
+
+
+
 }catch(e){
 
 
 console.log(
-"读取数据失败"
+"数据读取失败"
 );
 
 
@@ -652,18 +634,15 @@ speechSynthesis.speak(u);
 
 function item(){
 
-
 return lessons[current];
-
 
 }
 
 
 
 
-
 // ================================
-// 显示口诀
+// 显示当前口诀
 // ================================
 
 
@@ -675,8 +654,7 @@ let x=item();
 
 document
 .getElementById("lesson")
-.innerText=
-x.text;
+.innerText=x.text;
 
 
 }
@@ -686,9 +664,9 @@ x.text;
 
 
 
-
 // ================================
 // 学习口诀
+// 自动进入下一题
 // ================================
 
 
@@ -701,6 +679,7 @@ let x=item();
 
 
 showLesson();
+
 
 
 speak(
@@ -717,6 +696,22 @@ x.text
 );
 
 
+
+// 朗读结束后自动下一条
+
+setTimeout(()=>{
+
+
+nextLesson();
+
+
+showLesson();
+
+
+},3500);
+
+
+
 };
 
 
@@ -725,8 +720,9 @@ x.text
 
 
 
+
 // ================================
-// 听口诀
+// 听老师读
 // ================================
 
 
@@ -748,38 +744,9 @@ speak(x.text);
 
 
 
-
-// ================================
-// 跟读
-// ================================
-
-
-document
-.getElementById("repeat")
-.onclick=function(){
-
-
-let x=item();
-
-
-speak(
-
-"请跟老师读。"+
-x.text
-
-);
-
-
-};
-
-
-
-
-
-
-
 // ================================
 // 补全口诀
+// 输入答案后自动判断
 // ================================
 
 
@@ -788,19 +755,16 @@ document
 .onclick=function(){
 
 
+
 let x=item();
 
 
 
-let text=x.text;
+let hideText=
 
-
-
-let blank=
-
-text.substring(
+x.text.substring(
 0,
-text.length-2
+x.text.length-2
 );
 
 
@@ -809,27 +773,122 @@ document
 .getElementById("lesson")
 .innerText=
 
-blank+"__";
+hideText+"__";
+
+
+
+let answer=
+
+prompt(
+"请补全口诀："+hideText
+);
+
+
+
+if(answer===null){
+
+showLesson();
+
+return;
+
+}
+
+
+
+let full=
+
+hideText+answer;
+
+
+
+
+if(full===x.text){
+
+
+
+x.mastery+=10;
+
+
+if(x.mastery>100){
+
+x.mastery=100;
+
+}
+
+
+
+x.correct++;
+
+
+
+document
+.getElementById("result")
+.innerText=
+
+"🎉 背对了！"+
+x.text;
 
 
 
 speak(
 
-"请说出后面的口诀"
+"回答正确。"+
+x.text
 
 );
 
 
 
+setReview(x);
+
+
+save();
+
+
+update();
+
+
+
+setTimeout(()=>{
+
+
+nextLesson();
+
+
+showLesson();
+
+
+},1500);
+
+
+
+}
+
+else{
+
+
+
+document
+.getElementById("result")
+.innerText=
+
+"再试一次："+x.text;
+
+
+
+speak(
+
+"再听一次"
+
+);
+
+
+
+}
+
+
+
 };
-
-
-
-
-
-
-
-
 // ================================
 // 开始测试
 // ================================
@@ -885,7 +944,6 @@ document
 
 
 
-
 // ================================
 // 提交答案
 // ================================
@@ -897,7 +955,6 @@ document
 
 
 let x=item();
-
 
 
 let answer=
@@ -914,9 +971,7 @@ document
 if(answer===x.answer){
 
 
-
 correct(x);
-
 
 
 }
@@ -925,7 +980,6 @@ else{
 
 
 wrong(x);
-
 
 
 }
@@ -945,6 +999,8 @@ setTimeout(()=>{
 nextLesson();
 
 
+showLesson();
+
 
 },1500);
 
@@ -959,15 +1015,15 @@ nextLesson();
 
 
 // ================================
-// 答对处理
+// 答对
 // ================================
 
 
 function correct(x){
 
 
-x.correct++;
 
+x.correct++;
 
 x.streak++;
 
@@ -975,20 +1031,21 @@ x.streak++;
 
 // 连续正确增加掌握度
 
-
 if(x.streak===1){
+
 
 x.mastery+=5;
 
-}
 
+}
 
 else if(x.streak===2){
 
+
 x.mastery+=8;
 
-}
 
+}
 
 else{
 
@@ -1002,7 +1059,9 @@ x.mastery+=15;
 
 if(x.mastery>100){
 
+
 x.mastery=100;
+
 
 }
 
@@ -1010,7 +1069,7 @@ x.mastery=100;
 
 
 
-// 第一次真正掌握奖励
+// 达到掌握奖励
 
 if(x.mastery>=90 && !x.reward){
 
@@ -1048,12 +1107,14 @@ x.text;
 setReview(x);
 
 
+
 speak(
 
 "回答正确。"+
 x.text
 
 );
+
 
 
 }
@@ -1063,8 +1124,9 @@ x.text
 
 
 
+
 // ================================
-// 答错处理
+// 答错
 // ================================
 
 
@@ -1075,6 +1137,7 @@ x.wrong++;
 
 
 x.streak=0;
+
 
 
 x.mastery-=5;
@@ -1092,7 +1155,6 @@ x.mastery=0;
 
 // 加入错题池
 
-
 if(!wrongQueue.includes(x.id)){
 
 
@@ -1103,13 +1165,11 @@ wrongQueue.push(x.id);
 
 
 
-
 document
 .getElementById("result")
 .innerText=
 
-"需要加强："+
-x.text;
+"需要加强："+x.text;
 
 
 
@@ -1128,15 +1188,22 @@ setReview(x);
 }
 
 
+
+
+
+
+
 // ================================
-// 艾宾浩斯复习算法
+// 艾宾浩斯复习
 // ================================
 
 
 function setReview(x){
 
 
-let now=Date.now();
+let now=
+
+Date.now();
 
 
 
@@ -1155,7 +1222,7 @@ x.review=
 
 now+
 
-24*60*60*1000;
+86400000;
 
 
 }
@@ -1167,7 +1234,7 @@ x.review=
 
 now+
 
-3*24*60*60*1000;
+86400000*3;
 
 
 }
@@ -1179,27 +1246,30 @@ x.review=
 
 now+
 
-7*24*60*60*1000;
+86400000*7;
 
 
 }
 
 
 }
+
 
 
 
 
 
 // ================================
-// 获取需要复习内容
+// 获取复习列表
 // ================================
 
 
 function getReviewList(){
 
 
-let now=Date.now();
+let now=
+
+Date.now();
 
 
 
@@ -1213,23 +1283,15 @@ return x.review<=now;
 
 
 }
-
-
-
-
-
-
 // ================================
-// 下一条口诀选择
+// 下一题选择
 // ================================
 
 
 function nextLesson(){
 
 
-
 // 优先错题
-
 
 if(wrongQueue.length>0){
 
@@ -1243,6 +1305,8 @@ wrongQueue.shift();
 current=id;
 
 
+showLesson();
+
 
 return;
 
@@ -1252,7 +1316,8 @@ return;
 
 
 
-// 再检查艾宾浩斯复习
+
+// 艾宾浩斯复习
 
 
 let review=
@@ -1264,11 +1329,12 @@ getReviewList();
 if(review.length>0){
 
 
-
 current=
 
 review[0].id;
 
+
+showLesson();
 
 
 return;
@@ -1279,7 +1345,7 @@ return;
 
 
 
-// 正常学习顺序
+// 正常顺序
 
 
 current++;
@@ -1296,6 +1362,9 @@ current=0;
 
 
 
+showLesson();
+
+
 }
 
 
@@ -1303,8 +1372,9 @@ current=0;
 
 
 
+
 // ================================
-// 绿色掌握进度
+// 掌握进度
 // ================================
 
 
@@ -1340,8 +1410,10 @@ lessons.length
 
 
 
+
+
 // ================================
-// 等级系统
+// 等级
 // ================================
 
 
@@ -1355,6 +1427,7 @@ return "数学小苗";
 
 
 }
+
 
 
 if(stars<200){
@@ -1376,6 +1449,7 @@ return "乘法高手";
 }
 
 
+
 return "数学达人";
 
 
@@ -1386,8 +1460,9 @@ return "数学达人";
 
 
 
+
 // ================================
-// 页面刷新
+// 更新页面
 // ================================
 
 
@@ -1438,13 +1513,13 @@ getLevel();
 
 
 
+
 // ================================
-// 每日学习提醒
+// 今日提示
 // ================================
 
 
 function dailyMessage(){
-
 
 
 let review=
@@ -1463,7 +1538,7 @@ document
 
 "今天先复习"+
 review.length+
-"个需要加强的口诀";
+"个薄弱口诀";
 
 
 }
@@ -1506,16 +1581,16 @@ save();
 
 
 
-// ================================
-// 初始化启动
-// ================================
 
 
-// 页面打开时
-// 先选择最需要学习的口诀
+
+// ================================
+// 初始化
+// ================================
 
 
 function init(){
+
 
 
 let review=
@@ -1558,9 +1633,6 @@ dailyMessage();
 
 
 
-
-// 防止刷新丢失
-
 window.onbeforeunload=function(){
 
 
@@ -1572,7 +1644,7 @@ save();
 
 
 
-// 启动程序
+// 启动
 
 init();
 

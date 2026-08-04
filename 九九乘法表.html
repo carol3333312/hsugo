@@ -4,9 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
 
-<title>九九乘法智能老师 V6</title>
+<title>九九乘法智能老师 V7</title>
 
 <style>
+
 *{
 box-sizing:border-box;
 margin:0;
@@ -14,305 +15,522 @@ padding:0;
 -webkit-tap-highlight-color:transparent;
 }
 
+
 body{
+
 height:100vh;
+
 overflow:hidden;
-font-family:-apple-system,"Microsoft YaHei",sans-serif;
-background:linear-gradient(#dff6ff,#ffffff);
+
+font-family:-apple-system,
+"SF Pro Display",
+"Microsoft YaHei",
+sans-serif;
+
+background:
+linear-gradient(180deg,#eaf8ff,#ffffff);
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
 }
+
 
 
 .app{
+
 width:94%;
+
 max-width:390px;
-height:100vh;
-margin:auto;
+
+height:calc(100vh - 20px);
+
+max-height:680px;
+
+background:#fff;
+
+border-radius:26px;
+
+padding:14px;
+
+box-shadow:
+0 10px 35px rgba(0,0,0,.08);
+
 display:flex;
+
 flex-direction:column;
-justify-content:center;
-gap:8px;
+
+justify-content:space-between;
+
 }
 
 
-.card{
-background:#fff;
-border-radius:18px;
-padding:10px;
-box-shadow:0 4px 15px rgba(0,0,0,.08);
+
+/* 顶部 */
+
+.header{
+
 text-align:center;
+
 }
 
 
 .title{
-font-size:20px;
+
+font-size:21px;
+
 font-weight:800;
+
+color:#222;
+
 }
 
 
-.sub{
+.subtitle{
+
 font-size:12px;
-color:#777;
+
+color:#888;
+
+margin-top:2px;
+
 }
+
 
 
 .status{
+
 display:flex;
-gap:8px;
+
+justify-content:center;
+
+gap:12px;
+
+margin-top:8px;
+
 }
 
 
-.box{
-flex:1;
-background:#f5f7fa;
-border-radius:12px;
-padding:6px;
+.status span{
+
+background:#f6f8fb;
+
+border-radius:14px;
+
+padding:5px 12px;
+
+font-size:14px;
+
+font-weight:600;
+
 }
 
 
-.label{
-font-size:12px;
-color:#888;
+
+
+
+/* 进度 */
+
+.progress-area{
+
+text-align:center;
+
 }
-
-
-.num{
-font-size:22px;
-font-weight:bold;
-color:#ff9800;
-}
-
-
-.rank{
-font-size:13px;
-margin-top:5px;
-color:#555;
-}
-
 
 
 .level{
-font-size:16px;
-font-weight:bold;
+
+font-size:15px;
+
+font-weight:700;
+
 }
 
 
 
 .progress{
-height:8px;
+
+height:7px;
+
 background:#eee;
+
 border-radius:10px;
+
 overflow:hidden;
+
+margin:5px 15px;
+
 }
 
 
+
 .bar{
+
 height:100%;
+
 width:0;
+
 background:#4caf50;
+
 transition:.3s;
+
+}
+
+
+
+
+
+/* 口诀 */
+
+.memory{
+
+text-align:center;
+
+}
+
+
+
+.label{
+
+font-size:12px;
+
+color:#999;
+
+}
+
+
+
+.kou-row{
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+gap:8px;
+
 }
 
 
 
 .kou{
-font-size:22px;
-font-weight:bold;
+
+font-size:21px;
+
+font-weight:700;
+
 color:#222;
-background:#fafafa;
+
+padding:4px 10px;
+
+background:#f7f9fb;
+
 border-radius:12px;
-padding:8px;
-margin:6px;
+
+}
+
+
+
+.voice{
+
+border:0;
+
+background:#e3f2fd;
+
+color:#1976d2;
+
+border-radius:20px;
+
+padding:5px 10px;
+
+}
+
+
+
+
+
+/* 题目 */
+
+.question-area{
+
+text-align:center;
+
 }
 
 
 
 .question{
-font-size:32px;
-font-weight:bold;
-margin:8px;
+
+font-size:34px;
+
+font-weight:800;
+
+margin:5px;
+
 }
 
 
 
 .answer{
-width:120px;
-height:42px;
+
+width:110px;
+
+height:40px;
+
 border-radius:12px;
+
 border:2px solid #ddd;
+
 font-size:24px;
+
 text-align:center;
+
 background:#fafafa;
+
 }
 
 
+
+
+
+
+/* 数字键 */
 
 .keyboard{
+
 display:grid;
+
 grid-template-columns:repeat(3,1fr);
-gap:7px;
-margin-top:8px;
+
+gap:6px;
+
 }
+
 
 
 .key{
-height:42px;
+
+height:38px;
+
 border:0;
+
 border-radius:12px;
-font-size:20px;
-font-weight:bold;
-background:#edf5ff;
+
+background:#f0f6ff;
+
+font-size:19px;
+
+font-weight:700;
+
 }
+
 
 
 .key:active{
-background:#c9ddff;
-transform:scale(.95);
+
+transform:scale(.94);
+
 }
 
 
 
-.row{
+
+
+/* 操作按钮 */
+
+
+.actions{
+
 display:flex;
+
 gap:7px;
-margin-top:8px;
+
 }
+
 
 
 .btn{
+
 flex:1;
-height:40px;
+
+height:38px;
+
 border:0;
+
 border-radius:12px;
-font-weight:bold;
+
+font-weight:700;
+
 }
 
 
+
 .learn{
+
 background:#2196f3;
+
 color:white;
+
 }
 
 
 .submit{
+
 background:#4caf50;
+
 color:white;
+
 }
 
 
 .reset{
+
 background:#eee;
+
 }
 
 
 
-.small{
-border:0;
-background:#e3f2fd;
-color:#1976d2;
-padding:6px 15px;
-border-radius:20px;
-}
 
+.message{
 
-.msg{
 height:22px;
-font-size:16px;
+
+text-align:center;
+
+font-size:15px;
+
 font-weight:bold;
+
 }
+
 
 
 .good{
+
 color:#4caf50;
+
 }
 
 
 .bad{
+
 color:#ff7043;
+
 }
 
+
+
 </style>
+
 </head>
+
 
 <body>
 
+
 <div class="app">
 
-<div class="card">
+
+<div class="header">
 
 <div class="title">
 🌈 九九乘法智能老师
 </div>
 
-<div class="sub">
+<div class="subtitle">
 快乐学习 · 闯关成长
 </div>
 
 
 <div class="status">
 
-<div class="box">
-<div class="label">⭐ 星星</div>
-<div id="stars" class="num">0</div>
-</div>
+<span>
+⭐ <b id="stars">0</b>
+</span>
+
+<span>
+🔥 <b id="combo">0</b>
+</span>
+
+<span id="rank">
+🌱
+</span>
 
 
-<div class="box">
-<div class="label">🔥 连胜</div>
-<div id="combo" class="num">0</div>
-</div>
-
-</div>
-
-
-<div id="rank" class="rank">
-🌱 小芽阶段
 </div>
 
 </div>
 
 
 
-<div class="card">
+
+
+<div class="progress-area">
+
 
 <div id="level" class="level">
-第一关
+第一关：一的乘法
 </div>
+
 
 <div class="progress">
+
 <div id="bar" class="bar"></div>
+
 </div>
 
-<div id="progressText">
+
+<div id="progressText"
+style="font-size:12px;color:#888">
 0/9
 </div>
 
+
 </div>
 
 
 
-<div class="card">
 
-<div style="font-size:12px">
+
+<div class="memory">
+
+<div class="label">
 📖口诀
 </div>
 
-<div id="kou" class="kou">
+
+<div class="kou-row">
+
+<div id="kou"
+class="kou">
 一一得一
 </div>
 
-<button id="voice" class="small">
-🔊听口诀
+
+<button id="voice"
+class="voice">
+🔊
 </button>
+
+
+</div>
 
 </div>
 
 
 
 
-<div class="card">
+
+<div class="question-area">
 
 
-<div id="question" class="question">
+<div id="question"
+class="question">
 1 × 1 = ?
 </div>
 
@@ -323,27 +541,45 @@ readonly
 placeholder="答案">
 
 
+</div>
+
+
+
+
+
 <div class="keyboard">
 
+
 <button class="key">1</button>
+
 <button class="key">2</button>
+
 <button class="key">3</button>
 
+
 <button class="key">4</button>
+
 <button class="key">5</button>
+
 <button class="key">6</button>
 
+
 <button class="key">7</button>
+
 <button class="key">8</button>
+
 <button class="key">9</button>
+
 
 <button class="key">0</button>
 
-<button id="del" class="key">
+<button id="del"
+class="key">
 ⌫
 </button>
 
-<button id="clear" class="key">
+<button id="clear"
+class="key">
 清
 </button>
 
@@ -351,69 +587,103 @@ placeholder="答案">
 </div>
 
 
-<div class="row">
 
-<button id="learn" class="btn learn">
+
+
+<div class="actions">
+
+
+<button id="learn"
+class="btn learn">
 📖学习
 </button>
 
-<button id="submit" class="btn submit">
-🚀提交
+
+<button id="submit"
+class="btn submit">
+提交
 </button>
 
-<button id="reset" class="btn reset">
+
+<button id="reset"
+class="btn reset">
 重开
 </button>
 
-</div>
-
-
-<div id="msg" class="msg"></div>
-
 
 </div>
 
+
+
+<div id="message"
+class="message">
 </div>
+
+
+
+</div>
+
 <script>
 
 const kou={
-"1x1":"一一得一","1x2":"一二得二","1x3":"一三得三",
-"1x4":"一四得四","1x5":"一五得五","1x6":"一六得六",
-"1x7":"一七得七","1x8":"一八得八","1x9":"一九得九",
+"1x1":"一一得一",
+"1x2":"一二得二",
+"1x3":"一三得三",
+"1x4":"一四得四",
+"1x5":"一五得五",
+"1x6":"一六得六",
+"1x7":"一七得七",
+"1x8":"一八得八",
+"1x9":"一九得九",
 
-"2x2":"二二得四","2x3":"二三得六","2x4":"二四得八",
-"2x5":"二五一十","2x6":"二六十二","2x7":"二七十四",
-"2x8":"二八十六","2x9":"二九十八",
+"2x2":"二二得四",
+"2x3":"二三得六",
+"2x4":"二四得八",
+"2x5":"二五一十",
+"2x6":"二六十二",
+"2x7":"二七十四",
+"2x8":"二八十六",
+"2x9":"二九十八",
 
-"3x3":"三三得九","3x4":"三四十二","3x5":"三五十五",
-"3x6":"三六十八","3x7":"三七二十一",
-"3x8":"三八二十四","3x9":"三九二十七",
+"3x3":"三三得九",
+"3x4":"三四十二",
+"3x5":"三五十五",
+"3x6":"三六十八",
+"3x7":"三七二十一",
+"3x8":"三八二十四",
+"3x9":"三九二十七",
 
-"4x4":"四四十六","4x5":"四五二十","4x6":"四六二十四",
-"4x7":"四七二十八","4x8":"四八三十二",
+"4x4":"四四十六",
+"4x5":"四五二十",
+"4x6":"四六二十四",
+"4x7":"四七二十八",
+"4x8":"四八三十二",
 "4x9":"四九三十六",
 
-"5x5":"五五二十五","5x6":"五六三十",
-"5x7":"五七三十五","5x8":"五八四十",
+"5x5":"五五二十五",
+"5x6":"五六三十",
+"5x7":"五七三十五",
+"5x8":"五八四十",
 "5x9":"五九四十五",
 
-"6x6":"六六三十六","6x7":"六七四十二",
-"6x8":"六八四十八","6x9":"六九五十四",
+"6x6":"六六三十六",
+"6x7":"六七四十二",
+"6x8":"六八四十八",
+"6x9":"六九五十四",
 
-"7x7":"七七四十九","7x8":"七八五十六",
+"7x7":"七七四十九",
+"7x8":"七八五十六",
 "7x9":"七九六十三",
 
-"8x8":"八八六十四","8x9":"八九七十二",
+"8x8":"八八六十四",
+"8x9":"八九七十二",
 
 "9x9":"九九八十一"
 };
 
 
-// =====================
-// 创建题库
-// 小数字永远在前
-// =====================
 
+// 创建题库
 let questions=[];
 
 
@@ -427,7 +697,6 @@ for(let a=1;a<=9;a++){
             b:b,
             answer:a*b,
             key:a+"x"+b,
-
             error:0,
             done:false
 
@@ -439,24 +708,12 @@ for(let a=1;a<=9;a++){
 
 
 
+let group=1;
 
 let index=0;
 
-
-// 学习模式
-// 1 顺序学习
-// 2 强化
-// 3 混合挑战
-
-let mode=1;
-
-
-let group=1;
-
-
 let stars=
 Number(localStorage.getItem("stars")||0);
-
 
 let combo=0;
 
@@ -466,8 +723,10 @@ const answer=
 document.getElementById("answer");
 
 
-const msg=
-document.getElementById("msg");
+const message=
+document.getElementById("message");
+
+
 
 
 
@@ -476,6 +735,8 @@ document.getElementById("stars")
 
 
 
+
+// 保存
 
 function save(){
 
@@ -490,36 +751,35 @@ stars
 
 // 等级
 
-function rank(){
+function updateRank(){
 
-
-let r=
-document.getElementById("rank");
+let r=document.getElementById("rank");
 
 
 if(stars<20){
 
-r.innerText="🌱 小芽阶段";
+r.innerText="🌱";
 
 }
 else if(stars<50){
 
-r.innerText="🌿 小苗阶段";
+r.innerText="🌿";
 
 }
 else if(stars<100){
 
-r.innerText="🌳 小树阶段";
+r.innerText="🌳";
 
 }
 else{
 
-r.innerText="🏆 数学达人";
+r.innerText="🏆";
+
+}
 
 }
 
 
-}
 
 
 
@@ -528,41 +788,31 @@ r.innerText="🏆 数学达人";
 function current(){
 
 
-let list;
-
-
-if(mode===3){
-
-list=questions;
-
-}
-
-else{
-
-
-list=
+let list=
 questions.filter(
 q=>q.a===group
 );
 
 
-}
 
-
-
-return list[index % list.length];
+return list[index%list.length];
 
 
 }
 
 
 
-// 显示题目
 
-function show(){
+
+
+
+// 显示
+
+function render(){
 
 
 let q=current();
+
 
 
 document.getElementById("level")
@@ -587,13 +837,7 @@ answer.value="";
 
 
 
-let total=
-questions.filter(
-x=>x.a===group
-).length;
-
-
-let finish=
+let done=
 questions.filter(
 x=>x.a===group&&x.done
 ).length;
@@ -602,17 +846,16 @@ x=>x.a===group&&x.done
 
 document.getElementById("bar")
 .style.width=
-(finish/total*100)+"%";
-
+(done/9*100)+"%";
 
 
 document.getElementById("progressText")
 .innerText=
-finish+"/9 完成";
+done+"/9";
 
 
+message.innerText="";
 
-msg.innerText="";
 
 
 }
@@ -621,23 +864,21 @@ msg.innerText="";
 
 
 
-// =====================
-// 音效
-// =====================
+// 声音
 
-
-function tone(type){
+function sound(type){
 
 
 try{
 
 
-let AC=
+let Audio=
 window.AudioContext||
 window.webkitAudioContext;
 
 
-let ctx=new AC();
+let ctx=new Audio();
+
 
 
 let osc=
@@ -646,6 +887,7 @@ ctx.createOscillator();
 
 let gain=
 ctx.createGain();
+
 
 
 osc.connect(gain);
@@ -681,7 +923,7 @@ ctx.currentTime+.25
 
 
 
-// 通关音乐
+// 通关声音
 
 function passSound(){
 
@@ -689,12 +931,13 @@ function passSound(){
 try{
 
 
-let AC=
+let Audio=
 window.AudioContext||
 window.webkitAudioContext;
 
 
-let ctx=new AC();
+let ctx=new Audio();
+
 
 
 let notes=[
@@ -705,42 +948,45 @@ let notes=[
 notes.forEach((n,i)=>{
 
 
-let o=
+let osc=
 ctx.createOscillator();
 
 
-let g=
+let gain=
 ctx.createGain();
 
 
-
-o.frequency.value=n;
-
-
-o.connect(g);
-
-g.connect(ctx.destination);
+osc.frequency.value=n;
 
 
+osc.connect(gain);
 
-let t=
-ctx.currentTime+i*.15;
-
-
-g.gain.setValueAtTime(
-.18,t
+gain.connect(
+ctx.destination
 );
 
 
-g.gain.exponentialRampToValueAtTime(
-.01,
-t+.4
+
+let time=
+ctx.currentTime+i*0.15;
+
+
+gain.gain.setValueAtTime(
+0.18,
+time
 );
 
 
-o.start(t);
+gain.gain.exponentialRampToValueAtTime(
+0.01,
+time+0.4
+);
 
-o.stop(t+.45);
+
+
+osc.start(time);
+
+osc.stop(time+0.45);
 
 
 
@@ -755,9 +1001,102 @@ o.stop(t+.45);
 
 
 
-// =====================
+
+
+// 语音
+
+function speak(text){
+
+
+if(window.speechSynthesis){
+
+
+speechSynthesis.cancel();
+
+
+let u=
+new SpeechSynthesisUtterance(text);
+
+
+u.lang="zh-CN";
+
+u.rate=.8;
+
+
+speechSynthesis.speak(u);
+
+
+}
+
+}
+
+
+
+// 数字键盘
+
+document
+.querySelectorAll(".key")
+.forEach(btn=>{
+
+
+btn.onclick=function(){
+
+
+let value=this.innerText;
+
+
+
+if(value==="⌫"){
+
+
+answer.value=
+answer.value.slice(0,-1);
+
+
+return;
+
+
+}
+
+
+
+if(value==="清"){
+
+
+answer.value="";
+
+
+return;
+
+
+}
+
+
+
+if(answer.value.length<2){
+
+
+answer.value+=value;
+
+
+}
+
+
+
+};
+
+
+});
+
+
+
+
+
+
+
+
 // 提交答案
-// =====================
+
 
 document
 .getElementById("submit")
@@ -767,17 +1106,13 @@ document
 let q=current();
 
 
+
 if(answer.value==="")
 return;
 
 
 
-let user=
-Number(answer.value);
-
-
-
-if(user===q.answer){
+if(Number(answer.value)===q.answer){
 
 
 q.done=true;
@@ -800,23 +1135,23 @@ document.getElementById("combo")
 
 save();
 
-rank();
-
-
-msg.innerText=
-"🎉 太棒了！";
-
-
-msg.className=
-"msg good";
-
-
-tone("ok");
+updateRank();
 
 
 
+message.innerText=
+"🎉 答对啦！";
 
-// 判断当前组是否完成
+
+message.className=
+"message good";
+
+
+sound("ok");
+
+
+
+// 检查这一组是否完成
 
 let groupList=
 questions.filter(
@@ -825,17 +1160,15 @@ x=>x.a===group
 
 
 
-let complete=
+let finished=
 groupList.every(
 x=>x.done
 );
 
 
 
-if(complete){
+if(finished){
 
-
-// 播放过关音乐
 
 setTimeout(()=>{
 
@@ -843,18 +1176,10 @@ setTimeout(()=>{
 passSound();
 
 
-msg.innerText=
-"🏆 恭喜！"+
-group+
-"的乘法通关！";
+message.innerText=
+"🏆 "+group+"的乘法通关！";
 
 
-msg.className=
-"msg good";
-
-
-
-// 下一组
 
 setTimeout(()=>{
 
@@ -869,35 +1194,25 @@ index=0;
 if(group>9){
 
 
-mode=3;
-
-
-msg.innerText=
-"🎉 全部口诀完成！挑战模式开启";
+message.innerText=
+"🎊 全部口诀完成！";
 
 
 group=1;
 
 
-}
-
-
-
-// 下一轮清除完成状态
-
 questions.forEach(q=>{
 
-if(mode===3){
-
 q.done=false;
-
-}
 
 });
 
 
+}
 
-show();
+
+
+render();
 
 
 
@@ -905,7 +1220,7 @@ show();
 
 
 
-},500);
+},400);
 
 
 
@@ -916,9 +1231,11 @@ else{
 
 setTimeout(()=>{
 
+
 index++;
 
-show();
+render();
+
 
 },500);
 
@@ -927,8 +1244,8 @@ show();
 
 
 
-}
 
+}
 else{
 
 
@@ -943,71 +1260,19 @@ document.getElementById("combo")
 q.error++;
 
 
-msg.innerText=
+
+message.innerText=
 "😊 再想想\n"+
 kou[q.key];
 
 
-msg.className=
-"msg bad";
+message.className=
+"message bad";
 
 
-tone("bad");
+sound("bad");
 
 
-}
-
-
-};
-
-
-
-
-
-
-
-// =====================
-// 数字键盘
-// =====================
-
-
-document
-.querySelectorAll(".key")
-.forEach(btn=>{
-
-
-btn.onclick=function(){
-
-
-let t=
-this.innerText;
-
-
-
-if(t==="⌫"){
-
-answer.value=
-answer.value.slice(0,-1);
-
-return;
-
-}
-
-
-
-if(t==="清"){
-
-answer.value="";
-
-return;
-
-}
-
-
-
-if(answer.value.length<2){
-
-answer.value+=t;
 
 }
 
@@ -1017,17 +1282,11 @@ answer.value+=t;
 
 
 
-});
 
 
 
 
-
-
-// =====================
-// 学习模式
-// =====================
-
+// 学习
 
 document
 .getElementById("learn")
@@ -1037,17 +1296,11 @@ document
 let q=current();
 
 
-let text=
-q.a+"乘"+q.b+
-"等于"+
-q.answer+
-"。口诀是"+
-kou[q.key];
+message.innerText=
+"📖 "+q.a+"×"+q.b+
+"="+q.answer+
+"  "+kou[q.key];
 
-
-
-msg.innerText=
-"📖 "+text;
 
 
 speak(
@@ -1063,11 +1316,7 @@ kou[q.key]
 
 
 
-
-// =====================
-// 语音
-// =====================
-
+// 听口诀
 
 document
 .getElementById("voice")
@@ -1082,50 +1331,16 @@ kou[q.key]
 );
 
 
+
 };
 
 
 
 
 
-function speak(text){
 
 
-if(
-window.speechSynthesis
-){
-
-
-speechSynthesis.cancel();
-
-
-let u=
-new SpeechSynthesisUtterance(text);
-
-
-u.lang="zh-CN";
-
-
-u.rate=.8;
-
-
-speechSynthesis.speak(u);
-
-
-}
-
-
-}
-
-
-
-
-
-
-
-// =====================
 // 重置
-// =====================
 
 
 document
@@ -1138,6 +1353,10 @@ stars=0;
 
 combo=0;
 
+group=1;
+
+index=0;
+
 
 localStorage.clear();
 
@@ -1145,11 +1364,14 @@ localStorage.clear();
 
 questions.forEach(q=>{
 
+
 q.done=false;
 
 q.error=0;
 
+
 });
+
 
 
 document.getElementById("stars")
@@ -1160,16 +1382,11 @@ document.getElementById("combo")
 .innerText=0;
 
 
-group=1;
-
-index=0;
-
-mode=1;
+updateRank();
 
 
-rank();
+render();
 
-show();
 
 
 };
@@ -1179,9 +1396,9 @@ show();
 
 
 
-// =====================
+
+
 // 错题强化
-// =====================
 
 function strengthen(){
 
@@ -1189,14 +1406,18 @@ function strengthen(){
 questions.sort(function(a,b){
 
 
+
 if(b.error!==a.error){
 
+
 return b.error-a.error;
+
 
 }
 
 
-// 保持口诀顺序
+
+// 保证口诀顺序
 
 return(
 a.a*10+a.b
@@ -1205,6 +1426,7 @@ a.a*10+a.b
 (
 b.a*10+b.b
 );
+
 
 
 });
@@ -1218,15 +1440,20 @@ b.a*10+b.b
 
 // 初始化
 
-rank();
+
+updateRank();
+
 
 strengthen();
 
-show();
+
+render();
 
 
 
 </script>
 
+
 </body>
+
 </html>

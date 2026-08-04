@@ -1,32 +1,881 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>九九成长树 V1.5</title><style>
-*{box-sizing:border-box}body{margin:0;height:100dvh;overflow:hidden;font-family:"Microsoft YaHei";background:linear-gradient(#8ed8ff,#fff3b0,#b8e994)}
-.app{height:100dvh;max-width:390px;margin:auto;padding:8px;padding-bottom:env(safe-area-inset-bottom)}.world{height:100%;background:#ffffff66;border-radius:25px;padding:10px;display:flex;flex-direction:column}.top{display:flex;justify-content:space-between;font-weight:bold}
-.scene{height:175px;position:relative;display:flex;align-items:center;justify-content:center}.tree{font-size:100px}.hero{position:absolute;left:25px;bottom:10px;font-size:38px}.fruits{position:absolute;top:65px}
-.score{text-align:center}.progress{height:10px;background:#fff8;border-radius:10px}.bar{height:100%;background:#43a047;width:0}
-.kou{text-align:center;font-size:32px;font-weight:bold}.question{text-align:center;font-size:32px;font-weight:bold}
-input{width:110px;height:40px;margin:3px auto;display:block;font-size:25px;text-align:center;border-radius:12px}
-.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}.key{height:34px;background:white}
-button{border:0;border-radius:14px}.submit{width:100%;height:46px;margin-top:8px;background:#4caf50;color:white;font-size:18px}.restart{width:100%;height:40px;margin-top:6px;background:white}.tip{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:22px;display:none}
-</style></head><body><div class="app"><div class="world">
-<div class="top"><div>🌱 九九成长树</div><div id="chapter"></div></div>
-<div class="scene"><div class="hero">👦💧</div><div id="tree" class="tree">🌱</div><div id="fruits" class="fruits"></div><div id="tip" class="tip"></div></div>
-<div class="score">⭐成长值 <span id="score">0</span></div><div id="progressText"></div><div class="progress"><div id="bar" class="bar"></div></div>
-<div style="text-align:center">📖口诀</div><div id="kou" class="kou"></div><button onclick="voice()">🔊听口诀</button>
-<div id="question" class="question"></div><input id="answer" readonly>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>九九成长树 V3.1</title>
+
+<style>
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+height:100vh;
+overflow:hidden;
+font-family:"Microsoft YaHei",sans-serif;
+background:linear-gradient(#9edcff,#fff3b0,#b9e8a0);
+}
+
+.app{
+height:100vh;
+max-width:390px;
+margin:auto;
+padding:8px;
+padding-bottom:env(safe-area-inset-bottom);
+}
+
+.world{
+height:100%;
+background:rgba(255,255,255,.45);
+border-radius:25px;
+padding:10px;
+display:flex;
+flex-direction:column;
+overflow:hidden;
+}
+
+.top{
+display:flex;
+justify-content:space-between;
+font-weight:bold;
+font-size:16px;
+}
+
+.scene{
+height:180px;
+position:relative;
+display:flex;
+justify-content:center;
+align-items:center;
+overflow:hidden;
+}
+
+.sun{
+position:absolute;
+right:20px;
+top:5px;
+font-size:35px;
+}
+
+.moon{
+display:none;
+position:absolute;
+right:20px;
+top:5px;
+font-size:35px;
+}
+
+.tree{
+font-size:110px;
+transition:.5s;
+}
+
+.tree.grow{
+animation:shake .6s;
+}
+
+@keyframes shake{
+0%{transform:rotate(0)}
+25%{transform:rotate(-4deg)}
+50%{transform:rotate(4deg)}
+100%{transform:rotate(0)}
+}
+
+.water{
+position:absolute;
+top:20px;
+font-size:28px;
+animation:drop 1s forwards;
+}
+
+@keyframes drop{
+from{
+transform:translateY(0);
+opacity:1;
+}
+to{
+transform:translateY(90px);
+opacity:0;
+}
+}
+
+.fruits{
+position:absolute;
+width:150px;
+height:120px;
+top:25px;
+}
+
+.score{
+text-align:center;
+}
+
+.progress{
+height:10px;
+background:#ffffffaa;
+border-radius:20px;
+overflow:hidden;
+}
+
+.bar{
+height:100%;
+background:#43a047;
+width:0;
+}
+
+.kou{
+text-align:center;
+font-size:32px;
+font-weight:bold;
+color:#222;
+}
+
+.question{
+text-align:center;
+font-size:32px;
+font-weight:bold;
+}
+
+input{
+display:block;
+width:110px;
+height:42px;
+margin:3px auto;
+font-size:25px;
+text-align:center;
+border-radius:12px;
+border:1px solid #aaa;
+}
+
+.keys{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:5px;
+}
+
+button{
+border:0;
+border-radius:14px;
+font-size:16px;
+}
+
+.key{
+height:34px;
+background:white;
+}
+
+.submit{
+height:50px;
+width:100%;
+margin-top:8px;
+background:#43a047;
+color:white;
+font-size:18px;
+}
+
+.restart{
+height:40px;
+width:100%;
+margin-top:6px;
+}
+
+.msg{
+height:18px;
+text-align:center;
+color:#388e3c;
+}
+
+</style>
+</head>
+<body>
+
+<div class="app">
+
+<div class="world">
+
+<div class="top">
+<div>🌱 九九成长树</div>
+<div id="chapter"></div>
+</div>
+
+
+<div class="scene" id="scene">
+
+<div class="sun" id="sun">☀️</div>
+
+<div class="moon" id="moon">🌙</div>
+
+
+<div class="tree" id="tree">
+🌱
+</div>
+
+
+<div class="fruits" id="fruits"></div>
+
+
+</div>
+
+
+
+<div class="score">
+⭐成长值 <span id="score">0</span>
+</div>
+
+
+
+<div id="progressText">
+</div>
+
+
+<div class="progress">
+<div id="bar" class="bar"></div>
+</div>
+
+
+
+<div style="text-align:center">
+📖口诀
+</div>
+
+
+<div id="kou" class="kou">
+</div>
+
+
+
+<button onclick="voice()">
+🔊听口诀
+</button>
+
+
+
+<div id="question" class="question">
+</div>
+
+
+
+<input id="answer" readonly>
+
+
+
 <div class="keys">
-<button class="key" onclick="add(1)">1</button><button class="key" onclick="add(2)">2</button><button class="key" onclick="add(3)">3</button>
-<button class="key" onclick="add(4)">4</button><button class="key" onclick="add(5)">5</button><button class="key" onclick="add(6)">6</button>
-<button class="key" onclick="add(7)">7</button><button class="key" onclick="add(8)">8</button><button class="key" onclick="add(9)">9</button>
-<button class="key" onclick="add(0)">0</button><button class="key" onclick="delA()">⌫</button></div>
-<button class="submit" onclick="check()">✅提交答案</button><button class="restart" onclick="restart()">🔄重新开始</button>
-</div></div>
+
+<button class="key" onclick="add(1)">1</button>
+
+<button class="key" onclick="add(2)">2</button>
+
+<button class="key" onclick="add(3)">3</button>
+
+
+<button class="key" onclick="add(4)">4</button>
+
+<button class="key" onclick="add(5)">5</button>
+
+<button class="key" onclick="add(6)">6</button>
+
+
+<button class="key" onclick="add(7)">7</button>
+
+<button class="key" onclick="add(8)">8</button>
+
+<button class="key" onclick="add(9)">9</button>
+
+
+<button class="key" onclick="add(0)">0</button>
+
+<button class="key" onclick="delA()">⌫</button>
+
+
+</div>
+
+
+
+<button class="submit" onclick="check()">
+✅提交答案
+</button>
+
+
+<button class="restart" onclick="restart()">
+🔄重新开始
+</button>
+
+
+
+<div id="msg" class="msg">
+</div>
+
+
+
+</div>
+
+</div>
+
+
 <script>
-const nums=["","一","二","三","四","五","六","七","八","九"];let group=1,index=1,done=0,score=0,fruit=0;
-function getKou(a,b){let r=a*b;return r<10?nums[a]+nums[b]+"得"+nums[r]:nums[a]+nums[b]+r}
-function render(){chapter.innerHTML="第"+group+"组："+nums[group]+"的乘法村";kou.innerHTML=getKou(group,index);question.innerHTML=group+" × "+index+" = ?";progressText.innerHTML="第"+group+"组 "+done+"/9";bar.style.width=done/9*100+"%";document.getElementById("score").innerHTML=score;tree.innerHTML=score<30?"🌱":score<80?"🌿":score<160?"🌳":"🌳🌸";fruits.innerHTML="🍎".repeat(fruit)}
-function add(n){answer.value+=n}function delA(){answer.value=answer.value.slice(0,-1)}
-function tipShow(t){tip.innerHTML=t;tip.style.display="block";setTimeout(()=>tip.style.display="none",900)}
-function check(){if(Number(answer.value)==group*index){score+=10;done++;if(score%30==0)fruit++;tipShow("💧🌱");if(done>=9){group++;done=0;index=1}else index++}else{if(fruit>0)fruit--;tipShow("🍎");}answer.value="";render()}
-function voice(){let u=new SpeechSynthesisUtterance(getKou(group,index));u.lang="zh-CN";speechSynthesis.speak(u)}
-function restart(){group=1;index=1;done=0;score=0;fruit=0;render()}render();
-</script></body></html>
+
+
+const nums=[
+"",
+"一",
+"二",
+"三",
+"四",
+"五",
+"六",
+"七",
+"八",
+"九"
+];
+
+
+let group=1;
+let index=1;
+let done=0;
+let score=0;
+let fruit=0;
+
+
+
+function cnNum(n){
+
+if(n<=9){
+return nums[n];
+}
+
+
+if(n==10){
+return "十";
+}
+
+
+if(n<20){
+return "十"+nums[n%10];
+}
+
+
+if(n%10==0){
+return nums[n/10]+"十";
+}
+
+
+return nums[Math.floor(n/10)]
++"十"
++nums[n%10];
+
+}
+
+
+
+function kouText(a,b){
+
+let r=a*b;
+
+
+if(r<10){
+
+return nums[a]
++nums[b]
++"得"
++nums[r];
+
+}
+
+
+return nums[a]
++nums[b]
++cnNum(r);
+
+}
+
+
+
+function render(){
+
+
+chapter.innerHTML=
+"第"+group+"组："+nums[group]+"的乘法村";
+
+
+
+kou.innerHTML=
+kouText(group,index);
+
+
+
+question.innerHTML=
+group+" × "+index+" = ?";
+
+
+
+progressText.innerHTML=
+"第"+group+"组 "+done+"/9";
+
+
+
+bar.style.width=
+(done/9*100)+"%";
+
+
+
+scoreEl.innerHTML=
+score;
+
+
+
+if(score<30){
+
+tree.innerHTML="🌱";
+
+}
+
+else if(score<80){
+
+tree.innerHTML="🌿";
+
+}
+
+else if(score<160){
+
+tree.innerHTML="🌳";
+
+}
+
+else{
+
+tree.innerHTML="🌳";
+
+}
+
+
+
+fruits.innerHTML="";
+
+
+
+let positions=[
+
+"top:20px;left:60px",
+
+"top:35px;left:95px",
+
+"top:65px;left:35px",
+
+"top:70px;left:110px",
+
+"top:45px;left:70px"
+
+];
+
+
+
+for(let i=0;i<fruit;i++){
+
+let f=document.createElement("span");
+
+f.innerHTML="🍎";
+
+f.style.position="absolute";
+
+f.style.cssText+=positions[i];
+
+fruits.appendChild(f);
+
+}
+
+
+
+if(score>300){
+
+sun.style.display="none";
+
+moon.style.display="block";
+
+}
+
+else{
+
+sun.style.display="block";
+
+moon.style.display="none";
+
+}
+
+
+
+}
+  function playSound(type){
+
+try{
+
+let ctx=new(window.AudioContext||window.webkitAudioContext)();
+
+let osc=ctx.createOscillator();
+
+let gain=ctx.createGain();
+
+
+osc.connect(gain);
+
+gain.connect(ctx.destination);
+
+
+
+if(type==="ok"){
+
+osc.frequency.value=900;
+
+}
+
+else if(type==="win"){
+
+osc.frequency.value=1300;
+
+}
+
+else{
+
+osc.frequency.value=300;
+
+}
+
+
+
+gain.gain.value=0.08;
+
+
+osc.start();
+
+
+osc.stop(
+ctx.currentTime+0.18
+);
+
+
+}catch(e){}
+
+}
+
+
+
+
+
+function growEffect(){
+
+
+tree.classList.remove("grow");
+
+void tree.offsetWidth;
+
+tree.classList.add("grow");
+
+
+
+let water=document.createElement("div");
+
+water.className="water";
+
+water.innerHTML="💧";
+
+
+scene.appendChild(water);
+
+
+
+setTimeout(()=>{
+
+water.remove();
+
+},1000);
+
+
+
+}
+
+
+
+
+
+
+function add(n){
+
+answer.value+=n;
+
+}
+
+
+
+
+function delA(){
+
+answer.value=
+answer.value.slice(0,-1);
+
+}
+
+
+
+
+
+function check(){
+
+
+
+let user=
+
+Number(answer.value);
+
+
+
+if(user===group*index){
+
+
+
+score+=10;
+
+done++;
+
+
+
+if(score%30===0 && fruit<5){
+
+fruit++;
+
+}
+
+
+
+playSound("ok");
+
+
+growEffect();
+
+
+
+msg.innerHTML=
+"🌱 小树成长啦";
+
+
+
+
+if(done>=9){
+
+
+playSound("win");
+
+
+msg.innerHTML=
+"🎉 通关，进入下一片森林";
+
+
+group++;
+
+done=0;
+
+index=1;
+
+
+
+if(group>9){
+
+group=1;
+
+}
+
+
+
+}
+
+else{
+
+
+index++;
+
+}
+
+
+
+}
+
+else{
+
+
+
+if(fruit>0){
+
+fruit--;
+
+}
+
+
+
+playSound("bad");
+
+
+
+msg.innerHTML=
+"🍎 果实掉下来啦，再看看口诀";
+
+
+
+}
+
+
+
+answer.value="";
+
+
+render();
+
+
+
+}
+
+
+
+
+
+function voice(){
+
+
+
+let text=
+
+kouText(group,index);
+
+
+
+let u=
+
+new SpeechSynthesisUtterance(text);
+
+
+
+u.lang="zh-CN";
+
+u.rate=0.8;
+
+u.pitch=1;
+
+
+
+speechSynthesis.cancel();
+
+
+speechSynthesis.speak(u);
+
+
+
+}
+
+
+
+
+
+
+
+function restart(){
+
+
+group=1;
+
+index=1;
+
+done=0;
+
+score=0;
+
+fruit=0;
+
+
+
+render();
+
+
+
+}
+
+
+
+
+
+
+let scoreEl=
+
+document.getElementById("score");
+
+
+
+let chapter=
+
+document.getElementById("chapter");
+
+
+let kou=
+
+document.getElementById("kou");
+
+
+let question=
+
+document.getElementById("question");
+
+
+let answer=
+
+document.getElementById("answer");
+
+
+let tree=
+
+document.getElementById("tree");
+
+
+let fruits=
+
+document.getElementById("fruits");
+
+
+let scene=
+
+document.getElementById("scene");
+
+
+let bar=
+
+document.getElementById("bar");
+
+
+let progressText=
+
+document.getElementById("progressText");
+
+
+let msg=
+
+document.getElementById("msg");
+
+
+let sun=
+
+document.getElementById("sun");
+
+
+let moon=
+
+document.getElementById("moon");
+
+
+
+
+render();
+
+
+</script>
+
+
+</body>
+
+</html>

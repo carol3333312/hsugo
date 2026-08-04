@@ -3,61 +3,65 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>九九成长树 V1.2</title>
+<title>九九成长树 V1.3</title>
 <style>
 *{box-sizing:border-box}
 body{
 margin:0;height:100dvh;overflow:hidden;
 font-family:"Microsoft YaHei",sans-serif;
-background:linear-gradient(#9edcff,#eaffd5);
+background:linear-gradient(#8ed8ff,#fff3b0,#b8e994);
 }
 .app{
 height:100dvh;max-width:390px;margin:auto;
 padding:8px;padding-bottom:env(safe-area-inset-bottom);
-display:flex;
 }
 .world{
-width:100%;height:100%;
-background:#ffffff55;border-radius:25px;
-padding:10px;display:flex;flex-direction:column;
-overflow:hidden;
+height:100%;border-radius:25px;
+background:#ffffff66;padding:10px;
+display:flex;flex-direction:column;
 }
 .top{display:flex;justify-content:space-between;font-weight:bold}
-.treeBox{
-height:190px;position:relative;
-display:flex;align-items:center;justify-content:center;
+.scene{
+height:185px;position:relative;
+display:flex;justify-content:center;align-items:center;
+overflow:hidden;
 }
-.tree{font-size:120px;transition:.5s}
-.fruits{position:absolute;font-size:30px;top:25px}
-.hero{position:absolute;left:35px;top:115px;font-size:35px}
+.sun{position:absolute;right:20px;top:10px;font-size:35px}
+.moon{display:none;position:absolute;right:20px;top:10px;font-size:35px}
+.tree{font-size:100px;transition:.5s}
+.hero{position:absolute;left:25px;bottom:10px;font-size:38px}
+.fruits{position:absolute;top:70px;font-size:24px}
 .score{text-align:center}
-.progress{height:10px;background:#ffffffaa;border-radius:10px}
+.progress{height:10px;background:#fff8;border-radius:10px}
 .bar{height:100%;background:#43a047;width:0}
 .kou{text-align:center;font-size:32px;font-weight:bold;color:#222}
 .question{text-align:center;font-size:32px;font-weight:bold}
 input{
-width:100px;height:38px;margin:3px auto;
-display:block;text-align:center;font-size:24px;
-border-radius:12px;border:1px solid #aaa;
+width:110px;height:38px;margin:3px auto;
+display:block;font-size:25px;text-align:center;
+border-radius:12px;border:1px solid #999;
 }
-.keys{
-display:grid;grid-template-columns:repeat(3,1fr);
-gap:5px;
-}
+.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
 button{
-height:34px;border:0;border-radius:12px;font-size:16px;
+height:34px;border:0;border-radius:12px;font-size:16px
 }
 .key{background:white}
-.main{background:#4caf50;color:white}
-.msg{text-align:center;color:#388e3c;height:22px}
+.submit{background:#4caf50;color:white}
+.msg{text-align:center;height:22px;color:#388e3c}
 </style>
 </head>
 <body>
 <div class="app">
 <div class="world">
-<div class="top"><div>🌱 九九成长树</div><div id="chapter"></div></div>
 
-<div class="treeBox">
+<div class="top">
+<div>🌱 九九成长树</div>
+<div id="chapter"></div>
+</div>
+
+<div class="scene">
+<div class="sun" id="sun">☀️</div>
+<div class="moon" id="moon">🌙</div>
 <div class="hero">👦💧</div>
 <div class="tree" id="tree">🌱</div>
 <div class="fruits" id="fruits"></div>
@@ -69,6 +73,7 @@ height:34px;border:0;border-radius:12px;font-size:16px;
 
 <div style="text-align:center">📖口诀</div>
 <div id="kou" class="kou"></div>
+
 <button onclick="voice()">🔊听口诀</button>
 
 <div id="question" class="question"></div>
@@ -88,9 +93,11 @@ height:34px;border:0;border-radius:12px;font-size:16px;
 <button class="key" onclick="delA()">⌫</button>
 </div>
 
-<button class="main" onclick="check()">💧浇水成长</button>
+<button class="submit" onclick="check()">✅提交答案</button>
 <button onclick="restart()">🔄重新开始</button>
+
 <div id="msg" class="msg"></div>
+
 </div>
 </div>
 
@@ -98,65 +105,82 @@ height:34px;border:0;border-radius:12px;font-size:16px;
 const nums=["","一","二","三","四","五","六","七","八","九"];
 let group=1,index=1,done=0,score=0,fruit=0;
 
-function kou(a,b){
+function getKou(a,b){
 let r=a*b;
 return r<10?nums[a]+nums[b]+"得"+nums[r]:nums[a]+nums[b]+r;
 }
 
 function render(){
 chapter.innerHTML="第"+group+"组："+nums[group]+"的乘法村";
-document.getElementById("kou").innerHTML=kou(group,index);
+kou.innerHTML=getKou(group,index);
 question.innerHTML=group+" × "+index+" = ?";
 progressText.innerHTML="第"+group+"组 "+done+"/9";
-bar.style.width=(done/9*100)+"%";
+bar.style.width=done/9*100+"%";
 scoreEl.innerHTML=score;
 
 if(score<30)tree.innerHTML="🌱";
 else if(score<80)tree.innerHTML="🌿";
-else tree.innerHTML="🌳";
+else if(score<160)tree.innerHTML="🌳";
+else tree.innerHTML="🌳🌸";
 
 fruits.innerHTML="🍎".repeat(fruit);
+
+if(score>200){
+sun.style.display="none";
+moon.style.display="block";
+}else{
+sun.style.display="block";
+moon.style.display="none";
+}
 }
 
-function sound(freq=700){
-let c=new AudioContext();
-let o=c.createOscillator();
-let g=c.createGain();
-o.connect(g);g.connect(c.destination);
-o.frequency.value=freq;
+let audioReady=false;
+function beep(type="ok"){
+try{
+let ctx=new(window.AudioContext||window.webkitAudioContext)();
+let o=ctx.createOscillator();
+let g=ctx.createGain();
+o.connect(g);g.connect(ctx.destination);
+o.frequency.value=type==="ok"?880:300;
 g.gain.value=.08;
-o.start();o.stop(c.currentTime+.15);
+o.start();
+o.stop(ctx.currentTime+.15);
+}catch(e){}
 }
 
 function add(n){answer.value+=n}
 function delA(){answer.value=answer.value.slice(0,-1)}
 
 function check(){
+if(answer.value==="")return;
+
 if(Number(answer.value)==group*index){
-score+=10;done++;
-if(score>=50&&fruit<9)fruit++;
-sound(900);
-msg.innerHTML="🎵 答对啦，小树喝饱水！";
+score+=10;
+done++;
+if(fruit<10&&score%30===0)fruit++;
+beep("ok");
+msg.innerHTML="💧浇水成功，小树长大啦";
 
 if(done>=9){
-sound(1200);
-msg.innerHTML="🎉 通关进入下一组";
-group++;done=0;index=1;
+beep("ok");
+msg.innerHTML="🎉 这一组完成，进入下一片森林";
+group++;
+done=0;
+index=1;
 if(group>9)group=1;
 }else index++;
 
 }else{
 if(fruit>0)fruit--;
-score=Math.max(0,score-5);
-sound(300);
-msg.innerHTML="🍎 果实掉下来啦，再看看口诀";
+beep("bad");
+msg.innerHTML="🍎果实掉下来啦，再想想口诀";
 }
 answer.value="";
 render();
 }
 
 function voice(){
-let u=new SpeechSynthesisUtterance(kou(group,index));
+let u=new SpeechSynthesisUtterance(getKou(group,index));
 u.lang="zh-CN";
 speechSynthesis.cancel();
 speechSynthesis.speak(u);

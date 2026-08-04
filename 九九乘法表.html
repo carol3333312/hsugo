@@ -2,169 +2,256 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>九九乘法智能老师 V3.0</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>九九乘法智能老师 V3.1</title>
 <style>
-*{box-sizing:border-box}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{
-margin:0;
 background:linear-gradient(#e8f7ff,#fff);
-font-family:"Microsoft YaHei",sans-serif;color:#333
+font-family:-apple-system,"Microsoft YaHei",sans-serif;
+color:#333;
+padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
 }
-.app{max-width:450px;width:94%;margin:20px auto}
+.app{max-width:420px;width:94%;margin:12px auto;padding-bottom:20px}
 .card{
-background:white;border-radius:24px;padding:20px;margin-bottom:16px;
-box-shadow:0 8px 25px #0001;text-align:center
+background:#fff;border-radius:18px;padding:14px 16px;margin-bottom:12px;
+box-shadow:0 4px 16px rgba(0,0,0,.08);text-align:center
 }
-.title{font-size:28px;font-weight:bold}
-.status{display:flex;gap:12px;margin-top:15px}
-.box{flex:1;background:#f5f5f5;border-radius:16px;padding:10px}
-.num{font-size:28px;color:#ff9800;font-weight:bold}
-.level{font-size:20px;font-weight:bold}
-.progress-bg{height:14px;background:#eee;border-radius:20px;overflow:hidden;margin-top:10px}
-.progress{height:100%;width:0;background:#4caf50;transition:.4s}
+.title{font-size:22px;font-weight:700;margin-bottom:2px}
+.sub{font-size:13px;color:#666;margin-bottom:10px}
+.status{display:flex;gap:10px}
+.box{flex:1;background:#f5f7fa;border-radius:12px;padding:8px 6px}
+.box .label{font-size:12px;color:#888}
+.num{font-size:22px;color:#ff9800;font-weight:700;margin-top:2px}
+.level{font-size:16px;font-weight:700;margin-bottom:6px}
+.progress-bg{height:10px;background:#eee;border-radius:10px;overflow:hidden}
+.progress{height:100%;width:0;background:#4caf50;transition:.3s}
+.progressText{font-size:12px;color:#666;margin-top:4px}
+.kou-box{margin:8px 0}
 .kou{
-background:#111;color:white;border-radius:20px;padding:25px;
-font-size:42px;font-weight:bold;letter-spacing:4px;margin-top:15px
+background:#f8f9fa;color:#111;border:1px solid #e0e0e0;
+border-radius:14px;padding:12px 10px;font-size:22px;font-weight:700;
+letter-spacing:2px;display:inline-block;min-width:160px
 }
-.question{
-font-size:40px;font-weight:bold;padding:25px
+.voice-btn{
+margin-top:8px;background:#e3f2fd;color:#1976d2;border:none;
+border-radius:20px;padding:6px 16px;font-size:14px
 }
+.question{font-size:32px;font-weight:700;padding:12px 0 8px}
 input{
-width:150px;height:55px;border-radius:15px;border:2px solid #ddd;
-font-size:28px;text-align:center
+width:130px;height:46px;border-radius:12px;border:2px solid #ddd;
+font-size:24px;text-align:center;background:#fafafa;outline:none
 }
-.keyboard{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px}
-button{
-border:0;border-radius:16px;padding:12px;font-size:17px
+input:focus{border-color:#2196f3;background:#fff}
+.keyboard{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 10px}
+.key{
+background:#eef5ff;border:none;border-radius:12px;height:46px;
+font-size:20px;font-weight:600;color:#333
 }
-.key{background:#eef5ff}
-.learn{background:#2196f3;color:white}
-.submit{background:#4caf50;color:white}
-.reset{background:#eee}
-.message{font-size:22px;color:#4caf50;margin:15px}
+.key:active{background:#d0e4ff}
+.btn-row{display:flex;gap:8px;margin-top:6px}
+.btn{
+flex:1;border:none;border-radius:12px;height:42px;font-size:15px;font-weight:600
+}
+.learn{background:#2196f3;color:#fff}
+.submit{background:#4caf50;color:#fff}
+.reset{background:#f0f0f0;color:#555}
+.message{font-size:18px;height:26px;margin-top:8px;font-weight:600}
+.correct{color:#4caf50}
+.wrong{color:#ff7043}
 </style>
 </head>
 <body>
 <div class="app">
 
 <div class="card">
-<div class="title">🌈 九九乘法智能老师</div>
-<div>快乐学习 · 闯关成长</div>
-<div class="status">
-<div class="box">⭐ 星星<div id="stars" class="num">0</div></div>
-<div class="box">🔥 连胜<div id="combo" class="num">0</div></div>
-</div>
-</div>
-
-<div class="card">
-<div id="level" class="level"></div>
-<div class="progress-bg"><div id="bar" class="progress"></div></div>
-<div id="progressText"></div>
+  <div class="title">🌈 九九乘法智能老师</div>
+  <div class="sub">快乐学习 · 闯关成长</div>
+  <div class="status">
+    <div class="box"><div class="label">⭐ 星星</div><div id="stars" class="num">0</div></div>
+    <div class="box"><div class="label">🔥 连胜</div><div id="combo" class="num">0</div></div>
+  </div>
 </div>
 
 <div class="card">
-<div>📖 口诀记忆</div>
-<div id="kou" class="kou"></div>
-<button id="voice">🔊 听口诀</button>
+  <div id="level" class="level"></div>
+  <div class="progress-bg"><div id="bar" class="progress"></div></div>
+  <div id="progressText" class="progressText"></div>
 </div>
 
 <div class="card">
-<div id="question" class="question"></div>
-<input id="answer" readonly placeholder="输入答案">
-<div class="keyboard">
-<button class="key">1</button><button class="key">2</button><button class="key">3</button>
-<button class="key">4</button><button class="key">5</button><button class="key">6</button>
-<button class="key">7</button><button class="key">8</button><button class="key">9</button>
-<button class="key">0</button><button id="clear" class="key">⌫</button>
+  <div style="font-size:14px;color:#666;margin-bottom:4px">📖 口诀记忆</div>
+  <div class="kou-box"><div id="kou" class="kou"></div></div>
+  <button id="voice" class="voice-btn">🔊 听口诀</button>
 </div>
-<button id="learn" class="learn">📖 学习口诀</button>
-<button id="submit" class="submit">🚀 提交</button>
-<button id="reset" class="reset">重新开始</button>
-<div id="message" class="message"></div>
+
+<div class="card">
+  <div id="question" class="question"></div>
+  <input id="answer" readonly placeholder="答案" inputmode="none">
+  <div class="keyboard">
+    <button class="key">1</button><button class="key">2</button><button class="key">3</button>
+    <button class="key">4</button><button class="key">5</button><button class="key">6</button>
+    <button class="key">7</button><button class="key">8</button><button class="key">9</button>
+    <button class="key">0</button><button id="clear" class="key">⌫</button><button class="key" style="visibility:hidden"></button>
+  </div>
+  <div class="btn-row">
+    <button id="learn" class="btn learn">📖 学习</button>
+    <button id="submit" class="btn submit">🚀 提交</button>
+    <button id="reset" class="btn reset">重开</button>
+  </div>
+  <div id="message" class="message"></div>
 </div>
 
 </div>
 
 <script>
-const groups=[];
-const names=["一","二","三","四","五","六","七","八","九"];
-
-const kou={
-"1x1":"一一得一","1x2":"一二得二","1x3":"一三得三","1x4":"一四得四",
-"1x5":"一五得五","1x6":"一六得六","1x7":"一七得七","1x8":"一八得八","1x9":"一九得九"
+const names = ["一","二","三","四","五","六","七","八","九"];
+const kouMap = {
+  "1x1":"一一得一","1x2":"一二得二","1x3":"一三得三","1x4":"一四得四",
+  "1x5":"一五得五","1x6":"一六得六","1x7":"一七得七","1x8":"一八得八","1x9":"一九得九",
+  "2x2":"二二得四","2x3":"二三得六","2x4":"二四得八","2x5":"二五一十",
+  "2x6":"二六十二","2x7":"二七十四","2x8":"二八十六","2x9":"二九十八",
+  "3x3":"三三得九","3x4":"三四十二","3x5":"三五十五","3x6":"三六十八",
+  "3x7":"三七二十一","3x8":"三八二十四","3x9":"三九二十七",
+  "4x4":"四四十六","4x5":"四五二十","4x6":"四六二十四","4x7":"四七二十八",
+  "4x8":"四八三十二","4x9":"四九三十六",
+  "5x5":"五五二十五","5x6":"五六三十","5x7":"五七三十五","5x8":"五八四十","5x9":"五九四十五",
+  "6x6":"六六三十六","6x7":"六七四十二","6x8":"六八四十八","6x9":"六九五十四",
+  "7x7":"七七四十九","7x8":"七八五十六","7x9":"七九六十三",
+  "8x8":"八八六十四","8x9":"八九七十二",
+  "9x9":"九九八十一"
 };
 
+const groups = [];
 for(let b=1;b<=9;b++){
- let arr=[];
- for(let a=1;a<=9;a++){
-  let key=Math.min(a,b)+"x"+Math.max(a,b);
-  arr.push({a,b,answer:a*b,key,done:false});
- }
- groups.push(arr);
+  let arr = [];
+  for(let a=1;a<=9;a++){
+    let key = Math.min(a,b)+"x"+Math.max(a,b);
+    arr.push({a,b,answer:a*b,key,done:false});
+  }
+  groups.push(arr);
 }
 
-let g=0,i=0,stars=0,combo=0;
+let g=0, i=0, stars=0, combo=0;
+const answerEl = document.getElementById("answer");
+const messageEl = document.getElementById("message");
+const starsEl = document.getElementById("stars");
+const comboEl = document.getElementById("combo");
 
-function q(){return groups[g][i]}
+function q(){ return groups[g][i]; }
 
 function render(){
- let x=q();
- document.getElementById("level").innerText="第"+(g+1)+"组："+names[g]+"的乘法";
- document.getElementById("kou").innerText=kou[x.key]||(`${x.a}×${x.b}=${x.answer}`);
- document.getElementById("question").innerText=x.a+" × "+x.b+" = ?";
- document.getElementById("answer").value="";
- let done=groups[g].filter(x=>x.done).length;
- document.getElementById("bar").style.width=(done/9*100)+"%";
- document.getElementById("progressText").innerText=done+"/9 已完成";
+  const x = q();
+  document.getElementById("level").innerText = "第"+(g+1)+"组："+names[g]+"的乘法";
+  document.getElementById("kou").innerText = kouMap[x.key] || (x.a+"×"+x.b+"="+x.answer);
+  document.getElementById("question").innerText = x.a+" × "+x.b+" = ?";
+  answerEl.value = "";
+  const done = groups[g].filter(item=>item.done).length;
+  document.getElementById("bar").style.width = (done/9*100)+"%";
+  document.getElementById("progressText").innerText = done+"/9 已完成";
+  messageEl.innerText = "";
+  messageEl.className = "message";
 }
 
-document.querySelectorAll(".key").forEach(b=>{
-b.onclick=()=>{
- if(b.id==="clear") answer.value="";
- else if(answer.value.length<2) answer.value+=b.innerText;
-}
+// 数字键盘
+document.querySelectorAll(".key").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    if(btn.id==="clear"){
+      answerEl.value = "";
+    }else if(answerEl.value.length < 2){
+      answerEl.value += btn.innerText;
+    }
+    answerEl.focus();
+  });
 });
 
-document.getElementById("submit").onclick=()=>{
-let x=q();
-if(Number(answer.value)===x.answer){
-x.done=true;stars++;combo++;
-document.getElementById("stars").innerText=stars;
-document.getElementById("combo").innerText=combo;
-message.innerText="⭐ 太棒啦！";
-setTimeout(()=>{i++;if(i>=9){i=0;g=(g+1)%9}render()},700);
-}else{
-combo=0;document.getElementById("combo").innerText=0;
-message.innerText="😊 再想一下";
-}
-};
+// 提交
+document.getElementById("submit").addEventListener("click",()=>{
+  const x = q();
+  if(answerEl.value === "") return;
+  if(Number(answerEl.value) === x.answer){
+    x.done = true;
+    stars++;
+    combo++;
+    starsEl.innerText = stars;
+    comboEl.innerText = combo;
+    messageEl.innerText = "⭐ 太棒啦！";
+    messageEl.className = "message correct";
+    playSound("correct");
+    setTimeout(()=>{
+      i++;
+      if(i>=9){ i=0; g=(g+1)%9; }
+      render();
+    },700);
+  }else{
+    combo = 0;
+    comboEl.innerText = 0;
+    messageEl.innerText = "😊 再想一下";
+    messageEl.className = "message wrong";
+    playSound("wrong");
+  }
+});
 
-document.getElementById("learn").onclick=()=>{
-document.getElementById("message").innerText="记住："+q().key;
-speak(document.getElementById("kou").innerText);
-};
+// 学习口诀
+document.getElementById("learn").addEventListener("click",()=>{
+  const text = document.getElementById("kou").innerText;
+  messageEl.innerText = "记住："+text;
+  messageEl.className = "message";
+  speak(text);
+});
 
-document.getElementById("voice").onclick=()=>{
-speak(document.getElementById("kou").innerText);
-};
+// 听口诀
+document.getElementById("voice").addEventListener("click",()=>{
+  speak(document.getElementById("kou").innerText);
+});
 
+// 重新开始
+document.getElementById("reset").addEventListener("click",()=>{
+  g=0; i=0; stars=0; combo=0;
+  groups.forEach(arr=>arr.forEach(item=>item.done=false));
+  starsEl.innerText = 0;
+  comboEl.innerText = 0;
+  render();
+});
+
+// 语音
 function speak(t){
-if("speechSynthesis" in window){
-speechSynthesis.cancel();
-let u=new SpeechSynthesisUtterance(t);
-u.lang="zh-CN";u.rate=.8;
-speechSynthesis.speak(u);
-}
+  if("speechSynthesis" in window){
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(t);
+    u.lang = "zh-CN";
+    u.rate = 0.85;
+    speechSynthesis.speak(u);
+  }
 }
 
-document.getElementById("reset").onclick=()=>{
-g=0;i=0;stars=0;combo=0;
-groups.forEach(a=>a.forEach(x=>x.done=false));
-document.getElementById("stars").innerText=0;
-document.getElementById("combo").innerText=0;
-render();
-};
+// 简单提示音（兼容 iOS）
+function playSound(type){
+  try{
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if(!Ctx) return;
+    const ctx = new Ctx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    if(type==="correct"){
+      osc.frequency.value = 880;
+      gain.gain.setValueAtTime(0.15, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime+0.25);
+    }else{
+      osc.frequency.value = 220;
+      gain.gain.setValueAtTime(0.12, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime+0.3);
+    }
+    osc.start();
+    osc.stop(ctx.currentTime + 0.3);
+    setTimeout(()=>ctx.close(),400);
+  }catch(e){}
+}
+
+// 点击输入框自动聚焦（方便视觉反馈）
+answerEl.addEventListener("click",()=>answerEl.focus());
 
 render();
 </script>

@@ -1,216 +1,768 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>九九成长树 V3.1</title>
+
+<title>九九成长树 V3.4</title>
+
 
 <style>
+
 *{
 box-sizing:border-box;
 }
 
-body{
+
+html,body{
+
 margin:0;
-height:100vh;
+
+height:100%;
+
 overflow:hidden;
+
 font-family:"Microsoft YaHei",sans-serif;
-background:linear-gradient(#9edcff,#fff3b0,#b9e8a0);
+
 }
+
+
+
+body{
+
+background:
+linear-gradient(
+#9edcff,
+#fff3b0,
+#b9e8a0
+);
+
+}
+
+
 
 .app{
-height:100vh;
+
+height:100dvh;
+
 max-width:390px;
+
 margin:auto;
+
 padding:8px;
-padding-bottom:env(safe-area-inset-bottom);
+
+padding-bottom:
+env(safe-area-inset-bottom);
+
 }
+
+
 
 .world{
+
 height:100%;
-background:rgba(255,255,255,.45);
+
+background:
+rgba(255,255,255,.45);
+
 border-radius:25px;
+
 padding:10px;
-display:flex;
-flex-direction:column;
+
 overflow:hidden;
+
+display:flex;
+
+flex-direction:column;
+
 }
+
+
+
+
 
 .top{
+
 display:flex;
+
 justify-content:space-between;
-font-weight:bold;
+
 font-size:16px;
+
+font-weight:bold;
+
 }
+
+
+
 
 .scene{
-height:180px;
+
+height:190px;
+
 position:relative;
+
 display:flex;
+
 justify-content:center;
+
 align-items:center;
+
 overflow:hidden;
+
 }
+
+
+
 
 .sun{
+
 position:absolute;
+
 right:20px;
+
 top:5px;
+
 font-size:35px;
+
 }
+
+
 
 .moon{
+
 display:none;
+
 position:absolute;
+
 right:20px;
+
 top:5px;
+
 font-size:35px;
+
 }
+
+
+
+
 
 .tree{
-font-size:110px;
+
+width:150px;
+
+height:170px;
+
+}
+
+
+
+.tree svg{
+
+width:100%;
+
+height:100%;
+
 transition:.5s;
+
+transform-origin:center bottom;
+
 }
 
-.tree.grow{
-animation:shake .6s;
+
+
+
+/* 树成长 */
+
+.tree.seed svg{
+
+transform:scale(.45);
+
 }
 
-@keyframes shake{
-0%{transform:rotate(0)}
-25%{transform:rotate(-4deg)}
-50%{transform:rotate(4deg)}
-100%{transform:rotate(0)}
+
+
+.tree.small svg{
+
+transform:scale(.7);
+
 }
 
-.water{
-position:absolute;
-top:20px;
-font-size:28px;
-animation:drop 1s forwards;
+
+
+.tree.big svg{
+
+transform:scale(1);
+
 }
 
-@keyframes drop{
-from{
-transform:translateY(0);
-opacity:1;
+
+
+
+/* 树摇 */
+
+.tree.grow svg{
+
+animation:
+
+treeSway 1s ease;
+
 }
-to{
-transform:translateY(90px);
-opacity:0;
+
+
+
+
+@keyframes treeSway{
+
+
+0%{
+
+transform:rotate(0);
+
 }
+
+
+25%{
+
+transform:rotate(-3deg);
+
 }
+
+
+50%{
+
+transform:rotate(2deg);
+
+}
+
+
+75%{
+
+transform:rotate(-1deg);
+
+}
+
+
+100%{
+
+transform:rotate(0);
+
+}
+
+
+}
+
+
+
+
+
+#leaf{
+
+transform-origin:center bottom;
+
+}
+
+
+
+.tree.wind #leaf{
+
+animation:
+
+leafSway 3s infinite ease-in-out;
+
+}
+
+
+
+
+@keyframes leafSway{
+
+
+50%{
+
+transform:rotate(3deg);
+
+}
+
+
+}
+
+
+
+
+
+#fruitSvg{
+
+display:none;
+
+}
+
+
+
+.tree.fruit #fruitSvg{
+
+display:block;
+
+}
+
+
+
+
 
 .fruits{
+
 position:absolute;
+
 width:150px;
+
 height:120px;
-top:25px;
+
+top:20px;
+
 }
+
+
+
+.fruits.swing{
+
+animation:
+
+fruitSwing 1s;
+
+}
+
+
+
+@keyframes fruitSwing{
+
+
+50%{
+
+transform:rotate(3deg);
+
+}
+
+
+}
+
+
+
+
+.water{
+
+position:absolute;
+
+top:15px;
+
+font-size:28px;
+
+animation:
+
+waterDrop 1s forwards;
+
+}
+
+
+
+@keyframes waterDrop{
+
+
+to{
+
+transform:translateY(100px);
+
+opacity:0;
+
+}
+
+
+}
+
+
+
 
 .score{
+
 text-align:center;
+
 }
+
+
 
 .progress{
+
 height:10px;
+
 background:#ffffffaa;
+
 border-radius:20px;
+
 overflow:hidden;
+
 }
+
+
 
 .bar{
+
 height:100%;
-background:#43a047;
+
 width:0;
+
+background:#43a047;
+
 }
+
+
+
+
 
 .kou{
-text-align:center;
+
 font-size:32px;
+
 font-weight:bold;
-color:#222;
+
+text-align:center;
+
 }
+
+
+
+
 
 .question{
-text-align:center;
+
 font-size:32px;
+
 font-weight:bold;
+
+text-align:center;
+
+} input{
+
+display:block;
+
+width:110px;
+
+height:42px;
+
+margin:3px auto;
+
+font-size:25px;
+
+text-align:center;
+
+border-radius:12px;
+
+border:1px solid #aaa;
+
 }
 
-input{
-display:block;
-width:110px;
-height:42px;
-margin:3px auto;
-font-size:25px;
-text-align:center;
-border-radius:12px;
-border:1px solid #aaa;
-}
+
 
 .keys{
+
 display:grid;
-grid-template-columns:repeat(3,1fr);
+
+grid-template-columns:
+repeat(3,1fr);
+
 gap:5px;
+
 }
+
+
 
 button{
+
 border:0;
-border-radius:14px;
+
+border-radius:25px;
+
 font-size:16px;
+
+height:38px;
+
 }
+
+
+
+button:active{
+
+transform:scale(.95);
+
+}
+
+
 
 .key{
-height:34px;
+
 background:white;
+
 }
+
+
+
+.start{
+
+width:100%;
+
+height:40px;
+
+background:white;
+
+margin-top:4px;
+
+}
+
+
+
+.actionBox{
+
+display:flex;
+
+gap:15px;
+
+margin-top:12px;
+
+}
+
+
+
+.submit,
+.restart{
+
+flex:1;
+
+height:50px;
+
+font-size:17px;
+
+}
+
+
 
 .submit{
-height:50px;
-width:100%;
-margin-top:8px;
+
 background:#43a047;
+
 color:white;
-font-size:18px;
+
 }
+
+
 
 .restart{
-height:40px;
-width:100%;
-margin-top:6px;
+
+background:white;
+
 }
 
+
+
+
 .msg{
-height:18px;
+
+height:20px;
+
 text-align:center;
+
 color:#388e3c;
+
 }
 
 </style>
+
 </head>
-  <body>
+
+
+
+<body>
+
 
 <div class="app">
 
 <div class="world">
 
+
 <div class="top">
-<div>🌱 九九成长树</div>
-<div id="chapter"></div>
+
+<div>
+🌱 九九成长树
 </div>
+
+<div id="chapter"></div>
+
+</div>
+
 
 
 <div class="scene" id="scene">
 
-<div class="sun" id="sun">☀️</div>
 
-<div class="moon" id="moon">🌙</div>
-
-
-<div class="tree" id="tree">
-🌱
+<div class="sun" id="sun">
+☀️
 </div>
+
+
+<div class="moon" id="moon">
+🌙
+</div>
+
+
+
+<div class="tree seed wind grow" id="tree">
+
+
+<svg viewBox="0 0 200 220">
+
+
+<!-- 树干 -->
+
+<path
+
+d="M100 210 Q95 150 100 100"
+
+stroke="#8b5a2b"
+
+stroke-width="18"
+
+fill="none"
+
+/>
+
+
+
+<!-- 树枝 -->
+
+<path
+
+d="M100 130 L60 90"
+
+stroke="#8b5a2b"
+
+stroke-width="8"
+
+/>
+
+
+<path
+
+d="M100 120 L140 80"
+
+stroke="#8b5a2b"
+
+stroke-width="8"
+
+/>
+
+
+
+<!-- 叶冠 -->
+
+<g id="leaf">
+
+
+<circle
+
+cx="70"
+
+cy="80"
+
+r="45"
+
+fill="#4caf50"
+
+/>
+
+
+<circle
+
+cx="125"
+
+cy="70"
+
+r="50"
+
+fill="#66bb6a"
+
+/>
+
+
+<circle
+
+cx="100"
+
+cy="40"
+
+r="38"
+
+fill="#81c784"
+
+/>
+
+
+</g>
+
+
+
+<!-- 果实 -->
+
+<g id="fruitSvg">
+
+
+<circle
+
+cx="70"
+
+cy="80"
+
+r="8"
+
+fill="red"
+
+/>
+
+
+<circle
+
+cx="135"
+
+cy="90"
+
+r="8"
+
+fill="red"
+
+/>
+
+
+<circle
+
+cx="105"
+
+cy="55"
+
+r="8"
+
+fill="red"
+
+/>
+
+
+</g>
+
+
+
+</svg>
+
+
+</div>
+
 
 
 <div class="fruits" id="fruits"></div>
@@ -220,40 +772,60 @@ color:#388e3c;
 
 
 
+
+
 <div class="score">
-⭐成长值 <span id="score">0</span>
+
+⭐成长值
+
+<span id="score">
+
+0
+
+</span>
+
 </div>
 
 
 
-<div id="progressText">
-</div>
+<div id="progressText"></div>
+
 
 
 <div class="progress">
-<div id="bar" class="bar"></div>
+
+<div id="bar"></div>
+
 </div>
+
 
 
 
 <div style="text-align:center">
+
 📖口诀
+
 </div>
 
 
-<div id="kou" class="kou">
-</div>
+
+
+<div id="kou" class="kou"></div>
 
 
 
-<button onclick="voice()">
-🔊听口诀
+
+<button class="start" onclick="startVoice()">
+
+🌱开始学习
+
 </button>
 
 
 
-<div id="question" class="question">
-</div>
+
+<div id="question" class="question"></div>
+
 
 
 
@@ -261,7 +833,9 @@ color:#388e3c;
 
 
 
+
 <div class="keys">
+
 
 <button class="key" onclick="add(1)">1</button>
 
@@ -293,29 +867,37 @@ color:#388e3c;
 
 
 
+<div class="actionBox">
+
+
 <button class="submit" onclick="check()">
+
 ✅提交答案
+
 </button>
 
 
 <button class="restart" onclick="restart()">
+
 🔄重新开始
+
 </button>
 
 
-
-<div id="msg" class="msg">
 </div>
 
 
 
+<div id="msg" class="msg"></div>
+
+
 </div>
 
 </div>
+
 
 
 <script>
-
 
 const nums=[
 "",
@@ -332,32 +914,71 @@ const nums=[
 
 
 let group=1;
+
 let index=1;
+
 let done=0;
+
 let score=0;
+
 let fruit=0;
+
+
+let autoVoice=false;
+
+let audioCtx=null;
+
+
+
+
+const tree=
+document.getElementById("tree");
+
+
+const scene=
+document.getElementById("scene");
+
+
+const fruits=
+document.getElementById("fruits");
+
+
+const answer=
+document.getElementById("answer");
+
+
+
 
 
 
 function cnNum(n){
 
+
 if(n<=9){
+
 return nums[n];
+
 }
 
 
-if(n==10){
+if(n===10){
+
 return "十";
+
 }
 
 
 if(n<20){
+
 return "十"+nums[n%10];
+
 }
 
 
-if(n%10==0){
+if(n%10===0){
+
 return nums[n/10]+"十";
+
 }
 
 
@@ -369,157 +990,204 @@ return nums[Math.floor(n/10)]
 
 
 
+
 function kouText(a,b){
+
 
 let r=a*b;
 
 
 if(r<10){
 
-return nums[a]
-+nums[b]
-+"得"
-+nums[r];
+return nums[a]+nums[b]+"得"+nums[r];
 
 }
 
 
-return nums[a]
-+nums[b]
-+cnNum(r);
+return nums[a]+nums[b]+cnNum(r);
+
 
 }
+
+
 
 
 
 function render(){
 
 
-chapter.innerHTML=
+document.getElementById("chapter")
+.innerHTML=
 "第"+group+"组："+nums[group]+"的乘法村";
 
 
 
-kou.innerHTML=
+document.getElementById("kou")
+.innerHTML=
 kouText(group,index);
 
 
 
-question.innerHTML=
+document.getElementById("question")
+.innerHTML=
 group+" × "+index+" = ?";
 
 
 
-progressText.innerHTML=
+document.getElementById("progressText")
+.innerHTML=
 "第"+group+"组 "+done+"/9";
 
 
 
-bar.style.width=
+document.getElementById("bar")
+.style.width=
 (done/9*100)+"%";
 
 
 
-scoreEl.innerHTML=
+document.getElementById("score")
+.innerHTML=
 score;
+
+
+
+updateTree();
+
+
+}
+
+
+
+
+
+
+function updateTree(){
+
+
+tree.classList.remove(
+"seed",
+"small",
+"big",
+"fruit"
+);
 
 
 
 if(score<30){
 
-tree.innerHTML="🌱";
+
+tree.classList.add("seed");
+
 
 }
+
 
 else if(score<80){
 
-tree.innerHTML="🌿";
+
+tree.classList.add("small");
+
 
 }
+
 
 else if(score<160){
 
-tree.innerHTML="🌳";
+
+tree.classList.add("big");
+
 
 }
+
 
 else{
 
-tree.innerHTML="🌳";
 
-}
+tree.classList.add("fruit");
 
-
-
-fruits.innerHTML="";
-
-
-
-let positions=[
-
-"top:20px;left:60px",
-
-"top:35px;left:95px",
-
-"top:65px;left:35px",
-
-"top:70px;left:110px",
-
-"top:45px;left:70px"
-
-];
-
-
-
-for(let i=0;i<fruit;i++){
-
-let f=document.createElement("span");
-
-f.innerHTML="🍎";
-
-f.style.position="absolute";
-
-f.style.cssText+=positions[i];
-
-fruits.appendChild(f);
-
-}
-
-
-
-if(score>300){
-
-sun.style.display="none";
-
-moon.style.display="block";
-
-}
-
-else{
-
-sun.style.display="block";
-
-moon.style.display="none";
 
 }
 
 
 
 }
-  function playSound(type){
 
-try{
 
-let ctx=new(window.AudioContext||window.webkitAudioContext)();
 
-let osc=ctx.createOscillator();
 
-let gain=ctx.createGain();
+
+function startVoice(){
+
+
+autoVoice=true;
+
+
+voice();
+
+
+}
+
+
+
+
+
+
+function voice(){
+
+
+let u=
+new SpeechSynthesisUtterance(
+kouText(group,index)
+);
+
+
+
+u.lang="zh-CN";
+
+u.rate=.8;
+
+
+speechSynthesis.cancel();
+
+
+speechSynthesis.speak(u);
+
+
+}
+
+
+
+
+
+
+
+function playSound(type){
+
+
+if(!audioCtx){
+
+audioCtx=
+new(
+window.AudioContext||
+window.webkitAudioContext
+)();
+
+}
+
+
+
+let osc=
+audioCtx.createOscillator();
+
+
+let gain=
+audioCtx.createGain();
 
 
 osc.connect(gain);
 
-gain.connect(ctx.destination);
+gain.connect(audioCtx.destination);
 
 
 
@@ -543,20 +1211,20 @@ osc.frequency.value=300;
 
 
 
-gain.gain.value=0.08;
+gain.gain.value=.08;
 
 
 osc.start();
 
 
 osc.stop(
-ctx.currentTime+0.18
+audioCtx.currentTime+.2
 );
 
 
-}catch(e){}
-
 }
+
+
 
 
 
@@ -567,15 +1235,20 @@ function growEffect(){
 
 tree.classList.remove("grow");
 
+
 void tree.offsetWidth;
+
 
 tree.classList.add("grow");
 
 
 
-let water=document.createElement("div");
+let water=
+document.createElement("div");
+
 
 water.className="water";
+
 
 water.innerHTML="💧";
 
@@ -591,8 +1264,8 @@ water.remove();
 },1000);
 
 
-
 }
+
 
 
 
@@ -601,7 +1274,13 @@ water.remove();
 
 function add(n){
 
+
+if(answer.value.length<2){
+
 answer.value+=n;
+
+}
+
 
 }
 
@@ -609,6 +1288,7 @@ answer.value+=n;
 
 
 function delA(){
+
 
 answer.value=
 answer.value.slice(0,-1);
@@ -619,12 +1299,13 @@ answer.value.slice(0,-1);
 
 
 
+
+
 function check(){
 
 
 
 let user=
-
 Number(answer.value);
 
 
@@ -632,19 +1313,9 @@ Number(answer.value);
 if(user===group*index){
 
 
-
 score+=10;
 
 done++;
-
-
-
-if(score%30===0 && fruit<5){
-
-fruit++;
-
-}
-
 
 
 playSound("ok");
@@ -654,8 +1325,9 @@ growEffect();
 
 
 
-msg.innerHTML=
-"🌱 小树成长啦";
+document.getElementById("msg")
+.innerHTML=
+"🌱 小树喝到水啦";
 
 
 
@@ -666,8 +1338,14 @@ if(done>=9){
 playSound("win");
 
 
-msg.innerHTML=
-"🎉 通关，进入下一片森林";
+celebrate();
+
+
+
+document.getElementById("msg")
+.innerHTML=
+"🎉 通关啦！";
+
 
 
 group++;
@@ -677,13 +1355,11 @@ done=0;
 index=1;
 
 
-
 if(group>9){
 
 group=1;
 
 }
-
 
 
 }
@@ -697,9 +1373,31 @@ index++;
 
 
 
+
+
+if(autoVoice){
+
+
+setTimeout(()=>{
+
+voice();
+
+},500);
+
+
 }
 
+
+
+
+}
+
+
+
 else{
+
+
+playSound("bad");
 
 
 
@@ -711,13 +1409,9 @@ fruit--;
 
 
 
-playSound("bad");
-
-
-
-msg.innerHTML=
-"🍎 果实掉下来啦，再看看口诀";
-
+document.getElementById("msg")
+.innerHTML=
+"🍎果实掉落，再看看口诀";
 
 
 }
@@ -730,46 +1424,54 @@ answer.value="";
 render();
 
 
-
 }
 
 
 
 
 
-function voice(){
+
+function celebrate(){
+
+
+for(let i=0;i<12;i++){
+
+
+let f=
+document.createElement("div");
+
+
+f.innerHTML="🌸";
+
+
+f.style.position="absolute";
+
+f.style.left=
+Math.random()*300+"px";
+
+
+f.style.top="0";
+
+
+f.style.animation=
+"drop 2s";
+
+
+scene.appendChild(f);
 
 
 
-let text=
+setTimeout(()=>{
 
-kouText(group,index);
+f.remove();
 
-
-
-let u=
-
-new SpeechSynthesisUtterance(text);
-
-
-
-u.lang="zh-CN";
-
-u.rate=0.8;
-
-u.pitch=1;
-
-
-
-speechSynthesis.cancel();
-
-
-speechSynthesis.speak(u);
-
+},2000);
 
 
 }
 
+
+}
 
 
 
@@ -790,9 +1492,7 @@ score=0;
 fruit=0;
 
 
-
 render();
-
 
 
 }
@@ -801,80 +1501,9 @@ render();
 
 
 
-
-let scoreEl=
-
-document.getElementById("score");
-
-
-
-let chapter=
-
-document.getElementById("chapter");
-
-
-let kou=
-
-document.getElementById("kou");
-
-
-let question=
-
-document.getElementById("question");
-
-
-let answer=
-
-document.getElementById("answer");
-
-
-let tree=
-
-document.getElementById("tree");
-
-
-let fruits=
-
-document.getElementById("fruits");
-
-
-let scene=
-
-document.getElementById("scene");
-
-
-let bar=
-
-document.getElementById("bar");
-
-
-let progressText=
-
-document.getElementById("progressText");
-
-
-let msg=
-
-document.getElementById("msg");
-
-
-let sun=
-
-document.getElementById("sun");
-
-
-let moon=
-
-document.getElementById("moon");
-
-
-
-
 render();
 
-
 </script>
-
 
 </body>
 

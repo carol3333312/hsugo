@@ -4,155 +4,321 @@
 <head>
 
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>九九乘法学习</title>
+<title>九九乘法智能老师</title>
+
 
 <style>
 
+
 *{
-box-sizing:border-box;
+    box-sizing:border-box;
 }
 
 
 body{
 
-margin:0;
+    margin:0;
 
-background:#ffffff;
+    min-height:100vh;
 
-font-family:"Microsoft YaHei",sans-serif;
+    background:
+    linear-gradient(
+        180deg,
+        #e8f8ff,
+        #ffffff
+    );
 
-color:#333;
+    font-family:
+    "Microsoft YaHei",
+    sans-serif;
+
+    color:#333;
 
 }
 
 
+
+/* 主容器 */
 
 .app{
 
-width:92%;
-max-width:450px;
+    width:94%;
 
-margin:20px auto;
+    max-width:450px;
 
-padding:20px;
-
-border:1px solid #ddd;
-
-border-radius:16px;
-
-text-align:center;
+    margin:20px auto;
 
 }
 
 
 
-h1{
+/* 顶部 */
 
-font-size:28px;
-
-}
+.header{
 
 
+    background:white;
 
-.group-title{
+    border-radius:24px;
 
-font-size:20px;
+    padding:20px;
 
-margin:10px;
-
-font-weight:bold;
+    box-shadow:
+    0 8px 25px rgba(0,0,0,.08);
 
 }
 
 
 
-.progress-bg{
+.title{
 
-height:18px;
+    font-size:28px;
 
-background:#ddd;
+    font-weight:bold;
 
-border-radius:10px;
-
-overflow:hidden;
+    text-align:center;
 
 }
 
 
 
-.progress-green{
+.subtitle{
 
-height:100%;
+    text-align:center;
 
-width:0%;
+    color:#777;
 
-background:#4caf50;
-
-transition:.3s;
+    margin-top:8px;
 
 }
 
 
 
-.progress-text{
 
-margin:8px;
 
-color:#666;
+/* 数据卡 */
+
+
+.status{
+
+    display:flex;
+
+    justify-content:space-around;
+
+    margin-top:20px;
 
 }
 
+
+
+.status-box{
+
+
+    background:#f8f8f8;
+
+    border-radius:16px;
+
+    padding:12px;
+
+    width:42%;
+
+    text-align:center;
+
+}
+
+
+
+.status-number{
+
+
+    font-size:26px;
+
+    color:#ff9800;
+
+    font-weight:bold;
+
+}
+
+
+
+
+
+/* 学习卡 */
 
 
 .card{
 
-background:#fafafa;
+    animation: fadeIn .35s ease;
 
-padding:20px;
+    margin-top:20px;
 
-border-radius:15px;
+    background:white;
 
-margin:20px 0;
+    border-radius:28px;
 
-}
+    padding:25px;
 
+    text-align:center;
 
+    box-shadow:
 
-.cn{
-
-font-size:38px;
-
-font-weight:bold;
+    0 10px 30px rgba(0,0,0,.08);
 
 }
 
 
 
-.math{
 
-font-size:30px;
+.group{
 
-margin-top:15px;
+
+    color:#888;
+
+    font-size:16px;
 
 }
 
 
 
-input{
+.koujue{
 
-width:130px;
 
-height:45px;
+    margin-top:20px;
 
-font-size:24px;
+    font-size:42px;
 
-text-align:center;
+    font-weight:bold;
 
-border:1px solid #999;
+    color:#2196f3;
 
-border-radius:8px;
+}
+
+
+
+
+.question{
+
+
+    margin-top:20px;
+
+    font-size:34px;
+
+    font-weight:bold;
+
+}
+
+
+
+
+
+
+
+/* 答题区域 */
+
+
+.answer-area{
+
+
+    margin-top:25px;
+
+}
+
+
+
+.answer{
+
+
+    width:150px;
+
+    height:55px;
+
+    border-radius:18px;
+
+    border:
+
+    2px solid #ddd;
+
+    text-align:center;
+
+    font-size:28px;
+
+    outline:none;
+
+}
+
+
+
+.answer:focus{
+
+    border-color:#2196f3;
+
+}
+
+
+
+
+
+
+
+/* 数字键盘 */
+
+
+.keyboard{
+
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(3,1fr);
+
+    gap:10px;
+
+    margin-top:20px;
+
+}
+
+
+
+.key{
+
+
+    height:50px;
+
+    border:none;
+
+    border-radius:15px;
+
+    background:#f2f6ff;
+
+    font-size:22px;
+
+    cursor:pointer;
+
+}
+
+
+
+.key:active{
+
+
+    transform:scale(.95);
+
+}
+
+
+
+
+
+/* 按钮 */
+
+
+.buttons{
+
+
+    margin-top:20px;
 
 }
 
@@ -160,65 +326,213 @@ border-radius:8px;
 
 button{
 
-border:0;
 
-border-radius:8px;
+    border:none;
 
-padding:10px 18px;
+    border-radius:18px;
 
-margin:5px;
+    padding:13px 20px;
 
-font-size:16px;
+    margin:5px;
 
-}
+    font-size:17px;
 
-
-
-#learn,
-
-#submit{
-
-background:#4caf50;
-
-color:white;
+    cursor:pointer;
 
 }
 
 
 
-#restart{
-
-background:#ddd;
-
-color:#555;
-
-}
+.learn-btn{
 
 
+    background:#42a5f5;
 
-.feedback{
-
-margin-top:15px;
-
-font-size:22px;
-
-color:#4caf50;
+    color:white;
 
 }
 
 
 
-.flower{
+.submit-btn{
 
-font-size:36px;
+
+    background:#4caf50;
+
+    color:white;
 
 }
 
 
+
+.reset-btn{
+
+
+    background:#eee;
+
+}
+
+
+
+
+
+
+/* 提示 */
+
+
+.message{
+
+
+    min-height:35px;
+
+    margin-top:15px;
+
+    font-size:22px;
+
+    color:#4caf50;
+
+    font-weight:bold;
+
+}
+
+
+
+
+
+
+
+/* 星星动画 */
+
+
+.star{
+
+
+    font-size:45px;
+
+    animation:
+
+    starMove .8s;
+
+}
+
+
+
+@keyframes starMove{
+
+
+    0%{
+
+        transform:
+        scale(0);
+
+    }
+
+
+    50%{
+
+        transform:
+        scale(1.4);
+
+    }
+
+
+    100%{
+
+        transform:
+        scale(1);
+
+    }
+
+}
+
+
+
+
+
+
+
+/* 进度 */
+
+
+.progress{
+
+
+    margin-top:20px;
+
+}
+
+
+
+.progress-bg{
+
+
+    height:15px;
+
+    background:#eee;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+}
+
+
+
+.progress-bar{
+
+
+    height:100%;
+
+    width:0%;
+
+    background:
+    linear-gradient(
+    90deg,
+    #4caf50,
+    #8bc34a
+    );
+
+    transition:.5s;
+
+}
+
+
+
+.progress-text{
+
+
+    margin-top:8px;
+
+    color:#777;
+
+}
+
+
+
+
+
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(10px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+button,.key{
+    -webkit-tap-highlight-color:transparent;
+}
 
 </style>
 
+
 </head>
+
+
 
 
 <body>
@@ -227,12 +541,86 @@ font-size:36px;
 <div class="app">
 
 
-<h1>
-九九乘法学习
-</h1>
+
+<div class="header">
 
 
-<div id="groupTitle" class="group-title">
+<div class="title">
+
+🌈 九九乘法智能老师
+
+</div>
+
+
+
+<div class="subtitle">
+
+快乐学习 · 闯关成长
+
+</div>
+
+
+
+<div class="status">
+
+
+<div class="status-box">
+
+
+<div>
+⭐ 星星
+</div>
+
+
+<div id="stars" class="status-number">
+
+0
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="status-box">
+
+
+<div>
+🔥 连胜
+</div>
+
+
+<div id="combo" class="status-number">
+
+0
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+<div class="card">
+
+
+
+<div id="group" class="group">
 
 第1组
 
@@ -240,16 +628,140 @@ font-size:36px;
 
 
 
-<div>
-学习进度
+
+<div id="koujue" class="koujue">
+
+一一得一
+
 </div>
+
+
+
+
+<div id="question" class="question">
+
+1 × 1 = ?
+
+</div>
+
+
+
+
+
+<div class="answer-area">
+
+
+<input
+
+id="answer"
+
+class="answer"
+
+readonly
+
+placeholder="点击数字">
+
+
+</div>
+
+
+
+
+
+<div class="keyboard">
+
+
+<button class="key">1</button>
+
+<button class="key">2</button>
+
+<button class="key">3</button>
+
+<button class="key">4</button>
+
+<button class="key">5</button>
+
+<button class="key">6</button>
+
+<button class="key">7</button>
+
+<button class="key">8</button>
+
+<button class="key">9</button>
+
+<button class="key">0</button>
+
+<button id="clear" class="key">
+
+⌫
+
+</button>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="buttons">
+
+
+<button id="learn" class="learn-btn">
+
+📖 学习口诀
+
+</button>
+
+
+
+<button id="submit" class="submit-btn">
+
+🚀 提交答案
+
+</button>
+
+
+
+<button id="reset" class="reset-btn">
+
+重新开始
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+<div id="message" class="message">
+
+</div>
+
+
+
+<div id="star" class="star">
+
+</div>
+
+
+
+
+<div class="progress">
 
 
 <div class="progress-bg">
 
-<div id="progress" class="progress-green">
+
+<div id="progressBar" class="progress-bar">
 
 </div>
+
 
 </div>
 
@@ -263,419 +775,161 @@ font-size:36px;
 
 
 
-
-<div class="card">
-
-
-<div id="cn" class="cn">
-
-一一得一
-
 </div>
 
 
-<div id="math" class="math">
-
-1 × 1 = 1
-
-</div>
 
 
 </div>
 
 
 
-
-<input id="answer" placeholder="输入答案">
-
-
-
-<div>
-
-
-<button id="learn">
-学习
-</button>
-
-
-<button id="submit">
-提交
-</button>
-
-
-<button id="restart">
-重新开始
-</button>
-
-
 </div>
 
-
-
-<div id="feedback" class="feedback">
-
-</div>
-
-
-
-<div id="flower" class="flower">
-
-</div>
-
-
-</div>
 
 
 <script>
-// ================================
-// 九九乘法数据
-// ================================
 
 
-let groups=[];
-
-
-// 中文数字
-
-const nums=[
-
-"",
-"一",
-"二",
-"三",
-"四",
-"五",
-"六",
-"七",
-"八",
-"九",
-"十",
-"十一",
-"十二",
-"十三",
-"十四",
-"十五",
-"十六",
-"十七",
-"十八",
-"十九",
-"二十",
-"二十一",
-"二十二",
-"二十三",
-"二十四",
-"二十五",
-"二十六",
-"二十七",
-"二十八",
-"二十九",
-"三十",
-"三十一",
-"三十二",
-"三十三",
-"三十四",
-"三十五",
-"三十六",
-"三十七",
-"三十八",
-"三十九",
-"四十",
-"四十一",
-"四十二",
-"四十三",
-"四十四",
-"四十五",
-"四十六",
-"四十七",
-"四十八",
-"四十九",
-"五十",
-"五十一",
-"五十二",
-"五十三",
-"五十四",
-"五十五",
-"五十六",
-"五十七",
-"五十八",
-"五十九",
-"六十",
-"六十一",
-"六十二",
-"六十三",
-"六十四",
-"六十五",
-"六十六",
-"六十七",
-"六十八",
-"六十九",
-"七十",
-"七十一",
-"七十二",
-"七十三",
-"七十四",
-"七十五",
-"七十六",
-"七十七",
-"七十八",
-"七十九",
-"八十",
-"八十一"
-
-];
+// 第二部分代码接这里
 
 
 
 
+// 修复删除按钮
+document.getElementById("clear").onclick=function(){
+    document.getElementById("answer").value="";
+};
 
 
-// 生成9组
-
-// 第1组:
-// 1×1
-// 2×1
-// ...
-// 9×1
-
-
-for(let b=1;b<=9;b++){
-
-
-let list=[];
-
-
-for(let a=1;a<=9;a++){
-
-
-let result=a*b;
-
-
-list.push({
-
-a:a,
-
-b:b,
-
-answer:result,
-
-done:false
-
-});
-
-
+// 防止语音重复播放
+function speak(text){
+    if("speechSynthesis" in window){
+        speechSynthesis.cancel();
+        let msg=new SpeechSynthesisUtterance(text);
+        msg.lang="zh-CN";
+        msg.rate=0.8;
+        speechSynthesis.speak(msg);
+    }
 }
 
 
-
-groups.push({
-
-name:"第"+b+"组",
-
-list:list
-
-});
+</script>
 
 
-}
+</body>
 
-
-
-
-
-
-
-
-// ================================
-// 中文口诀
+</html>// ================================
+// 九九乘法智能学习引擎
+// 第二部分
 // ================================
 
 
-function makeKouJue(q){
 
-
-let left=
-
-nums[q.a]+
-nums[q.b];
-
-
-
-if(q.answer<=10){
-
-
-return left+
-"得"+
-nums[q.answer];
-
-
-}
-
-
-return left+
-nums[q.answer];
-
-
-
-}
-
-
-
-
-
-
-
-
-// ================================
 // 当前状态
-// ================================
+
+let groupIndex = 0;
+
+let questionIndex = 0;
 
 
-let groupIndex=0;
+// 学习阶段
 
+// 0 = 普通测试
+// 1 = 学习口诀
+// 2 = 数字测试
 
-let questionIndex=0;
-
-
-// 0 初始
-// 1 补口诀
-// 2 数字测试
-
-let stage=0;
-
-
-
-function getCurrent(){
-
-
-return groups[groupIndex]
-.list[questionIndex];
-
-
-}
-
-
-// ================================
-// 显示当前题
-// ================================
-
-
-function render(){
-
-
-let q=getCurrent();
+let stage = 0;
 
 
 
-document
-.getElementById("groupTitle")
-.innerText=
+// 奖励数据
 
-groups[groupIndex].name+
-"："+
-q.a+
-"×"+
-q.b;
+let stars = 0;
 
-
-
-document
-.getElementById("cn")
-.innerText=
-
-makeKouJue(q);
-
-
-
-document
-.getElementById("math")
-.innerText=
-
-q.a+
-" × "+
-q.b+
-" = "+
-q.answer;
-
-
-
-updateProgress();
-
-
-}
-
+let combo = 0;
 
 
 
 
 
 // ================================
-// 学习按钮
+// 九九乘法口诀库
 // ================================
 
 
-document
-.getElementById("learn")
-.onclick=function(){
+const koujue = {
+
+
+"1x1":"一一得一",
+"1x2":"一二得二",
+"1x3":"一三得三",
+"1x4":"一四得四",
+"1x5":"一五得五",
+"1x6":"一六得六",
+"1x7":"一七得七",
+"1x8":"一八得八",
+"1x9":"一九得九",
 
 
 
-let q=getCurrent();
-
-
-stage=1;
-
-
-
-let text=
-
-makeKouJue(q);
-
-
-
-document
-.getElementById("cn")
-.innerText=
-
-text.substring(
-0,
-text.length-1
-)
-+
-"__";
+"2x2":"二二得四",
+"2x3":"二三得六",
+"2x4":"二四得八",
+"2x5":"二五一十",
+"2x6":"二六十二",
+"2x7":"二七十四",
+"2x8":"二八十六",
+"2x9":"二九十八",
 
 
 
-document
-.getElementById("math")
-.innerText=
-
-q.a+
-" × "+
-q.b+
-" = "+
-q.answer;
+"3x3":"三三得九",
+"3x4":"三四十二",
+"3x5":"三五十五",
+"3x6":"三六十八",
+"3x7":"三七二十一",
+"3x8":"三八二十四",
+"3x9":"三九二十七",
 
 
 
-document
-.getElementById("answer")
-.value="";
+"4x4":"四四十六",
+"4x5":"四五二十",
+"4x6":"四六二十四",
+"4x7":"四七二十八",
+"4x8":"四八三十二",
+"4x9":"四九三十六",
 
 
 
-document
-.getElementById("answer")
-.placeholder=
+"5x5":"五五二十五",
+"5x6":"五六三十",
+"5x7":"五七三十五",
+"5x8":"五八四十",
+"5x9":"五九四十五",
 
-"填最后一个字";
+
+
+"6x6":"六六三十六",
+"6x7":"六七四十二",
+"6x8":"六八四十八",
+"6x9":"六九五十四",
 
 
 
-document
-.getElementById("feedback")
-.innerText=
+"7x7":"七七四十九",
+"7x8":"七八五十六",
+"7x9":"七九六十三",
 
-"补全口诀";
+
+
+"8x8":"八八六十四",
+"8x9":"八九七十二",
+
+
+
+"9x9":"九九八十一"
 
 
 };
@@ -686,54 +940,117 @@ document
 
 
 // ================================
-// 提交按钮
+// 生成学习题库
 // ================================
 
 
+let questions=[];
+
+
+
+for(let b=1;b<=9;b++){
+
+
+    let group=[];
+
+
+    for(let a=1;a<=9;a++){
+
+
+        group.push({
+
+            a:a,
+
+            b:b,
+
+            answer:a*b,
+
+            key:
+            Math.min(a,b)
+            +"x"+
+            Math.max(a,b),
+
+
+            wrong:0,
+
+            done:false,
+
+            mastery:0
+
+        });
+
+
+
+    }
+
+
+
+    questions.push(group);
+
+
+}
+
+
+
+
+
+
+
+// ================================
+// 获取当前题
+// ================================
+
+
+function currentQuestion(){
+
+
+    return questions[groupIndex][questionIndex];
+
+
+}
+
+
+
+
+
+
+// ================================
+// 显示题目
+// ================================
+
+
+function renderQuestion(){
+
+
+
+let q=currentQuestion();
+
+
+
 document
-.getElementById("submit")
-.onclick=function(){
-
-
-let q=getCurrent();
-
-
-let value=
-
-document
-.getElementById("answer")
-.value
-.trim();
-
-
-
-
-
-// 口诀阶段
-
-if(stage===1){
-
-
-
-if(
-value===nums[q.answer]
-){
-
-
-stage=2;
-
-
-
-document
-.getElementById("cn")
+.getElementById("group")
 .innerText=
 
-makeKouJue(q);
+"第 "+
+groupIndex+1+
+" 组 · 今日挑战";
+
+
 
 
 
 document
-.getElementById("math")
+.getElementById("koujue")
+.innerText=
+
+koujue[q.key];
+
+
+
+
+
+document
+.getElementById("question")
 .innerText=
 
 q.a+
@@ -748,36 +1065,241 @@ document
 .value="";
 
 
+
+updateProgress();
+
+
+
+}
+
+
+
+
+
+// ================================
+// 更新进度
+// ================================
+
+
+function updateProgress(){
+
+
+
+let total=
+
+questions[groupIndex]
+.length;
+
+
+
+let finish=
+
+questions[groupIndex]
+.filter(
+q=>q.done
+)
+.length;
+
+
+
+let percent=
+
+finish/
+total*
+100;
+
+
+
+document
+.getElementById("progressBar")
+.style.width=
+
+percent+"%";
+
+
+
+
+document
+.getElementById("progressText")
+.innerText=
+
+finish+
+" / "+
+total;
+
+
+
+
+}
+
+
+
+
+
+
+
+// ================================
+// 数字按钮
+// ================================
+
+
+
+document
+.querySelectorAll(".key")
+.forEach(btn=>{
+
+
+btn.onclick=function(){
+
+
+
+let value=this.innerText;
+
+
+
+let input=
+document
+.getElementById("answer");
+
+
+
+if(value==="⌫"){
+
+
+input.value=
+
+input.value.slice(
+0,-1
+);
+
+
+return;
+
+}
+
+
+
+if(input.value.length < 2){ input.value+=value; }
+
+
+
+};
+
+
+
+});
+
+
+
+
+
+
+// ================================
+// 初始化
+// ================================
+
+
+renderQuestion();// ================================
+// 第三部分
+// 智能教学系统
+// ================================
+
+
+
+// ================================
+// 学习口诀
+// ================================
+
+
+document
+.getElementById("learn")
+.onclick=function(){
+
+
+let q=currentQuestion();
+
+
+stage=1;
+
+
+
+let text=koujue[q.key];
+
+
+
+document
+.getElementById("koujue")
+.innerText=text;
+
+
+
+document
+.getElementById("question")
+.innerText=
+
+q.a+
+" × "+
+q.b+
+" = "+
+q.answer;
+
+
+
+document
+.getElementById("message")
+.innerText=
+
+"📖 请记住口诀";
+
+
+
+speak(text);
+
+
+
+};
+
+
+
+
+
+
+
+// ================================
+// 提交答案
+// ================================
+
+
+document
+.getElementById("submit")
+.onclick=function(){
+
+
+
+let q=currentQuestion();
+
+
+let input=
+
+Number(
 document
 .getElementById("answer")
-.placeholder=
-
-"输入数字";
-
+.value
+);
 
 
-document
-.getElementById("feedback")
-.innerText=
 
-"✓ 口诀正确";
-
-
-}
-
-else{
+if(!input){
 
 
 document
-.getElementById("feedback")
+.getElementById("message")
 .innerText=
 
-"再想一下";
+"请输入答案";
 
 
-}
-
-
+return;
 
 }
 
@@ -786,16 +1308,10 @@ document
 
 
 
-// 数字阶段
+// 判断正确
 
 
-else if(stage===2){
-
-
-
-if(
-Number(value)===q.answer
-){
+if(input===q.answer){
 
 
 
@@ -803,19 +1319,52 @@ q.done=true;
 
 
 
+q.mastery+=20;
+
+
+
+combo++;
+
+stars++;
+
+
+
 document
-.getElementById("feedback")
+.getElementById("stars")
 .innerText=
 
-"✓ 正确\n许彦篪，你真棒！";
+stars;
 
 
 
 document
-.getElementById("flower")
+.getElementById("combo")
 .innerText=
 
-"🌸";
+combo;
+
+
+
+
+document
+.getElementById("message")
+.innerText=
+
+randomGood();
+
+
+
+showStar();
+
+
+
+speak(
+"回答正确"
+);
+
+
+
+saveData();
 
 
 
@@ -829,7 +1378,9 @@ setTimeout(()=>{
 nextQuestion();
 
 
-},800);
+},1000);
+
+
 
 
 
@@ -838,62 +1389,42 @@ nextQuestion();
 else{
 
 
+q.wrong++;
+
+
+
+combo=0;
+
+
+
 document
-.getElementById("feedback")
+.getElementById("combo")
 .innerText=
 
-"再试一次";
+0;
+
+
+
+document
+.getElementById("message")
+.innerText=
+
+randomWrong();
+
+
+
+speak(
+"再想一想"
+);
+
 
 
 }
 
 
-
-}
 
 
 };
-// ================================
-// 更新组内进度
-// ================================
-
-
-function updateProgress(){
-
-
-let done=
-
-groups[groupIndex]
-.list
-.filter(q=>q.done)
-.length;
-
-
-
-let percent=
-
-(done/9)*100;
-
-
-
-document
-.getElementById("progress")
-.style.width=
-
-percent+"%";
-
-
-
-document
-.getElementById("progressText")
-.innerText=
-
-done+
-" / 9";
-
-
-
-}
 
 
 
@@ -914,25 +1445,16 @@ function nextQuestion(){
 questionIndex++;
 
 
-stage=0;
 
+// 当前组结束
 
-
-// 当前组完成
 
 if(
 questionIndex>=9
 ){
 
 
-
-setTimeout(()=>{
-
-
-alert(
-groups[groupIndex].name+
-"完成"
-);
+questionIndex=0;
 
 
 
@@ -940,19 +1462,29 @@ groupIndex++;
 
 
 
-// 九组全部完成
-
 if(
-groupIndex>=groups.length
+groupIndex>=9
 ){
+
+
+document
+.getElementById("message")
+.innerText=
+
+"🏆 恭喜你完成九九乘法！";
+
+
+speak(
+"恭喜你完成九九乘法"
+);
+
 
 
 groupIndex=0;
 
 
-alert(
-"九九乘法全部完成"
-);
+}
+
 
 
 }
@@ -960,29 +1492,8 @@ alert(
 
 
 
-questionIndex=0;
+renderQuestion();
 
-
-
-groups[groupIndex]
-.list
-.forEach(q=>{
-
-q.done=false;
-
-});
-
-
-
-render();
-
-
-
-},500);
-
-
-
-return;
 
 
 }
@@ -991,37 +1502,165 @@ return;
 
 
 
+
+
+
+
+
+// ================================
+// 鼓励语
+// ================================
+
+
+function randomGood(){
+
+
+
+let arr=[
+
+
+"🌟 太棒啦！",
+
+"👏 真厉害！",
+
+"🚀 继续保持！",
+
+"🎉 你越来越聪明了！",
+
+"⭐ 小数学家诞生啦！"
+
+
+];
+
+
+return arr[
+Math.floor(
+Math.random()*arr.length
+)
+];
+
+
+}
+
+
+
+
+
+
+function randomWrong(){
+
+
+
+let arr=[
+
+
+"😊 再想一下",
+
+"💪 差一点点",
+
+"📖 回忆一下口诀",
+
+"🌱 多练习就会啦"
+
+
+];
+
+
+return arr[
+Math.floor(
+Math.random()*arr.length
+)
+];
+
+
+}
+
+
+
+
+
+
+
+
+// ================================
+// 星星动画
+// ================================
+
+
+function showStar(){
+
+
+
+let box=
+
 document
-.getElementById("answer")
-.value="";
+.getElementById("star");
 
 
 
-document
-.getElementById("answer")
-.placeholder=
-
-"输入答案";
+box.innerText="⭐";
 
 
 
-document
-.getElementById("feedback")
-.innerText="";
+setTimeout(()=>{
+
+
+box.innerText="";
+
+
+},800);
+
+
+}
 
 
 
-document
-.getElementById("flower")
-.innerText="";
 
 
 
-render();
+
+
+
+// ================================
+// 语音朗读
+// ================================
+
+
+function speak(text){
+
+
+
+if(
+"speechSynthesis"
+in window
+){
+
+
+
+let msg=
+
+new SpeechSynthesisUtterance(text);
+
+
+
+msg.lang="zh-CN";
+
+
+
+msg.rate=0.8;
+
+
+
+speechSynthesis
+.speak(msg);
 
 
 
 }
+
+
+}
+
 
 
 
@@ -1035,7 +1674,7 @@ render();
 
 
 document
-.getElementById("restart")
+.getElementById("reset")
 .onclick=function(){
 
 
@@ -1044,18 +1683,25 @@ groupIndex=0;
 
 questionIndex=0;
 
-stage=0;
+
+stars=0;
+
+combo=0;
 
 
 
-groups.forEach(group=>{
+questions.forEach(group=>{
 
 
-group.list.forEach(q=>{
+group.forEach(q=>{
 
 
 q.done=false;
 
+q.wrong=0;
+
+q.mastery=0;
+
 
 });
 
@@ -1065,23 +1711,22 @@ q.done=false;
 
 
 document
-.getElementById("answer")
-.value="";
+.getElementById("stars")
+.innerText=0;
 
 
 
 document
-.getElementById("feedback")
-.innerText="";
-
-
-document
-.getElementById("flower")
-.innerText="";
+.getElementById("combo")
+.innerText=0;
 
 
 
-render();
+saveData();
+
+
+
+renderQuestion();
 
 
 
@@ -1094,14 +1739,113 @@ render();
 
 
 
+
 // ================================
-// 初始化
+// 本地保存
 // ================================
 
 
-render();
-</script>
+function saveData(){
 
-</body>
 
-</html>
+let data={
+
+
+stars:stars,
+
+combo:combo,
+
+questions:questions
+
+
+};
+
+
+
+localStorage
+.setItem(
+
+"mathTeacher",
+
+JSON.stringify(data)
+
+);
+
+
+
+}
+
+
+
+
+
+
+
+
+// ================================
+// 读取记录
+// ================================
+
+
+function loadData(){
+
+
+
+let data=
+
+localStorage
+.getItem(
+"mathTeacher"
+);
+
+
+
+if(data){
+
+
+
+let obj=
+
+JSON.parse(data);
+
+
+
+stars=obj.stars||0;
+
+combo=obj.combo||0;
+
+
+
+questions=obj.questions;
+
+
+
+document
+.getElementById("stars")
+.innerText=
+
+stars;
+
+
+
+document
+.getElementById("combo")
+.innerText=
+
+combo;
+
+
+}
+
+
+
+}
+
+
+
+
+
+
+loadData();
+
+renderQuestion();

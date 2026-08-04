@@ -7,7 +7,7 @@
 
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-<title>小悟课堂V5</title>
+<title>小悟课堂 V6</title>
 
 
 <style>
@@ -26,7 +26,6 @@ background:#eeeeee;
 font-family:"Microsoft YaHei",sans-serif;
 
 }
-
 
 
 .app{
@@ -57,7 +56,7 @@ font-size:32px;
 
 
 
-.teacher{
+.message{
 
 background:#f5f5f5;
 
@@ -73,7 +72,7 @@ font-size:20px;
 
 .lesson{
 
-font-size:36px;
+font-size:38px;
 
 font-weight:bold;
 
@@ -113,9 +112,9 @@ transition:.5s;
 
 .info{
 
-margin:15px;
-
 font-size:20px;
+
+margin:15px;
 
 }
 
@@ -129,7 +128,7 @@ padding:15px;
 
 margin:8px;
 
-border:0;
+border:none;
 
 border-radius:15px;
 
@@ -138,6 +137,14 @@ background:#4caf50;
 color:white;
 
 font-size:20px;
+
+}
+
+
+
+button:active{
+
+transform:scale(.97);
 
 }
 
@@ -161,22 +168,23 @@ border:1px solid #ccc;
 
 
 
-.hide{
-
-display:none;
-
-}
-
-
-
 .result{
 
 font-size:22px;
 
 margin:20px;
 
+min-height:35px;
+
 }
 
+
+
+.hide{
+
+display:none;
+
+}
 
 
 </style>
@@ -197,9 +205,10 @@ margin:20px;
 </h1>
 
 
-<div class="teacher" id="message">
 
-准备学习
+<div class="message" id="message">
+
+准备学习九九乘法
 
 </div>
 
@@ -210,7 +219,6 @@ margin:20px;
 一一得一
 
 </div>
-
 
 
 
@@ -234,23 +242,16 @@ margin:20px;
 <div class="info">
 
 <span id="progressText">
-
-0/45
-
+0 / 45
 </span>
 
-
 &nbsp;&nbsp;
-
 
 ⭐
 
 <span id="stars">
-
 0
-
 </span>
-
 
 </div>
 
@@ -258,7 +259,7 @@ margin:20px;
 
 
 
-<div id="action">
+<div id="actionArea">
 
 
 <button id="mainBtn">
@@ -273,10 +274,11 @@ margin:20px;
 
 
 
-<div id="inputBox" class="hide">
+
+<div id="inputArea" class="hide">
 
 
-<input id="answerInput">
+<input id="input">
 
 
 <button id="submitBtn">
@@ -290,7 +292,9 @@ margin:20px;
 
 
 
-<button id="restart">
+
+
+<button id="restartBtn">
 
 🔄重新开始
 
@@ -302,6 +306,7 @@ margin:20px;
 <div class="result" id="result">
 
 </div>
+
 
 
 </div>
@@ -325,7 +330,6 @@ const table=[
 ["一八得八",1,8,8],
 ["一九得九",1,9,9],
 
-
 ["二二得四",2,2,4],
 ["二三得六",2,3,6],
 ["二四得八",2,4,8],
@@ -335,7 +339,6 @@ const table=[
 ["二八十六",2,8,16],
 ["二九十八",2,9,18],
 
-
 ["三三得九",3,3,9],
 ["三四十二",3,4,12],
 ["三五十五",3,5,15],
@@ -344,7 +347,6 @@ const table=[
 ["三八二十四",3,8,24],
 ["三九二十七",3,9,27],
 
-
 ["四四十六",4,4,16],
 ["四五二十",4,5,20],
 ["四六二十四",4,6,24],
@@ -352,28 +354,23 @@ const table=[
 ["四八三十二",4,8,32],
 ["四九三十六",4,9,36],
 
-
 ["五五二十五",5,5,25],
 ["五六三十",5,6,30],
 ["五七三十五",5,7,35],
 ["五八四十",5,8,40],
 ["五九四十五",5,9,45],
 
-
 ["六六三十六",6,6,36],
 ["六七四十二",6,7,42],
 ["六八四十八",6,8,48],
 ["六九五十四",6,9,54],
 
-
 ["七七四十九",7,7,49],
 ["七八五十六",7,8,56],
 ["七九六十三",7,9,63],
 
-
 ["八八六十四",8,8,64],
 ["八九七十二",8,9,72],
-
 
 ["九九八十一",9,9,81]
 
@@ -382,8 +379,9 @@ const table=[
 
 
 
+
 // ================================
-// 学习对象
+// 学习任务对象
 // ================================
 
 
@@ -393,7 +391,6 @@ table.map((x,i)=>{
 
 
 return {
-
 
 id:i,
 
@@ -417,11 +414,9 @@ mastery:0,
 
 
 
-// 当前阶段
-
-// 0 学习
-// 1 补全
-// 2 测试
+// 0 学习口诀
+// 1 补全口诀
+// 2 数字测试
 // 3 完成
 
 stage:0,
@@ -447,56 +442,45 @@ lastTime:0
 
 
 
-// 当前口诀编号
+
+// ================================
+// 全局状态
+// ================================
+
 
 let current=0;
 
-
-
-// 当前星星
 
 let stars=0;
 
 
 
-// 错题队列
-
-let wrongQueue=[];
-
-
-
-
-
-// ================================
 // 当前任务
-// ================================
 
-
-function currentLesson(){
-
+function getTask(){
 
 return lessons[current];
 
-
 }
 
 
 
 
 
-
 // ================================
-// 设置阶段
+// 阶段控制
 // ================================
 
 
-function setStage(value){
+function setStage(stage){
 
 
-currentLesson().stage=value;
+getTask().stage=stage;
 
 
 }
+
+
 
 
 
@@ -507,7 +491,7 @@ currentLesson().stage=value;
 // ================================
 
 
-function masteredCount(){
+function getMasterCount(){
 
 
 return lessons.filter(x=>{
@@ -554,6 +538,7 @@ u.rate=0.75;
 speechSynthesis.speak(u);
 
 
+
 }
 
 
@@ -563,14 +548,14 @@ speechSynthesis.speak(u);
 
 
 // ================================
-// 显示当前口诀
+// 显示口诀
 // ================================
 
 
 function showLesson(){
 
 
-let x=currentLesson();
+let x=getTask();
 
 
 
@@ -579,7 +564,6 @@ document
 .innerText=x.text;
 
 
-
 }
 
 
@@ -589,7 +573,7 @@ document
 
 
 // ================================
-// 主按钮控制
+// 学口诀
 // ================================
 
 
@@ -598,14 +582,18 @@ document
 .onclick=function(){
 
 
-
-let x=currentLesson();
-
+let x=getTask();
 
 
-// 阶段0：学习
 
-if(x.stage===0){
+// 只允许学习阶段点击
+
+if(x.stage!==0){
+
+return;
+
+}
+
 
 
 setStage(1);
@@ -616,7 +604,7 @@ document
 .getElementById("message")
 .innerText=
 
-"认真记住口诀";
+"记住口诀";
 
 
 showLesson();
@@ -637,7 +625,8 @@ x.text
 
 
 
-// 自动进入补全
+// 学习完成后自动进入补全
+
 
 setTimeout(()=>{
 
@@ -649,9 +638,6 @@ openInput("memory");
 
 
 
-}
-
-
 };
 
 
@@ -660,24 +646,22 @@ openInput("memory");
 
 
 
-
 // ================================
-// 打开输入区域
+// 输入模式
 // ================================
 
 
-function openInput(type){
+function openInput(mode){
 
 
-
-let inputBox=
+let area=
 
 document
-.getElementById("inputBox");
+.getElementById("inputArea");
 
 
 
-inputBox.classList
+area.classList
 .remove("hide");
 
 
@@ -685,7 +669,7 @@ inputBox.classList
 let input=
 
 document
-.getElementById("answerInput");
+.getElementById("input");
 
 
 
@@ -693,9 +677,7 @@ input.value="";
 
 
 
-
-
-if(type==="memory"){
+if(mode==="memory"){
 
 
 
@@ -706,10 +688,9 @@ document
 "补全口诀";
 
 
-
 input.placeholder=
 
-"请输入缺少的口诀";
+"输入缺少部分";
 
 
 
@@ -717,7 +698,7 @@ input.placeholder=
 
 
 
-if(type==="test"){
+if(mode==="test"){
 
 
 
@@ -728,20 +709,16 @@ document
 "计算答案";
 
 
-
 input.placeholder=
 
-"请输入答案";
-
-
-
-}
-
+"输入数字";
 
 
 }
 
 
+
+}
 
 
 
@@ -759,39 +736,48 @@ document
 .onclick=function(){
 
 
-
-let x=currentLesson();
-
+let x=getTask();
 
 
 let value=
 
 document
-.getElementById("answerInput")
+.getElementById("input")
 .value
 .trim();
 
 
 
-// 阶段1：补全
+
+
+// ================================
+// 补全阶段
+// ================================
+
 
 if(x.stage===1){
 
 
 
-let blank=
+let answerPart=
 
 x.text.substring(
 
-0,
-
-x.text.length-2
+x.text.length-1
 
 );
 
 
 
-if(blank+value===x.text){
+
+
+if(
+
+value===answerPart ||
+
+value===x.text.substring(2)
+
+){
 
 
 
@@ -806,7 +792,7 @@ document
 .getElementById("result")
 .innerText=
 
-"🎉 口诀记住了！";
+"🎉 口诀记住了";
 
 
 
@@ -816,15 +802,9 @@ speak(
 
 
 
-// 自动进入测试
-
-setTimeout(()=>{
-
+// 立即进入数字测试
 
 openInput("test");
-
-
-},300);
 
 
 
@@ -840,7 +820,7 @@ document
 .getElementById("result")
 .innerText=
 
-"再试一次";
+"再想一下";
 
 
 }
@@ -853,7 +833,11 @@ document
 
 
 
-// 阶段2：测试
+
+
+// ================================
+// 数字测试阶段
+// ================================
 
 
 else if(x.stage===2){
@@ -864,13 +848,18 @@ if(Number(value)===x.answer){
 
 
 
-x.mastery+=50;
-
-
 x.correct++;
 
 
-setStage(3);
+x.mastery+=70;
+
+
+
+if(x.mastery>100){
+
+x.mastery=100;
+
+}
 
 
 
@@ -890,7 +879,7 @@ document
 .getElementById("result")
 .innerText=
 
-"答案不正确";
+"答案错误";
 
 
 }
@@ -903,9 +892,7 @@ document
 
 save();
 
-
 update();
-
 
 
 };
@@ -917,11 +904,16 @@ update();
 function finishLesson(){
 
 
-let x=currentLesson();
+let x=getTask();
 
 
+
+// 标记完成
 
 x.mastery=100;
+
+
+x.lastTime=Date.now();
 
 
 
@@ -943,23 +935,16 @@ speak(
 
 
 
-// 保存学习时间
-
-x.lastTime=Date.now();
-
-
-
-// 隐藏输入
+// 隐藏输入区域
 
 document
-.getElementById("inputBox")
+.getElementById("inputArea")
 .classList
 .add("hide");
 
 
 
-
-// 更新界面
+// 更新
 
 update();
 
@@ -968,18 +953,16 @@ save();
 
 
 
-// 自动下一题
+// 唯一下一题入口
 
 setTimeout(()=>{
 
 
-nextLesson();
+nextTask();
 
 
-resetLesson();
 
-
-},500);
+},300);
 
 
 
@@ -992,18 +975,17 @@ resetLesson();
 
 
 // ================================
-// 选择下一题
+// 下一任务选择
 // ================================
 
 
-function nextLesson(){
+function nextTask(){
 
 
 
-// 第一优先：错误题
+// 优先错误口诀
 
-
-let weak=
+let wrong=
 
 lessons.filter(x=>{
 
@@ -1015,10 +997,13 @@ return x.wrong>0 && x.mastery<90;
 
 
 
-if(weak.length>0){
+if(wrong.length>0){
 
 
-current=weak[0].id;
+current=wrong[0].id;
+
+
+resetTask();
 
 
 return;
@@ -1031,10 +1016,9 @@ return;
 
 
 
-// 第二：未完成口诀
+// 其次未掌握口诀
 
-
-let unlearn=
+let unfinished=
 
 lessons.filter(x=>{
 
@@ -1046,10 +1030,13 @@ return x.mastery<90;
 
 
 
-if(unlearn.length>0){
+if(unfinished.length>0){
 
 
-current=unlearn[0].id;
+current=unfinished[0].id;
+
+
+resetTask();
 
 
 return;
@@ -1066,6 +1053,8 @@ return;
 current=0;
 
 
+resetTask();
+
 
 }
 
@@ -1076,14 +1065,14 @@ current=0;
 
 
 // ================================
-// 重置当前状态
+// 重置任务状态
 // ================================
 
 
-function resetLesson(){
+function resetTask(){
 
 
-let x=currentLesson();
+let x=getTask();
 
 
 
@@ -1098,10 +1087,16 @@ document
 "准备学习";
 
 
-
 document
 .getElementById("result")
 .innerText="";
+
+
+
+document
+.getElementById("mainBtn")
+.classList
+.remove("hide");
 
 
 
@@ -1118,7 +1113,6 @@ showLesson();
 
 
 }
-
 
 
 
@@ -1153,10 +1147,15 @@ let percent=
 
 Math.round(
 
-total/(lessons.length)
+total/lessons.length
 
 );
 
+
+
+
+
+// 绿色进度条
 
 
 document
@@ -1167,13 +1166,14 @@ percent+"%";
 
 
 
+
 document
 .getElementById("progressText")
 .innerText=
 
-masteredCount()
+getMasterCount()
 +
-"/45";
+" / 45";
 
 
 
@@ -1193,7 +1193,6 @@ stars;
 
 
 
-
 // ================================
 // 保存
 // ================================
@@ -1205,7 +1204,7 @@ function save(){
 
 localStorage.setItem(
 
-"xw_v5_lessons",
+"xw_v6_lessons",
 
 JSON.stringify(lessons)
 
@@ -1215,19 +1214,9 @@ JSON.stringify(lessons)
 
 localStorage.setItem(
 
-"xw_v5_stars",
+"xw_v6_stars",
 
 stars
-
-);
-
-
-
-localStorage.setItem(
-
-"xw_v5_wrong",
-
-JSON.stringify(wrongQueue)
 
 );
 
@@ -1244,57 +1233,41 @@ function load(){
 try{
 
 
-let a=
+let data=
 
 localStorage.getItem(
-"xw_v5_lessons"
+"xw_v6_lessons"
 );
 
 
 
-if(a){
+if(data){
+
 
 lessons=
 
-JSON.parse(a);
+JSON.parse(data);
+
 
 }
 
 
 
-
-let b=
+let starData=
 
 localStorage.getItem(
-"xw_v5_stars"
+"xw_v6_stars"
 );
 
 
 
-if(b){
+if(starData){
+
 
 stars=
 
-Number(b);
+Number(starData);
 
-}
-
-
-
-
-let c=
-
-localStorage.getItem(
-"xw_v5_wrong"
-);
-
-
-
-if(c){
-
-wrongQueue=
-
-JSON.parse(c);
 
 }
 
@@ -1304,15 +1277,15 @@ JSON.parse(c);
 
 
 console.log(
-"数据恢复失败"
+"数据读取失败"
 );
 
 
 }
 
 
-
 }
+
 
 
 
@@ -1325,7 +1298,7 @@ console.log(
 
 
 document
-.getElementById("restart")
+.getElementById("restartBtn")
 .onclick=function(){
 
 
@@ -1333,7 +1306,7 @@ document
 let ok=
 
 confirm(
-"确定重新开始学习吗？"
+"确定重新开始吗？"
 );
 
 
@@ -1368,9 +1341,6 @@ x.lastTime=0;
 stars=0;
 
 
-wrongQueue=[];
-
-
 current=0;
 
 
@@ -1378,7 +1348,7 @@ current=0;
 save();
 
 
-resetLesson();
+resetTask();
 
 
 update();
@@ -1389,7 +1359,7 @@ document
 .getElementById("message")
 .innerText=
 
-"重新开始学习";
+"重新开始九九乘法";
 
 
 
@@ -1409,7 +1379,6 @@ document
 function init(){
 
 
-
 load();
 
 
@@ -1419,6 +1388,7 @@ current=0;
 
 
 showLesson();
+
 
 
 update();
@@ -1440,8 +1410,10 @@ document
 
 
 
+// ================================
+// 自动保存
+// ================================
 
-// 自动保存保护
 
 setInterval(()=>{
 
@@ -1455,6 +1427,7 @@ save();
 
 
 
+
 window.onbeforeunload=function(){
 
 
@@ -1462,6 +1435,7 @@ save();
 
 
 };
+
 
 
 

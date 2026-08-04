@@ -4,7 +4,7 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>九九乘法学习</title>
 
@@ -32,14 +32,11 @@ color:#333;
 .app{
 
 width:92%;
-
 max-width:450px;
 
 margin:20px auto;
 
 padding:20px;
-
-background:#ffffff;
 
 border:1px solid #ddd;
 
@@ -55,31 +52,25 @@ h1{
 
 font-size:28px;
 
-margin-bottom:20px;
-
 }
 
 
 
+.group-title{
 
-.title{
-
-font-size:18px;
-
-color:#666;
+font-size:20px;
 
 margin:10px;
 
+font-weight:bold;
+
 }
 
 
 
+.progress-bg{
 
-/* 进度 */
-
-.progress-box{
-
-height:16px;
+height:18px;
 
 background:#ddd;
 
@@ -107,31 +98,25 @@ transition:.3s;
 
 .progress-text{
 
-font-size:15px;
+margin:8px;
 
 color:#666;
-
-margin:8px;
 
 }
 
 
 
+.card{
 
-
-
-.lesson{
-
-margin:25px 0;
+background:#fafafa;
 
 padding:20px;
 
 border-radius:15px;
 
-background:#fafafa;
+margin:20px 0;
 
 }
-
 
 
 
@@ -155,8 +140,6 @@ margin-top:15px;
 
 
 
-
-
 input{
 
 width:130px;
@@ -167,7 +150,7 @@ font-size:24px;
 
 text-align:center;
 
-border:1px solid #aaa;
+border:1px solid #999;
 
 border-radius:8px;
 
@@ -175,21 +158,15 @@ border-radius:8px;
 
 
 
-
-
 button{
-
-background:#666;
-
-color:white;
 
 border:0;
 
 border-radius:8px;
 
-padding:10px 16px;
+padding:10px 18px;
 
-margin:6px;
+margin:5px;
 
 font-size:16px;
 
@@ -197,15 +174,43 @@ font-size:16px;
 
 
 
+#learn,
+
+#submit{
+
+background:#4caf50;
+
+color:white;
+
+}
+
+
+
+#restart{
+
+background:#ddd;
+
+color:#555;
+
+}
+
+
+
 .feedback{
 
-height:35px;
+margin-top:15px;
 
-margin-top:10px;
+font-size:22px;
 
 color:#4caf50;
 
-font-size:22px;
+}
+
+
+
+.flower{
+
+font-size:36px;
 
 }
 
@@ -214,7 +219,6 @@ font-size:22px;
 </style>
 
 </head>
-
 
 
 <body>
@@ -228,22 +232,20 @@ font-size:22px;
 </h1>
 
 
-<div id="questionTitle" class="title">
+<div id="groupTitle" class="group-title">
 
-第1题
+第1组
 
 </div>
 
 
 
-<div class="title">
-
+<div>
 学习进度
-
 </div>
 
 
-<div class="progress-box">
+<div class="progress-bg">
 
 <div id="progress" class="progress-green">
 
@@ -252,17 +254,17 @@ font-size:22px;
 </div>
 
 
+
 <div id="progressText" class="progress-text">
 
-0 / 81
+0 / 9
 
 </div>
 
 
 
 
-
-<div class="lesson">
+<div class="card">
 
 
 <div id="cn" class="cn">
@@ -290,6 +292,7 @@ font-size:22px;
 
 <div>
 
+
 <button id="learn">
 学习
 </button>
@@ -309,26 +312,33 @@ font-size:22px;
 
 
 
-
 <div id="feedback" class="feedback">
 
 </div>
 
 
+
+<div id="flower" class="flower">
+
 </div>
 
 
-<script>// ================================
+</div>
+
+
+<script>
+// ================================
 // 九九乘法数据
 // ================================
 
 
-let questions=[];
+let groups=[];
 
 
 // 中文数字
 
-const chinese=[
+const nums=[
+
 "",
 "一",
 "二",
@@ -338,40 +348,178 @@ const chinese=[
 "六",
 "七",
 "八",
-"九"
+"九",
+"十",
+"十一",
+"十二",
+"十三",
+"十四",
+"十五",
+"十六",
+"十七",
+"十八",
+"十九",
+"二十",
+"二十一",
+"二十二",
+"二十三",
+"二十四",
+"二十五",
+"二十六",
+"二十七",
+"二十八",
+"二十九",
+"三十",
+"三十一",
+"三十二",
+"三十三",
+"三十四",
+"三十五",
+"三十六",
+"三十七",
+"三十八",
+"三十九",
+"四十",
+"四十一",
+"四十二",
+"四十三",
+"四十四",
+"四十五",
+"四十六",
+"四十七",
+"四十八",
+"四十九",
+"五十",
+"五十一",
+"五十二",
+"五十三",
+"五十四",
+"五十五",
+"五十六",
+"五十七",
+"五十八",
+"五十九",
+"六十",
+"六十一",
+"六十二",
+"六十三",
+"六十四",
+"六十五",
+"六十六",
+"六十七",
+"六十八",
+"六十九",
+"七十",
+"七十一",
+"七十二",
+"七十三",
+"七十四",
+"七十五",
+"七十六",
+"七十七",
+"七十八",
+"七十九",
+"八十",
+"八十一"
+
 ];
 
 
 
 
-// 生成81题
-// 顺序：
+
+
+// 生成9组
+
+// 第1组:
 // 1×1
 // 2×1
 // ...
 // 9×1
-// 1×2
-// ...
+
 
 for(let b=1;b<=9;b++){
 
-    for(let a=1;a<=9;a++){
 
-        questions.push({
+let list=[];
 
-            a:a,
 
-            b:b,
+for(let a=1;a<=9;a++){
 
-            answer:a*b,
 
-            done:false
+let result=a*b;
 
-        });
 
-    }
+list.push({
+
+a:a,
+
+b:b,
+
+answer:result,
+
+done:false
+
+});
+
 
 }
+
+
+
+groups.push({
+
+name:"第"+b+"组",
+
+list:list
+
+});
+
+
+}
+
+
+
+
+
+
+
+
+// ================================
+// 中文口诀
+// ================================
+
+
+function makeKouJue(q){
+
+
+let left=
+
+nums[q.a]+
+nums[q.b];
+
+
+
+if(q.answer<=10){
+
+
+return left+
+"得"+
+nums[q.answer];
+
+
+}
+
+
+return left+
+nums[q.answer];
+
+
+
+}
+
+
+
 
 
 
@@ -382,103 +530,51 @@ for(let b=1;b<=9;b++){
 // ================================
 
 
-let currentIndex=0;
+let groupIndex=0;
 
 
-// 0 查看
-// 1 口诀补全
+let questionIndex=0;
+
+
+// 0 初始
+// 1 补口诀
 // 2 数字测试
 
 let stage=0;
 
 
 
+function getCurrent(){
 
+
+return groups[groupIndex]
+.list[questionIndex];
+
+
+}
 
 
 // ================================
-// 中文口诀生成
-// ================================
-
-
-function getChinese(num){
-
-
-return chinese[num];
-
-
-}
-
-
-
-function getKouJue(q){
-
-
-let result=q.answer;
-
-
-if(result<=10){
-
-return (
-getChinese(q.a)+
-getChinese(q.b)+
-"得"+
-getChinese(result)
-);
-
-}
-
-
-// 十以上结果
-
-return (
-getChinese(q.a)+
-getChinese(q.b)+
-getChinese(result)
-);
-
-
-
-}
-
-
-
-
-
-// 当前题
-
-function currentQuestion(){
-
-return questions[currentIndex];
-
-}
-
-
-
-
-
-
-
-// ================================
-// 显示题目
+// 显示当前题
 // ================================
 
 
 function render(){
 
 
-
-let q=currentQuestion();
+let q=getCurrent();
 
 
 
 document
-.getElementById("questionTitle")
+.getElementById("groupTitle")
 .innerText=
 
-"第"+
-(currentIndex+1)+
-"题";
+groups[groupIndex].name+
+"："+
+q.a+
+"×"+
+q.b;
 
 
 
@@ -486,7 +582,7 @@ document
 .getElementById("cn")
 .innerText=
 
-getKouJue(q);
+makeKouJue(q);
 
 
 
@@ -505,7 +601,6 @@ q.answer;
 updateProgress();
 
 
-
 }
 
 
@@ -513,9 +608,8 @@ updateProgress();
 
 
 
-
 // ================================
-// 点击学习
+// 学习按钮
 // ================================
 
 
@@ -525,10 +619,16 @@ document
 
 
 
-let q=currentQuestion();
+let q=getCurrent();
 
 
 stage=1;
+
+
+
+let text=
+
+makeKouJue(q);
 
 
 
@@ -536,10 +636,9 @@ document
 .getElementById("cn")
 .innerText=
 
-getKouJue(q)
-.substring(
+text.substring(
 0,
-getKouJue(q).length-1
+text.length-1
 )
 +
 "__";
@@ -568,7 +667,7 @@ document
 .getElementById("answer")
 .placeholder=
 
-"补最后一字";
+"填最后一个字";
 
 
 
@@ -579,8 +678,13 @@ document
 "补全口诀";
 
 
-
 };
+
+
+
+
+
+
 // ================================
 // 提交按钮
 // ================================
@@ -591,7 +695,7 @@ document
 .onclick=function(){
 
 
-let q=currentQuestion();
+let q=getCurrent();
 
 
 let value=
@@ -604,23 +708,16 @@ document
 
 
 
-// ================================
-// 阶段1：口诀补全
-// ================================
 
+// 口诀阶段
 
 if(stage===1){
 
 
 
-let last=
-
-getChinese(q.answer);
-
-
-
-if(value===last){
-
+if(
+value===nums[q.answer]
+){
 
 
 stage=2;
@@ -631,7 +728,7 @@ document
 .getElementById("cn")
 .innerText=
 
-getKouJue(q);
+makeKouJue(q);
 
 
 
@@ -649,7 +746,6 @@ q.b+
 document
 .getElementById("answer")
 .value="";
-
 
 
 document
@@ -690,10 +786,7 @@ document
 
 
 
-
-// ================================
-// 阶段2：数字测试
-// ================================
+// 数字阶段
 
 
 else if(stage===2){
@@ -714,7 +807,15 @@ document
 .getElementById("feedback")
 .innerText=
 
-"✓ 正确";
+"✓ 正确\n许彦篪，你真棒！";
+
+
+
+document
+.getElementById("flower")
+.innerText=
+
+"🌸";
 
 
 
@@ -728,8 +829,7 @@ setTimeout(()=>{
 nextQuestion();
 
 
-
-},700);
+},800);
 
 
 
@@ -752,35 +852,27 @@ document
 }
 
 
-
 };
-
-
-
-
-
-
-
-
 // ================================
-// 更新进度
+// 更新组内进度
 // ================================
 
 
 function updateProgress(){
 
 
-
 let done=
 
-questions.filter(q=>q.done)
+groups[groupIndex]
+.list
+.filter(q=>q.done)
 .length;
 
 
 
 let percent=
 
-(done/81)*100;
+(done/9)*100;
 
 
 
@@ -797,10 +889,12 @@ document
 .innerText=
 
 done+
-" / 81";
+" / 9";
+
 
 
 }
+
 
 
 
@@ -817,29 +911,82 @@ function nextQuestion(){
 
 
 
-currentIndex++;
+questionIndex++;
 
 
 stage=0;
 
 
 
-if(currentIndex>=questions.length){
+// 当前组完成
+
+if(
+questionIndex>=9
+){
 
 
-currentIndex=0;
+
+setTimeout(()=>{
 
 
-document
-.getElementById("feedback")
-.innerText=
+alert(
+groups[groupIndex].name+
+"完成"
+);
 
-"✓ 全部完成";
+
+
+groupIndex++;
+
+
+
+// 九组全部完成
+
+if(
+groupIndex>=groups.length
+){
+
+
+groupIndex=0;
+
+
+alert(
+"九九乘法全部完成"
+);
+
+
+}
+
+
+
+
+questionIndex=0;
+
+
+
+groups[groupIndex]
+.list
+.forEach(q=>{
+
+q.done=false;
+
+});
+
+
+
+render();
+
+
+
+},500);
+
 
 
 return;
 
+
 }
+
 
 
 
@@ -864,11 +1011,19 @@ document
 
 
 
+document
+.getElementById("flower")
+.innerText="";
+
+
+
 render();
 
 
 
 }
+
+
 
 
 
@@ -885,16 +1040,25 @@ document
 
 
 
-currentIndex=0;
+groupIndex=0;
 
+questionIndex=0;
 
 stage=0;
 
 
 
-questions.forEach(q=>{
+groups.forEach(group=>{
+
+
+group.list.forEach(q=>{
+
 
 q.done=false;
+
+
+});
+
 
 });
 
@@ -911,8 +1075,14 @@ document
 .innerText="";
 
 
+document
+.getElementById("flower")
+.innerText="";
+
+
 
 render();
+
 
 
 };
@@ -922,10 +1092,15 @@ render();
 
 
 
+
+
+// ================================
 // 初始化
+// ================================
+
 
 render();
-  </script>
+</script>
 
 </body>
 

@@ -7,7 +7,7 @@
 
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 
-<title>九九成长猎豹 V5.1</title>
+<title>九九成长猎豹 V5.2</title>
 
 
 <style>
@@ -17,17 +17,28 @@ box-sizing:border-box;
 }
 
 
-body{
+html,body{
 
 margin:0;
 
-height:100vh;
+padding:0;
+
+height:100%;
 
 overflow:hidden;
 
 font-family:"Microsoft YaHei",sans-serif;
 
-background:linear-gradient(#8bd8ff,#eaffc8);
+}
+
+
+
+body{
+
+background:linear-gradient(
+#8edcff,
+#e8ffd0
+);
 
 }
 
@@ -47,7 +58,7 @@ padding:8px;
 
 
 
-.panel{
+.game{
 
 height:100%;
 
@@ -55,7 +66,7 @@ background:rgba(255,255,255,.5);
 
 border-radius:25px;
 
-padding:12px;
+padding:10px;
 
 overflow:hidden;
 
@@ -72,6 +83,8 @@ justify-content:space-between;
 
 font-weight:bold;
 
+font-size:16px;
+
 }
 
 
@@ -80,31 +93,35 @@ font-weight:bold;
 
 height:190px;
 
-position:relative;
-
-overflow:hidden;
-
-background:linear-gradient(#7ed2ff,#d9f5a5);
+margin-top:8px;
 
 border-radius:20px;
 
-margin-top:8px;
+overflow:hidden;
+
+position:relative;
+
+background:linear-gradient(
+#8ad8ff,
+#d7f5a0
+);
 
 }
 
 
 
-.ground{
+
+.track{
 
 position:absolute;
 
-bottom:20px;
-
-height:12px;
+bottom:22px;
 
 width:100%;
 
-background:#b58a52;
+height:12px;
+
+background:#a87945;
 
 }
 
@@ -115,9 +132,9 @@ background:#b58a52;
 
 position:absolute;
 
-right:20px;
+right:15px;
 
-bottom:30px;
+bottom:35px;
 
 font-size:35px;
 
@@ -130,9 +147,9 @@ font-size:35px;
 
 position:absolute;
 
-left:-50px;
+left:-60px;
 
-top:80px;
+top:70px;
 
 font-size:25px;
 
@@ -161,13 +178,11 @@ transform:translateX(0);
 
 }
 
-
 to{
 
-transform:translateX(400px);
+transform:translateX(420px);
 
 }
-
 
 }
 
@@ -180,33 +195,31 @@ position:absolute;
 
 left:20px;
 
-bottom:30px;
+bottom:28px;
 
-width:140px;
+width:150px;
 
 transform-origin:center;
 
-transition:transform .3s;
-
 }
 
 
 
 
-.cheetah.run{
+.cheetah.running{
 
-animation:bounce .25s infinite;
+animation:bodyRun .25s infinite;
 
 }
 
 
 
-@keyframes bounce{
+@keyframes bodyRun{
 
 
 50%{
 
-margin-bottom:8px;
+transform:translateY(-7px);
 
 }
 
@@ -216,7 +229,8 @@ margin-bottom:8px;
 
 
 
-.leg{
+
+.leg1{
 
 transform-origin:top;
 
@@ -224,24 +238,32 @@ transform-origin:top;
 
 
 
-.cheetah.run .leg1{
+.leg2{
 
-animation:legA .25s infinite alternate;
-
-}
-
-
-
-.cheetah.run .leg2{
-
-animation:legA .25s infinite alternate-reverse;
+transform-origin:top;
 
 }
 
 
 
+.running .leg1{
 
-@keyframes legA{
+animation:legRun .25s infinite alternate;
+
+}
+
+
+
+.running .leg2{
+
+animation:legRun .25s infinite alternate-reverse;
+
+}
+
+
+
+
+@keyframes legRun{
 
 
 from{
@@ -249,6 +271,7 @@ from{
 transform:rotate(15deg);
 
 }
+
 
 to{
 
@@ -262,9 +285,9 @@ transform:rotate(-20deg);
 
 
 
-.cheetah.run .tail{
+.running .tail{
 
-animation:tailA .4s infinite;
+animation:tailRun .5s infinite;
 
 transform-origin:left;
 
@@ -272,17 +295,18 @@ transform-origin:left;
 
 
 
-@keyframes tailA{
+@keyframes tailRun{
 
 
 50%{
 
-transform:rotate(15deg);
+transform:rotate(18deg);
+
+}
 
 }
 
 
-}
 
 
 
@@ -290,14 +314,13 @@ transform:rotate(15deg);
 
 text-align:center;
 
-font-size:18px;
-
 font-weight:bold;
+
+font-size:18px;
 
 margin:5px;
 
 }
-
 
 
 </style>
@@ -311,7 +334,7 @@ margin:5px;
 <div class="app">
 
 
-<div class="panel">
+<div class="game">
 
 
 <div class="header">
@@ -321,8 +344,10 @@ margin:5px;
 </div>
 
 
-<div>
+<div id="level">
+
 Lv1 小猎豹
+
 </div>
 
 
@@ -333,11 +358,13 @@ Lv1 小猎豹
 <div class="race">
 
 
+
 <div id="wind" class="wind">
 
 💨💨
 
 </div>
+
 
 
 
@@ -347,71 +374,91 @@ Lv1 小猎豹
 <svg viewBox="0 0 300 150">
 
 
-<!--身体-->
+<!-- 身体 -->
 
-<ellipse cx="140"
+<ellipse 
+cx="140"
 cy="75"
 rx="75"
 ry="35"
-fill="#d99b32"/>
+fill="#d89b35"/>
 
 
 
-<!--斑纹-->
+<!-- 斑纹 -->
 
 <circle cx="110" cy="60" r="5"/>
 <circle cx="145" cy="50" r="5"/>
-<circle cx="170" cy="80" r="5"/>
-<circle cx="120" cy="90" r="5"/>
+<circle cx="175" cy="80" r="5"/>
+<circle cx="125" cy="90" r="5"/>
 
 
 
-<!--头-->
+<!-- 头 -->
 
-<circle cx="220"
+<circle 
+cx="225"
 cy="60"
 r="30"
-fill="#d99b32"/>
+fill="#d89b35"/>
 
 
 
-<!--耳朵-->
+<!-- 眼睛 -->
 
-<circle cx="210"
+<circle
+cx="235"
+cy="55"
+r="5"
+fill="black"/>
+
+
+
+<!-- 耳朵 -->
+
+<circle
+cx="215"
 cy="35"
 r="9"
-fill="#a86d20"/>
+fill="#9c641e"/>
 
 
 
-<!--尾巴-->
+<!-- 尾巴 -->
 
-<path class="tail"
+<path
+class="tail"
 d="M75 75 Q20 35 5 70"
-stroke="#d99b32"
-stroke-width="10"
+stroke="#d89b35"
+stroke-width="12"
 fill="none"/>
 
 
 
-<!--腿-->
+<!-- 前腿 -->
 
-<line class="leg leg1"
+<line
+class="leg1"
 x1="180"
 y1="95"
-x2="210"
+x2="215"
 y2="130"
-stroke="#d99b32"
+stroke="#d89b35"
 stroke-width="12"/>
 
 
-<line class="leg leg2"
+
+<!-- 后腿 -->
+
+<line
+class="leg2"
 x1="100"
 y1="95"
-x2="70"
+x2="65"
 y2="130"
-stroke="#d99b32"
+stroke="#d89b35"
 stroke-width="12"/>
+
 
 
 </svg>
@@ -426,13 +473,11 @@ stroke-width="12"/>
 </div>
 
 
-
-<div class="ground">
-
-</div>
+<div class="track"></div>
 
 
 </div>
+
 <div class="speedBox">
 
 速度：
@@ -447,7 +492,8 @@ stroke-width="12"/>
 
 
 
-<div style="text-align:center;font-size:16px">
+
+<div style="text-align:center">
 
 📖口诀
 
@@ -486,6 +532,7 @@ background:#43a047;
 
 
 
+
 <div id="progressText">
 
 第1组 0/9
@@ -495,9 +542,10 @@ background:#43a047;
 
 
 
+
 <button id="startVoice">
 
-🌱开始学习
+🌱 开始学习
 
 </button>
 
@@ -505,12 +553,8 @@ background:#43a047;
 
 
 
-<div id="question" style="
-text-align:center;
-font-size:32px;
-font-weight:bold;
-margin-top:5px;
-">
+
+<div id="question" class="question">
 
 1 × 1 = ?
 
@@ -524,33 +568,66 @@ margin-top:5px;
 
 
 
+
 <div class="keys">
 
 
-<button onclick="add(1)">1</button>
-
-<button onclick="add(2)">2</button>
-
-<button onclick="add(3)">3</button>
+<button onclick="add(1)">
+1
+</button>
 
 
-<button onclick="add(4)">4</button>
-
-<button onclick="add(5)">5</button>
-
-<button onclick="add(6)">6</button>
+<button onclick="add(2)">
+2
+</button>
 
 
-<button onclick="add(7)">7</button>
-
-<button onclick="add(8)">8</button>
-
-<button onclick="add(9)">9</button>
+<button onclick="add(3)">
+3
+</button>
 
 
-<button onclick="add(0)">0</button>
 
-<button onclick="delA()">⌫</button>
+<button onclick="add(4)">
+4
+</button>
+
+
+<button onclick="add(5)">
+5
+</button>
+
+
+<button onclick="add(6)">
+6
+</button>
+
+
+
+<button onclick="add(7)">
+7
+</button>
+
+
+<button onclick="add(8)">
+8
+</button>
+
+
+<button onclick="add(9)">
+9
+</button>
+
+
+
+<button onclick="add(0)">
+0
+</button>
+
+
+<button onclick="delA()">
+⌫
+</button>
 
 
 </div>
@@ -558,18 +635,22 @@ margin-top:5px;
 
 
 
+
 <button id="submit">
 
-✅提交答案
+✅ 提交答案
 
 </button>
 
 
 
+<div class="buttonGap"></div>
+
+
 
 <button id="restart">
 
-🔄重新开始
+🔄 重新开始
 
 </button>
 
@@ -583,38 +664,19 @@ margin-top:5px;
 
 
 
-</div>
-
-</div>
-
-
-
-
 
 <style>
 
 
-button{
+.question{
 
-width:100%;
+text-align:center;
 
-height:45px;
+font-size:32px;
 
-border:0;
+font-weight:bold;
 
-border-radius:14px;
-
-font-size:18px;
-
-margin-top:6px;
-
-}
-
-
-
-button:active{
-
-transform:scale(.95);
+margin-top:5px;
 
 }
 
@@ -638,7 +700,48 @@ margin-top:8px;
 
 height:38px;
 
+border:0;
+
 background:white;
+
+border-radius:14px;
+
+font-size:18px;
+
+}
+
+
+
+button{
+
+width:100%;
+
+height:45px;
+
+border:0;
+
+border-radius:15px;
+
+font-size:18px;
+
+}
+
+
+
+button:active{
+
+transform:scale(.95);
+
+}
+
+
+
+
+#startVoice{
+
+background:#fff;
+
+margin-top:5px;
 
 }
 
@@ -652,7 +755,17 @@ background:#43a047;
 
 color:white;
 
+font-size:19px;
+
 margin-top:12px;
+
+}
+
+
+
+.buttonGap{
+
+height:18px;
 
 }
 
@@ -660,9 +773,21 @@ margin-top:12px;
 
 #restart{
 
-margin-top:20px;
+background:white;
 
-background:#fff;
+}
+
+
+
+#msg{
+
+height:22px;
+
+text-align:center;
+
+color:#388e3c;
+
+margin-top:5px;
 
 }
 
@@ -690,24 +815,20 @@ text-align:center;
 
 
 
-#msg{
-
-height:22px;
-
-text-align:center;
-
-color:#388e3c;
-
-}
-
-
-
 </style>
 
 
 
+
 <script>
-  const nums=[
+
+// =====================
+// 九九成长猎豹 V5.2
+// 核心逻辑
+// =====================
+
+
+const nums=[
 "",
 "一",
 "二",
@@ -721,8 +842,11 @@ color:#388e3c;
 ];
 
 
+
 let group=1;
+
 let index=1;
+
 let done=0;
 
 
@@ -731,6 +855,7 @@ let speed=20;
 let streak=0;
 
 let distance=0;
+
 
 let voiceEnable=false;
 
@@ -745,6 +870,8 @@ document.getElementById("wind");
 
 
 
+
+
 function cnNum(n){
 
 
@@ -755,7 +882,7 @@ return nums[n];
 }
 
 
-if(n==10){
+if(n===10){
 
 return "十";
 
@@ -769,7 +896,7 @@ return "十"+nums[n%10];
 }
 
 
-if(n%10==0){
+if(n%10===0){
 
 return nums[n/10]+"十";
 
@@ -780,27 +907,31 @@ return nums[Math.floor(n/10)]
 +"十"
 +nums[n%10];
 
-
 }
+
 
 
 
 function kouText(a,b){
 
 
-let r=a*b;
+let result=a*b;
 
 
-if(r<10){
+if(result<10){
 
-return nums[a]+nums[b]+"得"+nums[r];
+return nums[a]+nums[b]+"得"+nums[result];
+
+}
+
+
+return nums[a]+nums[b]+cnNum(result);
+
 
 }
 
 
-return nums[a]+nums[b]+cnNum(r);
 
-}
 
 
 
@@ -850,22 +981,23 @@ streak;
 
 
 
-function run(){
+// 猎豹运动
+
+function updateRun(){
+
 
 
 if(speed>25){
 
-cheetah.classList.add("run");
+cheetah.classList.add("running");
 
 wind.classList.add("active");
 
 
-}
-
-else{
+}else{
 
 
-cheetah.classList.remove("run");
+cheetah.classList.remove("running");
 
 wind.classList.remove("active");
 
@@ -874,51 +1006,63 @@ wind.classList.remove("active");
 
 
 
-distance+=speed/30;
+
+distance += speed/40;
 
 
 
-if(distance>190){
+if(distance>180){
 
-distance=20;
-
-}
-
-
-
-cheetah.style.left=
-(20+distance)+"px";
-
-
+distance=0;
 
 }
 
 
 
-setInterval(run,40);
+
+cheetah.style.transform=
+"translateX("+distance+"px)";
+
+
+}
+
+
+
+
+
+setInterval(updateRun,40);
 
 
 
 
 
 
-function add(n){
+
+// 数字输入
+
+
+function add(num){
+
 
 document.getElementById("answer")
-.value+=n;
+.value += num;
+
 
 }
+
 
 
 
 function delA(){
 
-let a=
+
+let input=
 document.getElementById("answer");
 
 
-a.value=
-a.value.slice(0,-1);
+input.value=
+input.value.slice(0,-1);
+
 
 }
 
@@ -926,12 +1070,25 @@ a.value.slice(0,-1);
 
 
 
+
+// 声音
+
 function beep(type){
+
+
+
+if(!voiceEnable){
+
+return;
+
+}
+
 
 
 let ctx=
 new(window.AudioContext||
 window.webkitAudioContext)();
+
 
 
 let osc=
@@ -940,6 +1097,7 @@ ctx.createOscillator();
 
 let gain=
 ctx.createGain();
+
 
 
 osc.connect(gain);
@@ -954,17 +1112,20 @@ osc.frequency.value=880;
 
 }
 
-else if(type==="win"){
+
+if(type==="bad"){
+
+osc.frequency.value=300;
+
+}
+
+
+if(type==="win"){
 
 osc.frequency.value=1200;
 
 }
 
-else{
-
-osc.frequency.value=300;
-
-}
 
 
 gain.gain.value=.08;
@@ -980,39 +1141,42 @@ ctx.currentTime+.15
 
 }
 
-
-
-
+// =====================
+// 答题核心
+// =====================
 
 
 function check(){
 
 
-
-let answer=
-
+let userAnswer=
 Number(
 document.getElementById("answer").value
 );
 
 
 
-if(answer===group*index){
-
+if(
+userAnswer === group*index
+){
 
 
 streak++;
 
 
-speed+=8;
+speed += 8;
 
 
 
-if(speed>90){
+if(speed>100){
 
-speed=90;
+speed=100;
 
 }
+
+
+
+done++;
 
 
 
@@ -1022,33 +1186,47 @@ beep("ok");
 
 document.getElementById("msg")
 .innerHTML=
-"🐆答对啦！猎豹加速";
+"🐆 答对啦！猎豹加速";
 
 
 
-done++;
 
 
+// 一组完成
 
 if(done>=9){
+
 
 
 beep("win");
 
 
+
 document.getElementById("msg")
 .innerHTML=
-"🏁冲过终点！太棒啦！";
+"🏁 冲过终点！👏";
+
 
 
 speed+=15;
 
 
+if(speed>100){
+
+speed=100;
+
+}
+
+
+
 group++;
+
 
 done=0;
 
+
 index=1;
+
 
 
 if(group>9){
@@ -1058,6 +1236,8 @@ group=1;
 }
 
 
+
+
 }
 
 else{
@@ -1065,17 +1245,24 @@ else{
 
 index++;
 
+
 }
 
 
 
+
+// 自动朗读下一题
+
 if(voiceEnable){
 
-setTimeout(()=>{
+
+setTimeout(function(){
 
 voice();
 
-},400);
+
+},500);
+
 
 }
 
@@ -1086,11 +1273,11 @@ voice();
 else{
 
 
-
 streak=0;
 
 
 speed-=15;
+
 
 
 if(speed<10){
@@ -1107,7 +1294,8 @@ beep("bad");
 
 document.getElementById("msg")
 .innerHTML=
-"🐆停下来想一想";
+"🐆 停下来想一想";
+
 
 
 }
@@ -1116,6 +1304,7 @@ document.getElementById("msg")
 
 document.getElementById("answer")
 .value="";
+
 
 
 render();
@@ -1128,13 +1317,23 @@ render();
 
 
 
+
+// =====================
+// 口诀语音
+// =====================
+
+
 function voice(){
 
 
+let text=
+kouText(group,index);
+
+
+
 let u=
-new SpeechSynthesisUtterance(
-kouText(group,index)
-);
+new SpeechSynthesisUtterance(text);
+
 
 
 u.lang="zh-CN";
@@ -1149,11 +1348,18 @@ speechSynthesis.cancel();
 speechSynthesis.speak(u);
 
 
+
 }
 
 
 
 
+
+
+
+// =====================
+// 第一次点击开启声音
+// =====================
 
 
 document
@@ -1167,6 +1373,7 @@ voiceEnable=true;
 voice();
 
 
+
 };
 
 
@@ -1174,11 +1381,20 @@ voice();
 
 
 
+
+
+// =====================
+// 按钮事件
+// =====================
+
+
 document
 .getElementById("submit")
 .onclick=function(){
 
+
 check();
+
 
 };
 
@@ -1192,11 +1408,23 @@ document
 .onclick=function(){
 
 
+
+let ok=
+confirm(
+"确定重新开始吗？"
+);
+
+
+
+if(ok){
+
+
 group=1;
 
 index=1;
 
 done=0;
+
 
 speed=20;
 
@@ -1205,7 +1433,17 @@ streak=0;
 distance=0;
 
 
+
+cheetah.style.transform=
+"translateX(0px)";
+
+
+
 render();
+
+
+}
+
 
 
 };
@@ -1215,8 +1453,9 @@ render();
 
 
 
-render();
+// 初始化
 
+render();
 
 
 </script>

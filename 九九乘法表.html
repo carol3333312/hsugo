@@ -7,7 +7,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>小悟课堂 V3.2 九九乘法</title>
+<title>小悟课堂 V4 九九乘法</title>
 
 
 <style>
@@ -76,21 +76,11 @@ line-height:1.6;
 
 .lesson{
 
-font-size:32px;
+font-size:34px;
 
 font-weight:bold;
 
-margin:20px;
-
-color:#333;
-
-}
-
-
-
-.progress-box{
-
-margin-top:20px;
+margin:25px 0;
 
 }
 
@@ -106,6 +96,8 @@ border-radius:20px;
 
 overflow:hidden;
 
+margin:15px 0;
+
 }
 
 
@@ -114,9 +106,9 @@ overflow:hidden;
 
 height:100%;
 
-width:0%;
-
 background:#4caf50;
+
+width:0%;
 
 transition:.5s;
 
@@ -129,14 +121,6 @@ transition:.5s;
 font-size:20px;
 
 margin:15px;
-
-}
-
-
-
-.star{
-
-font-size:26px;
 
 }
 
@@ -164,21 +148,13 @@ font-size:20px;
 
 
 
-button:active{
-
-transform:scale(.96);
-
-}
-
-
-
 input{
 
-width:140px;
-
-font-size:28px;
+width:150px;
 
 padding:10px;
+
+font-size:28px;
 
 text-align:center;
 
@@ -190,31 +166,20 @@ border:1px solid #ccc;
 
 
 
-.hide{
-
-display:none;
-
-}
-
-
-
 .result{
 
 font-size:22px;
 
-margin:20px;
+min-height:35px;
 
-min-height:30px;
+margin:20px;
 
 }
 
 
+.hide{
 
-.level{
-
-font-size:18px;
-
-color:#555;
+display:none;
 
 }
 
@@ -236,23 +201,25 @@ color:#555;
 
 <div class="teacher" id="teacher">
 
-今天学习九九乘法口诀
+准备开始学习
 
 </div>
+
 
 
 <div class="lesson" id="lesson">
 
-准备开始
+一一得一
 
 </div>
 
 
 
-<div class="progress-box">
 
 <div>
+
 口诀掌握进度
+
 </div>
 
 
@@ -272,11 +239,8 @@ color:#555;
 </div>
 
 
-</div>
 
-
-
-<div class="star">
+<div class="info">
 
 ⭐ <span id="stars">0</span>
 
@@ -284,68 +248,72 @@ color:#555;
 
 
 
-<div class="level">
+<div>
 
-等级：
+已掌握：
 
-<span id="level">
+<span id="count">
 
-数学小苗
+0
 
 </span>
 
+/45
+
 </div>
+
+
 
 
 
 <button id="learn">
 
-📖 学习口诀
-
-</button>
-
-
-<button id="listen">
-
-🔊 听老师读
-
-</button>
-
-
-<button id="memory">
-
-🧠 补全口诀
-
-</button>
-
-
-<button id="test">
-
-✏️ 开始测试
+📖 学口诀
 
 </button>
 
 
 
-<div id="box" class="hide">
+<div id="memoryBox" class="hide">
 
 
-<h2 id="question"></h2>
+<input id="memoryInput" placeholder="补全口诀">
 
 
-<input id="answer"
-type="number"
-placeholder="答案">
+<button id="memoryBtn">
 
-
-<button id="submit">
-
-提交
+🧠 确认补全
 
 </button>
 
 
 </div>
+
+
+
+
+
+<div id="testBox" class="hide">
+
+
+<h2 id="question">
+
+</h2>
+
+
+<input id="answer" type="number" placeholder="答案">
+
+
+<button id="testBtn">
+
+✏️ 提交答案
+
+</button>
+
+
+</div>
+
+
 
 
 
@@ -354,14 +322,15 @@ placeholder="答案">
 </div>
 
 
+
 </div>
 
 
-
 <script>
-  // ================================
+// ================================
 // 九九乘法数据
 // ================================
+
 
 const table=[
 
@@ -423,42 +392,83 @@ const table=[
 
 
 
+
 // ================================
-// 学习数据
+// 学习对象
 // ================================
 
 
 let lessons=table.map((x,i)=>({
 
+
 id:i,
+
 
 text:x[0],
 
+
 a:x[1],
+
 
 b:x[2],
 
+
 answer:x[3],
+
+
+
+// 掌握度
 
 mastery:0,
 
-streak:0,
+
+
+// 当前学习阶段
+
+// 0 未学习
+// 1 已学习
+// 2 已补全
+// 3 已测试
+
+stage:0,
+
+
 
 correct:0,
 
+
 wrong:0,
 
-review:0,
 
-reward:false
+
+streak:0,
+
+
+
+review:0
+
 
 }));
 
 
 
-let stars=0;
+
+// 当前题目
 
 let current=0;
+
+
+
+// 当前阶段
+
+let stage=0;
+
+
+
+// 星星
+
+let stars=0;
+
 
 
 // 错题池
@@ -468,8 +478,10 @@ let wrongQueue=[];
 
 
 
+
+
 // ================================
-// 保存
+// 数据保存
 // ================================
 
 
@@ -478,7 +490,7 @@ function save(){
 
 localStorage.setItem(
 
-"xiaowu_v32_lessons",
+"xw_v4_lessons",
 
 JSON.stringify(lessons)
 
@@ -488,7 +500,7 @@ JSON.stringify(lessons)
 
 localStorage.setItem(
 
-"xiaowu_v32_stars",
+"xw_v4_stars",
 
 stars
 
@@ -498,7 +510,7 @@ stars
 
 localStorage.setItem(
 
-"xiaowu_v32_wrong",
+"xw_v4_wrong",
 
 JSON.stringify(wrongQueue)
 
@@ -511,8 +523,10 @@ JSON.stringify(wrongQueue)
 
 
 
+
+
 // ================================
-// 读取
+// 数据读取
 // ================================
 
 
@@ -525,8 +539,9 @@ try{
 let a=
 
 localStorage.getItem(
-"xiaowu_v32_lessons"
+"xw_v4_lessons"
 );
+
 
 
 if(a){
@@ -537,10 +552,11 @@ lessons=JSON.parse(a);
 
 
 
+
 let b=
 
 localStorage.getItem(
-"xiaowu_v32_stars"
+"xw_v4_stars"
 );
 
 
@@ -557,7 +573,7 @@ stars=Number(b);
 let c=
 
 localStorage.getItem(
-"xiaowu_v32_wrong"
+"xw_v4_wrong"
 );
 
 
@@ -573,12 +589,11 @@ wrongQueue=JSON.parse(c);
 }catch(e){
 
 
-console.log(
-"数据读取失败"
-);
+console.log("读取失败");
 
 
 }
+
 
 
 }
@@ -587,7 +602,7 @@ console.log(
 
 load();
 // ================================
-// 语音老师
+// 语音系统
 // ================================
 
 
@@ -604,8 +619,10 @@ return;
 speechSynthesis.cancel();
 
 
+
 let u=
 new SpeechSynthesisUtterance(text);
+
 
 
 u.lang="zh-CN";
@@ -621,7 +638,9 @@ u.pitch=1.1;
 speechSynthesis.speak(u);
 
 
+
 }
+
 
 
 
@@ -634,9 +653,14 @@ speechSynthesis.speak(u);
 
 function item(){
 
+
 return lessons[current];
 
+
 }
+
+
+
 
 
 
@@ -664,9 +688,10 @@ document
 
 
 
+
+
 // ================================
-// 学习口诀
-// 自动进入下一题
+// 学口诀
 // ================================
 
 
@@ -678,13 +703,19 @@ document
 let x=item();
 
 
+stage=1;
+
+
+x.stage=1;
+
+
+
 showLesson();
 
 
 
 speak(
 
-"今天学习"+
 x.a+
 "乘"+
 x.b+
@@ -697,18 +728,24 @@ x.text
 
 
 
-// 朗读结束后自动下一条
+document
+.getElementById("teacher")
+.innerText=
+
+"记住口诀："+x.text;
+
+
+
+
+// 自动进入补全阶段
 
 setTimeout(()=>{
 
 
-nextLesson();
+openMemory();
 
 
-showLesson();
-
-
-},3500);
+},3000);
 
 
 
@@ -720,24 +757,65 @@ showLesson();
 
 
 
+// ================================
+// 打开补全
+// ================================
 
-// ================================
-// 听老师读
-// ================================
+
+function openMemory(){
+
+
+
+stage=1;
+
 
 
 document
-.getElementById("listen")
-.onclick=function(){
+.getElementById("memoryBox")
+.classList
+.remove("hide");
+
+
+
+document
+.getElementById("testBox")
+.classList
+.add("hide");
+
 
 
 let x=item();
 
 
-speak(x.text);
+
+let blank=
+
+x.text.substring(
+
+0,
+
+x.text.length-2
+
+);
 
 
-};
+
+document
+.getElementById("memoryInput")
+.value="";
+
+
+
+document
+.getElementById("memoryInput")
+.placeholder=
+
+blank+"？";
+
+
+
+}
+
 
 
 
@@ -746,48 +824,41 @@ speak(x.text);
 
 // ================================
 // 补全口诀
-// 输入答案后自动判断
 // ================================
 
 
 document
-.getElementById("memory")
+.getElementById("memoryBtn")
 .onclick=function(){
-
 
 
 let x=item();
 
 
 
-let hideText=
+let blank=
 
 x.text.substring(
+
 0,
+
 x.text.length-2
+
 );
 
 
+
+let input=
 
 document
-.getElementById("lesson")
-.innerText=
-
-hideText+"__";
-
-
-
-let answer=
-
-prompt(
-"请补全口诀："+hideText
-);
+.getElementById("memoryInput")
+.value
+.trim();
 
 
 
-if(answer===null){
+if(input===""){
 
-showLesson();
 
 return;
 
@@ -795,18 +866,12 @@ return;
 
 
 
-let full=
 
-hideText+answer;
-
+if(blank+input===x.text){
 
 
 
-if(full===x.text){
-
-
-
-x.mastery+=10;
+x.mastery+=20;
 
 
 if(x.mastery>100){
@@ -817,7 +882,10 @@ x.mastery=100;
 
 
 
-x.correct++;
+x.stage=2;
+
+
+stage=2;
 
 
 
@@ -825,40 +893,33 @@ document
 .getElementById("result")
 .innerText=
 
-"🎉 背对了！"+
-x.text;
+"🎉 背诵正确！";
 
 
 
 speak(
 
-"回答正确。"+
+"正确。"+
 x.text
 
 );
 
 
 
-setReview(x);
 
 
-save();
-
-
-update();
-
-
+// 自动进入测试
 
 setTimeout(()=>{
 
 
-nextLesson();
+openTest();
 
 
-showLesson();
+
+},500);
 
 
-},1500);
 
 
 
@@ -868,12 +929,18 @@ else{
 
 
 
+x.wrong++;
+
+
+x.streak=0;
+
+
+
 document
 .getElementById("result")
 .innerText=
 
-"再试一次："+x.text;
-
+"再想一下";
 
 
 speak(
@@ -888,37 +955,46 @@ speak(
 
 
 
+
+save();
+
+
+update();
+
+
+
 };
+
+
+
+
+
+
+
 // ================================
-// 开始测试
+// 打开测试
 // ================================
+
+
+function openTest(){
 
 
 document
-.getElementById("test")
-.onclick=function(){
+.getElementById("memoryBox")
+.classList
+.add("hide");
+
 
 
 document
-.getElementById("box")
+.getElementById("testBox")
 .classList
 .remove("hide");
 
 
-showQuestion();
-
-
-};
-
-
-
-
-
-
-function showQuestion(){
-
 
 let x=item();
+
 
 
 document
@@ -931,30 +1007,25 @@ x.b+
 " = ?";
 
 
+
 document
 .getElementById("answer")
 .value="";
 
 
 }
-
-
-
-
-
-
-
 // ================================
-// 提交答案
+// 测试提交
 // ================================
 
 
 document
-.getElementById("submit")
+.getElementById("testBtn")
 .onclick=function(){
 
 
 let x=item();
+
 
 
 let answer=
@@ -967,11 +1038,12 @@ document
 
 
 
-
 if(answer===x.answer){
 
 
-correct(x);
+
+successTest(x);
+
 
 
 }
@@ -979,30 +1051,18 @@ correct(x);
 else{
 
 
-wrong(x);
+failTest(x);
+
 
 
 }
 
 
 
+
 save();
 
-
 update();
-
-
-
-setTimeout(()=>{
-
-
-nextLesson();
-
-
-showLesson();
-
-
-},1500);
 
 
 
@@ -1015,105 +1075,76 @@ showLesson();
 
 
 // ================================
-// 答对
+// 测试正确
 // ================================
 
 
-function correct(x){
+function successTest(x){
 
 
 
 x.correct++;
 
+
 x.streak++;
 
 
-
-// 连续正确增加掌握度
-
-if(x.streak===1){
+x.stage=3;
 
 
-x.mastery+=5;
+
+// 增加掌握度
 
 
-}
-
-else if(x.streak===2){
-
-
-x.mastery+=8;
-
-
-}
-
-else{
-
-
-x.mastery+=15;
-
-
-}
+x.mastery+=30;
 
 
 
 if(x.mastery>100){
 
-
 x.mastery=100;
 
-
 }
 
 
 
 
-
-// 达到掌握奖励
-
-if(x.mastery>=90 && !x.reward){
+// 奖励
 
 
-stars+=3;
+stars+=2;
 
 
-x.reward=true;
+
+document
+.getElementById("stars")
+.innerText=
+
+stars;
+
 
 
 document
 .getElementById("result")
 .innerText=
 
-"🎉 掌握口诀！⭐+3";
-
-
-}
-
-else{
-
-
-document
-.getElementById("result")
-.innerText=
-
-"⭐⭐ 很棒！"+
-x.text;
-
-
-}
-
-
-
-setReview(x);
+"🎉 答对了！⭐+2";
 
 
 
 speak(
 
-"回答正确。"+
-x.text
+"回答正确"
 
 );
+
+
+
+
+
+// 完成当前口诀
+
+finishLesson();
 
 
 
@@ -1126,11 +1157,12 @@ x.text
 
 
 // ================================
-// 答错
+// 测试错误
 // ================================
 
 
-function wrong(x){
+function failTest(x){
+
 
 
 x.wrong++;
@@ -1155,6 +1187,7 @@ x.mastery=0;
 
 // 加入错题池
 
+
 if(!wrongQueue.includes(x.id)){
 
 
@@ -1165,24 +1198,21 @@ wrongQueue.push(x.id);
 
 
 
+
 document
 .getElementById("result")
 .innerText=
 
-"需要加强："+x.text;
+"再试一次："+x.text;
 
 
 
 speak(
 
-"再听一次。"+
-x.text
+"再想一想"
 
 );
 
-
-
-setReview(x);
 
 
 }
@@ -1194,6 +1224,214 @@ setReview(x);
 
 
 // ================================
+// 完成当前口诀
+// 自动下一题
+// ================================
+
+
+function finishLesson(){
+
+
+
+let x=item();
+
+
+
+if(x.mastery>=90){
+
+
+stars+=3;
+
+
+document
+.getElementById("result")
+.innerText=
+
+"🌟 完全掌握！+3星";
+
+
+}
+
+
+
+// 隐藏当前区域
+
+
+document
+.getElementById("testBox")
+.classList
+.add("hide");
+
+
+
+document
+.getElementById("memoryBox")
+.classList
+.add("hide");
+
+
+
+
+// 自动下一题
+
+
+setTimeout(()=>{
+
+
+nextLesson();
+
+
+showLesson();
+
+
+
+},500);
+
+
+
+}
+
+
+
+
+
+
+
+// ================================
+// 下一题选择
+// ================================
+
+
+function nextLesson(){
+
+
+
+// 优先错题
+
+
+if(wrongQueue.length>0){
+
+
+current=
+
+wrongQueue.shift();
+
+
+return;
+
+
+}
+
+
+
+// 正常顺序
+
+
+current++;
+
+
+
+if(current>=lessons.length){
+
+
+current=0;
+
+
+}
+
+
+
+}
+
+
+
+
+
+
+
+// ================================
+// 进度计算
+// ================================
+
+
+function update(){
+
+
+
+let total=0;
+
+
+let count=0;
+
+
+
+lessons.forEach(x=>{
+
+
+total+=x.mastery;
+
+
+
+if(x.mastery>=90){
+
+
+count++;
+
+
+}
+
+
+
+});
+
+
+
+let percent=
+
+Math.round(
+
+total/(lessons.length)
+
+);
+
+
+
+document
+.getElementById("progress")
+.style.width=
+
+percent+"%";
+
+
+
+document
+.getElementById("percent")
+.innerText=
+
+percent+"%";
+
+
+
+document
+.getElementById("count")
+.innerText=
+
+count;
+
+
+
+document
+.getElementById("stars")
+.innerText=
+
+stars;
+
+
+
+}
+
+
+// ================================
 // 艾宾浩斯复习
 // ================================
 
@@ -1201,9 +1439,7 @@ setReview(x);
 function setReview(x){
 
 
-let now=
-
-Date.now();
+let now=Date.now();
 
 
 
@@ -1259,17 +1495,16 @@ now+
 
 
 
+
 // ================================
-// 获取复习列表
+// 获取复习口诀
 // ================================
 
 
-function getReviewList(){
+function getReview(){
 
 
-let now=
-
-Date.now();
+let now=Date.now();
 
 
 
@@ -1283,89 +1518,6 @@ return x.review<=now;
 
 
 }
-// ================================
-// 下一题选择
-// ================================
-
-
-function nextLesson(){
-
-
-// 优先错题
-
-if(wrongQueue.length>0){
-
-
-let id=
-
-wrongQueue.shift();
-
-
-
-current=id;
-
-
-showLesson();
-
-
-return;
-
-
-}
-
-
-
-
-
-// 艾宾浩斯复习
-
-
-let review=
-
-getReviewList();
-
-
-
-if(review.length>0){
-
-
-current=
-
-review[0].id;
-
-
-showLesson();
-
-
-return;
-
-
-}
-
-
-
-
-// 正常顺序
-
-
-current++;
-
-
-
-if(current>=lessons.length){
-
-
-current=0;
-
-
-}
-
-
-
-showLesson();
-
-
-}
 
 
 
@@ -1374,171 +1526,27 @@ showLesson();
 
 
 // ================================
-// 掌握进度
-// ================================
-
-
-function getProgress(){
-
-
-let total=0;
-
-
-
-lessons.forEach(x=>{
-
-
-total+=x.mastery;
-
-
-});
-
-
-
-return Math.round(
-
-total/
-
-lessons.length
-
-);
-
-
-}
-
-
-
-
-
-
-
-// ================================
-// 等级
-// ================================
-
-
-function getLevel(){
-
-
-if(stars<50){
-
-
-return "数学小苗";
-
-
-}
-
-
-
-if(stars<200){
-
-
-return "口诀学徒";
-
-
-}
-
-
-
-if(stars<500){
-
-
-return "乘法高手";
-
-
-}
-
-
-
-return "数学达人";
-
-
-}
-
-
-
-
-
-
-
-// ================================
-// 更新页面
-// ================================
-
-
-function update(){
-
-
-
-let p=getProgress();
-
-
-
-document
-.getElementById("progress")
-.style.width=
-
-p+"%";
-
-
-
-document
-.getElementById("percent")
-.innerText=
-
-p+"%";
-
-
-
-document
-.getElementById("stars")
-.innerText=
-
-stars;
-
-
-
-document
-.getElementById("level")
-.innerText=
-
-getLevel();
-
-
-
-}
-
-
-
-
-
-
-
-// ================================
-// 今日提示
+// 每日提示
 // ================================
 
 
 function dailyMessage(){
 
 
-let review=
-
-getReviewList();
+let list=getReview();
 
 
 
-if(review.length>0){
-
+if(list.length>0){
 
 
 document
 .getElementById("teacher")
 .innerText=
 
-"今天先复习"+
-review.length+
-"个薄弱口诀";
+"今天加强"+
+list.length+
+"个口诀";
 
 
 }
@@ -1550,10 +1558,51 @@ document
 .getElementById("teacher")
 .innerText=
 
-"开始学习新的口诀吧！";
+"开始新的口诀学习";
 
 
 }
+
+
+}
+
+
+
+
+
+
+
+
+// ================================
+// 初始化
+// ================================
+
+
+function init(){
+
+
+
+let review=getReview();
+
+
+
+if(review.length>0){
+
+
+current=review[0].id;
+
+
+}
+
+
+
+showLesson();
+
+
+update();
+
+
+dailyMessage();
 
 
 
@@ -1584,55 +1633,6 @@ save();
 
 
 
-// ================================
-// 初始化
-// ================================
-
-
-function init(){
-
-
-
-let review=
-
-getReviewList();
-
-
-
-if(review.length>0){
-
-
-current=
-
-review[0].id;
-
-
-}
-
-else{
-
-
-current=0;
-
-
-}
-
-
-
-showLesson();
-
-
-update();
-
-
-dailyMessage();
-
-
-}
-
-
-
-
 window.onbeforeunload=function(){
 
 
@@ -1640,6 +1640,8 @@ save();
 
 
 };
+
+
 
 
 

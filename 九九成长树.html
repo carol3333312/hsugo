@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
 
 <meta charset="UTF-8">
 
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 
-<title>九九成长猎豹 V5.0</title>
+<title>九九成长猎豹 V5.1</title>
+
 
 <style>
 
@@ -25,7 +27,7 @@ overflow:hidden;
 
 font-family:"Microsoft YaHei",sans-serif;
 
-background:linear-gradient(#8fd8ff,#e8ffd9);
+background:linear-gradient(#8bd8ff,#eaffc8);
 
 }
 
@@ -45,15 +47,15 @@ padding:8px;
 
 
 
-.world{
+.panel{
 
 height:100%;
 
-background:rgba(255,255,255,.45);
+background:rgba(255,255,255,.5);
 
 border-radius:25px;
 
-padding:10px;
+padding:12px;
 
 overflow:hidden;
 
@@ -61,7 +63,8 @@ overflow:hidden;
 
 
 
-.top{
+
+.header{
 
 display:flex;
 
@@ -75,33 +78,36 @@ font-weight:bold;
 
 .race{
 
-height:220px;
+height:190px;
 
 position:relative;
 
 overflow:hidden;
 
-background:linear-gradient(#8ed7ff,#d8f6a8);
+background:linear-gradient(#7ed2ff,#d9f5a5);
 
 border-radius:20px;
 
+margin-top:8px;
+
 }
 
 
 
-.track{
+.ground{
 
 position:absolute;
 
-bottom:25px;
+bottom:20px;
+
+height:12px;
 
 width:100%;
 
-height:8px;
-
-background:#8b6b45;
+background:#b58a52;
 
 }
+
 
 
 
@@ -111,7 +117,7 @@ position:absolute;
 
 right:20px;
 
-bottom:35px;
+bottom:30px;
 
 font-size:35px;
 
@@ -119,13 +125,14 @@ font-size:35px;
 
 
 
+
 .wind{
 
 position:absolute;
 
-left:0;
+left:-50px;
 
-top:90px;
+top:80px;
 
 font-size:25px;
 
@@ -135,35 +142,35 @@ opacity:0;
 
 
 
-.wind.run{
+.wind.active{
 
-animation:
-wind 0.8s linear infinite;
+opacity:.8;
 
-opacity:.7;
+animation:windMove 1s linear infinite;
 
 }
 
 
 
-@keyframes wind{
+@keyframes windMove{
 
 
 from{
 
-transform:translateX(-50px);
+transform:translateX(0);
 
 }
 
 
 to{
 
-transform:translateX(300px);
+transform:translateX(400px);
 
 }
 
 
 }
+
 
 
 
@@ -173,50 +180,40 @@ position:absolute;
 
 left:20px;
 
-bottom:35px;
+bottom:30px;
 
-width:150px;
+width:140px;
 
-transition:.4s;
+transform-origin:center;
 
-}
-
-
-
-.cheetah.running{
-
-animation:
-bodyRun .3s infinite;
+transition:transform .3s;
 
 }
 
 
 
-@keyframes bodyRun{
 
-0%{
+.cheetah.run{
 
-transform:translateY(0);
+animation:bounce .25s infinite;
 
 }
+
+
+
+@keyframes bounce{
+
 
 50%{
 
-transform:translateY(-8px);
-
-}
-
-100%{
-
-transform:translateY(0);
-
-}
+margin-bottom:8px;
 
 }
 
 
+}
 
-/* SVG猎豹 */
+
 
 
 .leg{
@@ -227,25 +224,24 @@ transform-origin:top;
 
 
 
-.running .front{
+.cheetah.run .leg1{
 
-animation:
-legMove .25s infinite alternate;
-
-}
-
-
-
-.running .back{
-
-animation:
-legMove .25s infinite alternate-reverse;
+animation:legA .25s infinite alternate;
 
 }
 
 
 
-@keyframes legMove{
+.cheetah.run .leg2{
+
+animation:legA .25s infinite alternate-reverse;
+
+}
+
+
+
+
+@keyframes legA{
 
 
 from{
@@ -253,7 +249,6 @@ from{
 transform:rotate(15deg);
 
 }
-
 
 to{
 
@@ -266,16 +261,18 @@ transform:rotate(-20deg);
 
 
 
-.running .tail{
 
-animation:
-tailMove .5s infinite;
+.cheetah.run .tail{
+
+animation:tailA .4s infinite;
+
+transform-origin:left;
 
 }
 
 
 
-@keyframes tailMove{
+@keyframes tailA{
 
 
 50%{
@@ -284,11 +281,12 @@ transform:rotate(15deg);
 
 }
 
+
 }
 
 
 
-.speed{
+.speedBox{
 
 text-align:center;
 
@@ -296,29 +294,7 @@ font-size:18px;
 
 font-weight:bold;
 
-}
-
-
-
-.progress{
-
-height:10px;
-
-background:#ffffffaa;
-
-border-radius:20px;
-
-}
-
-
-
-.bar{
-
-height:100%;
-
-background:#43a047;
-
-width:0;
+margin:5px;
 
 }
 
@@ -334,17 +310,18 @@ width:0;
 
 <div class="app">
 
-<div class="world">
+
+<div class="panel">
 
 
-<div class="top">
+<div class="header">
 
 <div>
 🐆 九九成长猎豹
 </div>
 
 
-<div id="level">
+<div>
 Lv1 小猎豹
 </div>
 
@@ -356,82 +333,84 @@ Lv1 小猎豹
 <div class="race">
 
 
-<div class="wind" id="wind">
+<div id="wind" class="wind">
 
-～～～～
+💨💨
 
 </div>
 
 
 
-<div class="cheetah" id="cheetah">
+<div id="cheetah" class="cheetah">
 
 
 <svg viewBox="0 0 300 150">
 
 
-<!-- 身体 -->
+<!--身体-->
 
-<ellipse cx="150"
+<ellipse cx="140"
 cy="75"
 rx="75"
 ry="35"
-fill="#d9a441"/>
+fill="#d99b32"/>
 
 
-<!-- 黑色斑点 -->
 
-<circle cx="120" cy="60" r="6"/>
-<circle cx="160" cy="50" r="6"/>
-<circle cx="190" cy="75" r="6"/>
-<circle cx="130" cy="90" r="6"/>
+<!--斑纹-->
 
-
-<!-- 头 -->
-
-<circle cx="235"
-cy="60"
-r="30"
-fill="#d9a441"/>
+<circle cx="110" cy="60" r="5"/>
+<circle cx="145" cy="50" r="5"/>
+<circle cx="170" cy="80" r="5"/>
+<circle cx="120" cy="90" r="5"/>
 
 
-<!-- 耳朵 -->
+
+<!--头-->
 
 <circle cx="220"
+cy="60"
+r="30"
+fill="#d99b32"/>
+
+
+
+<!--耳朵-->
+
+<circle cx="210"
 cy="35"
-r="10"
-fill="#b27b25"/>
+r="9"
+fill="#a86d20"/>
 
 
-<!-- 尾巴 -->
+
+<!--尾巴-->
 
 <path class="tail"
-d="M80 75 Q20 30 5 70"
-stroke="#d9a441"
-stroke-width="12"
+d="M75 75 Q20 35 5 70"
+stroke="#d99b32"
+stroke-width="10"
 fill="none"/>
 
 
 
-<!-- 前腿 -->
+<!--腿-->
 
-<line class="leg front"
-x1="190"
+<line class="leg leg1"
+x1="180"
 y1="95"
-x2="220"
+x2="210"
 y2="130"
-stroke="#d9a441"
+stroke="#d99b32"
 stroke-width="12"/>
 
 
-<!-- 后腿 -->
-
-<line class="leg back"
+<line class="leg leg2"
 x1="100"
 y1="95"
 x2="70"
 y2="130"
-stroke="#d9a441"
+stroke="#d99b32"
 stroke-width="12"/>
 
 
@@ -442,43 +421,45 @@ stroke-width="12"/>
 
 
 
-
 <div class="finish">
-
 🏁
+</div>
+
+
+
+<div class="ground">
 
 </div>
 
 
-<div class="track"></div>
-
-
 </div>
-<div class="speed">
+<div class="speedBox">
 
 速度：
-<span id="speed">
-20
-</span>
+<span id="speed">20</span>
 
-&nbsp; 
+&nbsp;&nbsp;
+
 🔥连击：
-<span id="streak">
-0
-</span>
+<span id="streak">0</span>
 
 </div>
 
 
 
-<div style="text-align:center">
+<div style="text-align:center;font-size:16px">
 
 📖口诀
 
 </div>
 
 
-<div class="kou" id="kou">
+
+<div id="kou" style="
+text-align:center;
+font-size:32px;
+font-weight:bold;
+">
 
 一一得一
 
@@ -486,9 +467,18 @@ stroke-width="12"/>
 
 
 
-<div class="progress">
+<div style="
+height:10px;
+background:#ffffffaa;
+border-radius:20px;
+overflow:hidden;
+">
 
-<div class="bar" id="bar">
+<div id="bar" style="
+height:100%;
+width:0%;
+background:#43a047;
+">
 
 </div>
 
@@ -505,11 +495,27 @@ stroke-width="12"/>
 
 
 
-<div class="question" id="question">
+<button id="startVoice">
+
+🌱开始学习
+
+</button>
+
+
+
+
+
+<div id="question" style="
+text-align:center;
+font-size:32px;
+font-weight:bold;
+margin-top:5px;
+">
 
 1 × 1 = ?
 
 </div>
+
 
 
 
@@ -521,55 +527,187 @@ stroke-width="12"/>
 <div class="keys">
 
 
-<button onclick="add(1)">
-1
+<button onclick="add(1)">1</button>
+
+<button onclick="add(2)">2</button>
+
+<button onclick="add(3)">3</button>
+
+
+<button onclick="add(4)">4</button>
+
+<button onclick="add(5)">5</button>
+
+<button onclick="add(6)">6</button>
+
+
+<button onclick="add(7)">7</button>
+
+<button onclick="add(8)">8</button>
+
+<button onclick="add(9)">9</button>
+
+
+<button onclick="add(0)">0</button>
+
+<button onclick="delA()">⌫</button>
+
+
+</div>
+
+
+
+
+<button id="submit">
+
+✅提交答案
+
 </button>
 
 
-<button onclick="add(2)">
-2
+
+
+<button id="restart">
+
+🔄重新开始
+
 </button>
 
 
-<button onclick="add(3)">
-3
-</button>
 
 
-<button onclick="add(4)">
-4
-</button>
+<div id="msg">
+
+</div>
 
 
-<button onclick="add(5)">
-5
-</button>
 
 
-<button onclick="add(6)">
-6
-</button>
+</div>
+
+</div>
 
 
-<button onclick="add(7)">
-7
-</button>
 
 
-<button onclick="add(8)">
-8
-</button>
+
+<style>
 
 
-<button onclick="add(9)">
-9
-</button>
+button{
+
+width:100%;
+
+height:45px;
+
+border:0;
+
+border-radius:14px;
+
+font-size:18px;
+
+margin-top:6px;
+
+}
 
 
-<button onclick="add(0)">
-0
-</button>
-const nums=[
+
+button:active{
+
+transform:scale(.95);
+
+}
+
+
+
+.keys{
+
+display:grid;
+
+grid-template-columns:repeat(3,1fr);
+
+gap:6px;
+
+margin-top:8px;
+
+}
+
+
+
+.keys button{
+
+height:38px;
+
+background:white;
+
+}
+
+
+
+#submit{
+
+height:52px;
+
+background:#43a047;
+
+color:white;
+
+margin-top:12px;
+
+}
+
+
+
+#restart{
+
+margin-top:20px;
+
+background:#fff;
+
+}
+
+
+
+input{
+
+display:block;
+
+width:110px;
+
+height:45px;
+
+margin:5px auto;
+
+border-radius:12px;
+
+border:1px solid #aaa;
+
+font-size:25px;
+
+text-align:center;
+
+}
+
+
+
+#msg{
+
+height:22px;
+
+text-align:center;
+
+color:#388e3c;
+
+}
+
+
+
+</style>
+
+
+
+<script>
+  const nums=[
 "",
 "一",
 "二",
@@ -587,15 +725,23 @@ let group=1;
 let index=1;
 let done=0;
 
-let score=0;
 
 let speed=20;
 
-let distance=0;
-
 let streak=0;
 
+let distance=0;
+
 let voiceEnable=false;
+
+
+
+const cheetah=
+document.getElementById("cheetah");
+
+
+const wind=
+document.getElementById("wind");
 
 
 
@@ -654,10 +800,7 @@ return nums[a]+nums[b]+"得"+nums[r];
 
 return nums[a]+nums[b]+cnNum(r);
 
-
 }
-
-
 
 
 
@@ -665,36 +808,38 @@ return nums[a]+nums[b]+cnNum(r);
 function render(){
 
 
-chapter.innerHTML=
-"第"+group+"组："+nums[group]+"的乘法村";
-
-
-kou.innerHTML=
+document.getElementById("kou")
+.innerHTML=
 kouText(group,index);
 
 
 
-question.innerHTML=
+document.getElementById("question")
+.innerHTML=
 group+" × "+index+" = ?";
 
 
 
-progressText.innerHTML=
+document.getElementById("progressText")
+.innerHTML=
 "第"+group+"组 "+done+"/9";
 
 
 
-bar.style.width=
+document.getElementById("bar")
+.style.width=
 (done/9*100)+"%";
 
 
 
-document.getElementById("speed").innerHTML=
+document.getElementById("speed")
+.innerHTML=
 speed;
 
 
 
-document.getElementById("streak").innerHTML=
+document.getElementById("streak")
+.innerHTML=
 streak;
 
 
@@ -704,32 +849,15 @@ streak;
 
 
 
-function moveCheetah(){
 
-
-distance+=speed/2;
-
-
-
-if(distance>180){
-
-distance=20;
-
-}
-
-
-
-cheetah.style.transform=
-"translateX("+distance+"px)";
-
+function run(){
 
 
 if(speed>25){
 
+cheetah.classList.add("run");
 
-cheetah.classList.add("running");
-
-wind.classList.add("run");
+wind.classList.add("active");
 
 
 }
@@ -737,27 +865,37 @@ wind.classList.add("run");
 else{
 
 
-cheetah.classList.remove("running");
+cheetah.classList.remove("run");
 
-wind.classList.remove("run");
-
-
-}
-
+wind.classList.remove("active");
 
 
 }
 
 
 
-
-setInterval(()=>{
-
-moveCheetah();
-
-},50);
+distance+=speed/30;
 
 
+
+if(distance>190){
+
+distance=20;
+
+}
+
+
+
+cheetah.style.left=
+(20+distance)+"px";
+
+
+
+}
+
+
+
+setInterval(run,40);
 
 
 
@@ -766,7 +904,8 @@ moveCheetah();
 
 function add(n){
 
-answer.value+=n;
+document.getElementById("answer")
+.value+=n;
 
 }
 
@@ -774,8 +913,12 @@ answer.value+=n;
 
 function delA(){
 
-answer.value=
-answer.value.slice(0,-1);
+let a=
+document.getElementById("answer");
+
+
+a.value=
+a.value.slice(0,-1);
 
 }
 
@@ -783,15 +926,12 @@ answer.value.slice(0,-1);
 
 
 
-
-
-function sound(type){
+function beep(type){
 
 
 let ctx=
 new(window.AudioContext||
 window.webkitAudioContext)();
-
 
 
 let osc=
@@ -800,7 +940,6 @@ ctx.createOscillator();
 
 let gain=
 ctx.createGain();
-
 
 
 osc.connect(gain);
@@ -828,7 +967,6 @@ osc.frequency.value=300;
 }
 
 
-
 gain.gain.value=.08;
 
 
@@ -836,13 +974,11 @@ osc.start();
 
 
 osc.stop(
-ctx.currentTime+.2
+ctx.currentTime+.15
 );
 
 
-
 }
-
 
 
 
@@ -852,59 +988,60 @@ ctx.currentTime+.2
 function check(){
 
 
-let value=
-Number(answer.value);
+
+let answer=
+
+Number(
+document.getElementById("answer").value
+);
 
 
 
-if(value===group*index){
+if(answer===group*index){
 
-
-score+=10;
-
-
-done++;
 
 
 streak++;
-
 
 
 speed+=8;
 
 
 
-if(speed>80){
+if(speed>90){
 
-speed=80;
+speed=90;
 
 }
 
 
 
-sound("ok");
+beep("ok");
 
 
 
-msg.innerHTML=
-"🐆 太棒了！猎豹加速";
+document.getElementById("msg")
+.innerHTML=
+"🐆答对啦！猎豹加速";
 
 
+
+done++;
 
 
 
 if(done>=9){
 
 
-
-sound("win");
-
-
-msg.innerHTML=
-"🏁冲过终点！👏";
+beep("win");
 
 
-speed+=20;
+document.getElementById("msg")
+.innerHTML=
+"🏁冲过终点！太棒啦！";
+
+
+speed+=15;
 
 
 group++;
@@ -923,31 +1060,24 @@ group=1;
 
 }
 
-
 else{
 
 
 index++;
 
-
 }
-
 
 
 
 if(voiceEnable){
 
-
 setTimeout(()=>{
 
 voice();
 
-
 },400);
 
-
 }
-
 
 
 
@@ -971,23 +1101,24 @@ speed=10;
 
 
 
-sound("bad");
+beep("bad");
 
 
-msg.innerHTML=
+
+document.getElementById("msg")
+.innerHTML=
 "🐆停下来想一想";
-
 
 
 }
 
 
 
-answer.value="";
+document.getElementById("answer")
+.value="";
 
 
 render();
-
 
 
 }
@@ -1000,15 +1131,14 @@ render();
 function voice(){
 
 
-
 let u=
 new SpeechSynthesisUtterance(
 kouText(group,index)
 );
 
 
-
 u.lang="zh-CN";
+
 
 u.rate=.8;
 
@@ -1019,14 +1149,16 @@ speechSynthesis.cancel();
 speechSynthesis.speak(u);
 
 
-
 }
 
 
 
 
 
-function startVoice(){
+
+document
+.getElementById("startVoice")
+.onclick=function(){
 
 
 voiceEnable=true;
@@ -1035,13 +1167,29 @@ voiceEnable=true;
 voice();
 
 
-}
+};
 
 
 
 
 
-function restart(){
+
+document
+.getElementById("submit")
+.onclick=function(){
+
+check();
+
+};
+
+
+
+
+
+
+document
+.getElementById("restart")
+.onclick=function(){
 
 
 group=1;
@@ -1050,8 +1198,6 @@ index=1;
 
 done=0;
 
-score=0;
-
 speed=20;
 
 streak=0;
@@ -1059,51 +1205,18 @@ streak=0;
 distance=0;
 
 
-
 render();
 
 
-}
+};
 
 
 
-
-
-
-let cheetah=
-document.getElementById("cheetah");
-
-
-let wind=
-document.getElementById("wind");
-
-
-let chapter=
-document.getElementById("chapter");
-
-
-let kou=
-document.getElementById("kou");
-
-
-let question=
-document.getElementById("question");
-
-
-let answer=
-document.getElementById("answer");
-
-
-let bar=
-document.getElementById("bar");
-
-
-let progressText=
-document.getElementById("progressText");
 
 
 
 render();
+
 
 
 </script>

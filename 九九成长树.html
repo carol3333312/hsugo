@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+
 <meta charset="UTF-8">
 
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 
-<title>九九成长树 V4.0</title>
+<title>九九成长猎豹 V5.0</title>
 
 <style>
 
@@ -13,31 +14,18 @@
 box-sizing:border-box;
 }
 
-html,body{
-margin:0;
-padding:0;
-height:100%;
-overflow:hidden;
-font-family:"Microsoft YaHei",sans-serif;
-}
-
 
 body{
 
-background:#9edcff;
+margin:0;
 
-transition:background 3s;
+height:100vh;
 
-}
+overflow:hidden;
 
+font-family:"Microsoft YaHei",sans-serif;
 
-
-body.night{
-
-background:linear-gradient(
-#101a40,
-#263b66
-);
+background:linear-gradient(#8fd8ff,#e8ffd9);
 
 }
 
@@ -53,8 +41,6 @@ margin:auto;
 
 padding:8px;
 
-padding-bottom:env(safe-area-inset-bottom);
-
 }
 
 
@@ -63,17 +49,13 @@ padding-bottom:env(safe-area-inset-bottom);
 
 height:100%;
 
-background:rgba(255,255,255,.35);
+background:rgba(255,255,255,.45);
 
-border-radius:28px;
+border-radius:25px;
 
 padding:10px;
 
 overflow:hidden;
-
-display:flex;
-
-flex-direction:column;
 
 }
 
@@ -87,19 +69,19 @@ justify-content:space-between;
 
 font-weight:bold;
 
-font-size:16px;
-
 }
 
 
 
-.scene{
+.race{
 
-height:190px;
+height:220px;
 
 position:relative;
 
 overflow:hidden;
+
+background:linear-gradient(#8ed7ff,#d8f6a8);
 
 border-radius:20px;
 
@@ -107,237 +89,212 @@ border-radius:20px;
 
 
 
-.sky{
-
-position:absolute;
-
-width:100%;
-
-height:100%;
-
-}
-
-
-
-.sun{
-
-position:absolute;
-
-right:25px;
-
-top:15px;
-
-font-size:40px;
-
-transition:2s;
-
-}
-
-
-
-.moon{
-
-display:none;
-
-position:absolute;
-
-right:25px;
-
-top:15px;
-
-font-size:38px;
-
-}
-
-
-
-.cloud{
-
-position:absolute;
-
-font-size:35px;
-
-animation:cloudMove 15s linear infinite;
-
-}
-
-
-
-.cloud.one{
-
-top:25px;
-
-left:20px;
-
-}
-
-
-
-.cloud.two{
-
-top:55px;
-
-left:180px;
-
-}
-
-
-
-@keyframes cloudMove{
-
-from{
-transform:translateX(0);
-}
-
-to{
-transform:translateX(120px);
-}
-
-}
-
-
-
-.mountain{
-
-position:absolute;
-
-bottom:35px;
-
-font-size:65px;
-
-}
-
-
-
-.mountain.one{
-
-left:10px;
-
-}
-
-
-
-.mountain.two{
-
-right:10px;
-
-}
-
-
-
-.river{
-
-position:absolute;
-
-bottom:0;
-
-width:100%;
-
-height:35px;
-
-background:#72c8ee;
-
-border-radius:50%;
-
-}
-
-
-
-.tree-area{
+.track{
 
 position:absolute;
 
 bottom:25px;
 
-left:50%;
+width:100%;
 
-transform:translateX(-50%);
+height:8px;
 
-}
-
-
-
-.tree{
-
-font-size:120px;
-
-transition:.5s;
+background:#8b6b45;
 
 }
 
 
 
-.tree.shake{
-
-animation:shake .6s;
-
-}
-
-
-
-@keyframes shake{
-
-25%{
-transform:rotate(-4deg);
-}
-
-50%{
-transform:rotate(4deg);
-}
-
-}
-
-
-
-.fruit{
+.finish{
 
 position:absolute;
 
-font-size:22px;
+right:20px;
+
+bottom:35px;
+
+font-size:35px;
 
 }
 
 
 
-.water{
+.wind{
 
 position:absolute;
 
-font-size:28px;
+left:0;
 
-animation:waterDown 1s forwards;
+top:90px;
 
-}
-
-
-
-@keyframes waterDown{
-
-from{
-
-transform:translateY(0);
-
-opacity:1;
-
-}
-
-to{
-
-transform:translateY(90px);
+font-size:25px;
 
 opacity:0;
 
 }
 
+
+
+.wind.run{
+
+animation:
+wind 0.8s linear infinite;
+
+opacity:.7;
+
 }
 
 
 
-.score{
+@keyframes wind{
+
+
+from{
+
+transform:translateX(-50px);
+
+}
+
+
+to{
+
+transform:translateX(300px);
+
+}
+
+
+}
+
+
+
+.cheetah{
+
+position:absolute;
+
+left:20px;
+
+bottom:35px;
+
+width:150px;
+
+transition:.4s;
+
+}
+
+
+
+.cheetah.running{
+
+animation:
+bodyRun .3s infinite;
+
+}
+
+
+
+@keyframes bodyRun{
+
+0%{
+
+transform:translateY(0);
+
+}
+
+50%{
+
+transform:translateY(-8px);
+
+}
+
+100%{
+
+transform:translateY(0);
+
+}
+
+}
+
+
+
+/* SVG猎豹 */
+
+
+.leg{
+
+transform-origin:top;
+
+}
+
+
+
+.running .front{
+
+animation:
+legMove .25s infinite alternate;
+
+}
+
+
+
+.running .back{
+
+animation:
+legMove .25s infinite alternate-reverse;
+
+}
+
+
+
+@keyframes legMove{
+
+
+from{
+
+transform:rotate(15deg);
+
+}
+
+
+to{
+
+transform:rotate(-20deg);
+
+}
+
+
+}
+
+
+
+.running .tail{
+
+animation:
+tailMove .5s infinite;
+
+}
+
+
+
+@keyframes tailMove{
+
+
+50%{
+
+transform:rotate(15deg);
+
+}
+
+}
+
+
+
+.speed{
 
 text-align:center;
 
-margin-top:4px;
+font-size:18px;
+
+font-weight:bold;
 
 }
 
@@ -351,8 +308,6 @@ background:#ffffffaa;
 
 border-radius:20px;
 
-overflow:hidden;
-
 }
 
 
@@ -361,268 +316,36 @@ overflow:hidden;
 
 height:100%;
 
+background:#43a047;
+
 width:0;
 
-background:#43a047;
-
 }
 
-
-
-.kou{
-
-text-align:center;
-
-font-size:32px;
-
-font-weight:bold;
-
-}
-
-
-
-.question{
-
-text-align:center;
-
-font-size:32px;
-
-font-weight:bold;
-
-}
-
-
-
-input{
-
-width:110px;
-
-height:42px;
-
-margin:4px auto;
-
-display:block;
-
-font-size:25px;
-
-text-align:center;
-
-border-radius:12px;
-
-border:1px solid #aaa;
-
-}
-
-
-
-.keys{
-
-display:grid;
-
-grid-template-columns:repeat(3,1fr);
-
-gap:6px;
-
-}
-
-
-
-button{
-
-border:0;
-
-border-radius:15px;
-
-font-size:17px;
-
-transition:.15s;
-
-}
-
-
-
-button:active{
-
-transform:scale(.94);
-
-}
-
-
-
-.key{
-
-height:36px;
-
-background:white;
-
-}
-
-
-
-.submit{
-
-height:52px;
-
-width:100%;
-
-margin-top:10px;
-
-background:#43a047;
-
-color:white;
-
-font-size:19px;
-
-}
-
-
-
-.restart{
-
-height:42px;
-
-width:100%;
-
-margin-top:20px;
-
-background:white;
-
-}
-
-
-
-.msg{
-
-height:20px;
-
-text-align:center;
-
-color:#388e3c;
-
-}
-
-
-
-.flower{
-
-position:absolute;
-
-font-size:25px;
-
-animation:fall 2s linear;
-
-}
-
-
-
-@keyframes fall{
-
-from{
-
-transform:translateY(-20px);
-
-opacity:1;
-
-}
-
-to{
-
-transform:translateY(180px);
-
-opacity:0;
-
-}
-
-}
 
 
 </style>
+
 </head>
+
+
 <body>
 
 
 <div class="app">
 
-
 <div class="world">
-
 
 
 <div class="top">
 
-<div>🌱 九九成长树</div>
-
-<div id="chapter">
-一的乘法村
-</div>
-
+<div>
+🐆 九九成长猎豹
 </div>
 
 
-
-<div class="scene" id="scene">
-
-
-
-<div class="sky">
-
-
-<div class="sun" id="sun">
-☀️
-</div>
-
-
-<div class="moon" id="moon">
-🌙
-</div>
-
-
-
-<div class="cloud one">
-☁️
-</div>
-
-
-<div class="cloud two">
-☁️
-</div>
-
-
-
-<div class="mountain one">
-⛰️
-</div>
-
-
-<div class="mountain two">
-🏔️
-</div>
-
-
-
-<div class="river">
-
-</div>
-
-
-
-<div class="tree-area">
-
-<div class="tree" id="tree">
-
-🌱
-
-</div>
-
-
-<div id="fruits">
-
-</div>
-
-
-</div>
-
-
+<div id="level">
+Lv1 小猎豹
 </div>
 
 
@@ -630,12 +353,117 @@ opacity:0;
 
 
 
+<div class="race">
 
-<div class="score">
 
-⭐成长值
+<div class="wind" id="wind">
 
-<span id="score">
+～～～～
+
+</div>
+
+
+
+<div class="cheetah" id="cheetah">
+
+
+<svg viewBox="0 0 300 150">
+
+
+<!-- 身体 -->
+
+<ellipse cx="150"
+cy="75"
+rx="75"
+ry="35"
+fill="#d9a441"/>
+
+
+<!-- 黑色斑点 -->
+
+<circle cx="120" cy="60" r="6"/>
+<circle cx="160" cy="50" r="6"/>
+<circle cx="190" cy="75" r="6"/>
+<circle cx="130" cy="90" r="6"/>
+
+
+<!-- 头 -->
+
+<circle cx="235"
+cy="60"
+r="30"
+fill="#d9a441"/>
+
+
+<!-- 耳朵 -->
+
+<circle cx="220"
+cy="35"
+r="10"
+fill="#b27b25"/>
+
+
+<!-- 尾巴 -->
+
+<path class="tail"
+d="M80 75 Q20 30 5 70"
+stroke="#d9a441"
+stroke-width="12"
+fill="none"/>
+
+
+
+<!-- 前腿 -->
+
+<line class="leg front"
+x1="190"
+y1="95"
+x2="220"
+y2="130"
+stroke="#d9a441"
+stroke-width="12"/>
+
+
+<!-- 后腿 -->
+
+<line class="leg back"
+x1="100"
+y1="95"
+x2="70"
+y2="130"
+stroke="#d9a441"
+stroke-width="12"/>
+
+
+</svg>
+
+
+</div>
+
+
+
+
+<div class="finish">
+
+🏁
+
+</div>
+
+
+<div class="track"></div>
+
+
+</div>
+<div class="speed">
+
+速度：
+<span id="speed">
+20
+</span>
+
+&nbsp; 
+🔥连击：
+<span id="streak">
 0
 </span>
 
@@ -643,9 +471,16 @@ opacity:0;
 
 
 
-<div id="progressText">
+<div style="text-align:center">
 
-第1组 0/9
+📖口诀
+
+</div>
+
+
+<div class="kou" id="kou">
+
+一一得一
 
 </div>
 
@@ -661,29 +496,11 @@ opacity:0;
 
 
 
+<div id="progressText">
 
-<div style="text-align:center">
-
-📖口诀
-
-</div>
-
-
-
-<div class="kou" id="kou">
-
-一一得一
+第1组 0/9
 
 </div>
-
-
-
-
-<button onclick="startVoice()">
-
-🌱开始学习
-
-</button>
 
 
 
@@ -696,7 +513,6 @@ opacity:0;
 
 
 
-
 <input id="answer" readonly>
 
 
@@ -705,96 +521,55 @@ opacity:0;
 <div class="keys">
 
 
-<button class="key" onclick="add(1)">
+<button onclick="add(1)">
 1
 </button>
 
-<button class="key" onclick="add(2)">
+
+<button onclick="add(2)">
 2
 </button>
 
-<button class="key" onclick="add(3)">
+
+<button onclick="add(3)">
 3
 </button>
 
 
-
-<button class="key" onclick="add(4)">
+<button onclick="add(4)">
 4
 </button>
 
-<button class="key" onclick="add(5)">
+
+<button onclick="add(5)">
 5
 </button>
 
-<button class="key" onclick="add(6)">
+
+<button onclick="add(6)">
 6
 </button>
 
 
-
-<button class="key" onclick="add(7)">
+<button onclick="add(7)">
 7
 </button>
 
-<button class="key" onclick="add(8)">
+
+<button onclick="add(8)">
 8
 </button>
 
-<button class="key" onclick="add(9)">
+
+<button onclick="add(9)">
 9
 </button>
 
 
-
-<button class="key" onclick="add(0)">
+<button onclick="add(0)">
 0
 </button>
-
-
-<button class="key" onclick="delA()">
-⌫
-</button>
-
-
-</div>
-
-
-
-
-<button class="submit" onclick="check()">
-
-✅提交答案
-
-</button>
-
-
-
-
-<button class="restart" onclick="restart()">
-
-🔄重新开始
-
-</button>
-
-
-
-
-<div class="msg" id="msg">
-
-</div>
-
-
-
-
-</div>
-
-</div>
-
-
-
-<script>
-  const nums=[
+const nums=[
 "",
 "一",
 "二",
@@ -811,8 +586,14 @@ opacity:0;
 let group=1;
 let index=1;
 let done=0;
+
 let score=0;
-let fruit=0;
+
+let speed=20;
+
+let distance=0;
+
+let streak=0;
 
 let voiceEnable=false;
 
@@ -820,11 +601,13 @@ let voiceEnable=false;
 
 function cnNum(n){
 
+
 if(n<=9){
 
 return nums[n];
 
 }
+
 
 if(n==10){
 
@@ -832,11 +615,13 @@ return "十";
 
 }
 
+
 if(n<20){
 
 return "十"+nums[n%10];
 
 }
+
 
 if(n%10==0){
 
@@ -844,15 +629,18 @@ return nums[n/10]+"十";
 
 }
 
+
 return nums[Math.floor(n/10)]
 +"十"
 +nums[n%10];
+
 
 }
 
 
 
 function kouText(a,b){
+
 
 let r=a*b;
 
@@ -866,7 +654,10 @@ return nums[a]+nums[b]+"得"+nums[r];
 
 return nums[a]+nums[b]+cnNum(r);
 
+
 }
+
+
 
 
 
@@ -876,7 +667,6 @@ function render(){
 
 chapter.innerHTML=
 "第"+group+"组："+nums[group]+"的乘法村";
-
 
 
 kou.innerHTML=
@@ -899,73 +689,60 @@ bar.style.width=
 
 
 
-score.innerHTML=score;
+document.getElementById("speed").innerHTML=
+speed;
 
 
 
-if(score<30){
+document.getElementById("streak").innerHTML=
+streak;
 
-tree.innerHTML="🌱";
 
 }
 
-else if(score<80){
 
-tree.innerHTML="🌿";
+
+
+
+function moveCheetah(){
+
+
+distance+=speed/2;
+
+
+
+if(distance>180){
+
+distance=20;
 
 }
 
-else if(score<160){
 
-tree.innerHTML="🌳";
+
+cheetah.style.transform=
+"translateX("+distance+"px)";
+
+
+
+if(speed>25){
+
+
+cheetah.classList.add("running");
+
+wind.classList.add("run");
+
 
 }
 
 else{
 
-tree.innerHTML="🌳🌸";
 
-}
+cheetah.classList.remove("running");
 
-
-
-fruits.innerHTML="";
-
-
-
-let fruitPos=[
-
-"left:35px;top:35px",
-
-"left:85px;top:20px",
-
-"left:120px;top:55px",
-
-"left:55px;top:70px",
-
-"left:100px;top:80px"
-
-];
-
-
-
-for(let i=0;i<fruit;i++){
-
-
-let f=document.createElement("div");
-
-f.className="fruit";
-
-f.innerHTML="🍎";
-
-f.style.cssText=fruitPos[i];
-
-
-fruits.appendChild(f);
+wind.classList.remove("run");
 
 
 }
-
 
 
 
@@ -974,22 +751,56 @@ fruits.appendChild(f);
 
 
 
+setInterval(()=>{
+
+moveCheetah();
+
+},50);
 
 
-// iPhone 音频
+
+
+
+
+
+
+function add(n){
+
+answer.value+=n;
+
+}
+
+
+
+function delA(){
+
+answer.value=
+answer.value.slice(0,-1);
+
+}
+
+
+
+
+
+
 
 function sound(type){
 
 
-try{
+let ctx=
+new(window.AudioContext||
+window.webkitAudioContext)();
 
 
-let ctx=new(window.AudioContext||window.webkitAudioContext)();
+
+let osc=
+ctx.createOscillator();
 
 
-let osc=ctx.createOscillator();
+let gain=
+ctx.createGain();
 
-let gain=ctx.createGain();
 
 
 osc.connect(gain);
@@ -998,13 +809,13 @@ gain.connect(ctx.destination);
 
 
 
-if(type=="ok"){
+if(type==="ok"){
 
 osc.frequency.value=880;
 
 }
 
-else if(type=="win"){
+else if(type==="win"){
 
 osc.frequency.value=1200;
 
@@ -1024,117 +835,10 @@ gain.gain.value=.08;
 osc.start();
 
 
-osc.stop(ctx.currentTime+.18);
+osc.stop(
+ctx.currentTime+.2
+);
 
-
-
-}catch(e){}
-
-
-}
-
-
-
-
-
-
-function waterEffect(){
-
-
-
-let w=document.createElement("div");
-
-w.className="water";
-
-w.innerHTML="💧";
-
-
-scene.appendChild(w);
-
-
-setTimeout(()=>{
-
-w.remove();
-
-},1000);
-
-
-
-tree.classList.remove("shake");
-
-void tree.offsetWidth;
-
-tree.classList.add("shake");
-
-
-
-}
-
-
-
-
-
-function flowerEffect(){
-
-
-
-for(let i=0;i<12;i++){
-
-
-let f=document.createElement("div");
-
-
-f.className="flower";
-
-
-f.innerHTML="🌸";
-
-
-f.style.left=Math.random()*300+"px";
-
-
-f.style.top="0px";
-
-
-scene.appendChild(f);
-
-
-
-setTimeout(()=>{
-
-f.remove();
-
-},2000);
-
-
-
-}
-
-
-
-}
-
-
-
-
-
-
-function add(n){
-
-
-answer.value+=n;
-
-
-}
-
-
-
-
-function delA(){
-
-
-answer.value=
-answer.value.slice(0,-1);
 
 
 }
@@ -1148,7 +852,6 @@ answer.value.slice(0,-1);
 function check(){
 
 
-
 let value=
 Number(answer.value);
 
@@ -1157,16 +860,23 @@ Number(answer.value);
 if(value===group*index){
 
 
-
 score+=10;
 
 
 done++;
 
 
-if(score%30===0 && fruit<5){
+streak++;
 
-fruit++;
+
+
+speed+=8;
+
+
+
+if(speed>80){
+
+speed=80;
 
 }
 
@@ -1175,12 +885,9 @@ fruit++;
 sound("ok");
 
 
-waterEffect();
-
-
 
 msg.innerHTML=
-"🌱小树成长啦";
+"🐆 太棒了！猎豹加速";
 
 
 
@@ -1189,24 +896,22 @@ msg.innerHTML=
 if(done>=9){
 
 
+
 sound("win");
 
 
-flowerEffect();
-
-
 msg.innerHTML=
-"🎉通关成功 👏";
+"🏁冲过终点！👏";
+
+
+speed+=20;
 
 
 group++;
 
-
 done=0;
 
-
 index=1;
-
 
 
 if(group>9){
@@ -1216,7 +921,6 @@ group=1;
 }
 
 
-
 }
 
 
@@ -1224,6 +928,7 @@ else{
 
 
 index++;
+
 
 }
 
@@ -1235,14 +940,14 @@ if(voiceEnable){
 
 setTimeout(()=>{
 
-
 voice();
 
 
-},500);
+},400);
 
 
 }
+
 
 
 
@@ -1251,9 +956,16 @@ voice();
 else{
 
 
-if(fruit>0){
 
-fruit--;
+streak=0;
+
+
+speed-=15;
+
+
+if(speed<10){
+
+speed=10;
 
 }
 
@@ -1263,7 +975,7 @@ sound("bad");
 
 
 msg.innerHTML=
-"🍎果实掉下来啦";
+"🐆停下来想一想";
 
 
 
@@ -1285,29 +997,11 @@ render();
 
 
 
-
-function startVoice(){
-
-
-voiceEnable=true;
-
-
-voice();
-
-
-}
-
-
-
-
-
-
-
 function voice(){
 
 
-let u=
 
+let u=
 new SpeechSynthesisUtterance(
 kouText(group,index)
 );
@@ -1315,7 +1009,6 @@ kouText(group,index)
 
 
 u.lang="zh-CN";
-
 
 u.rate=.8;
 
@@ -1333,13 +1026,22 @@ speechSynthesis.speak(u);
 
 
 
+function startVoice(){
+
+
+voiceEnable=true;
+
+
+voice();
+
+
+}
+
+
+
 
 
 function restart(){
-
-
-
-if(confirm("确定重新开始吗？")){
 
 
 group=1;
@@ -1350,7 +1052,12 @@ done=0;
 
 score=0;
 
-fruit=0;
+speed=20;
+
+streak=0;
+
+distance=0;
+
 
 
 render();
@@ -1360,61 +1067,39 @@ render();
 
 
 
-}
 
 
 
+let cheetah=
+document.getElementById("cheetah");
 
 
+let wind=
+document.getElementById("wind");
 
 
-// 白天夜晚循环
-
-let night=false;
-
-
-setInterval(()=>{
+let chapter=
+document.getElementById("chapter");
 
 
-night=!night;
+let kou=
+document.getElementById("kou");
 
 
-
-if(night){
-
-
-document.body.classList.add("night");
+let question=
+document.getElementById("question");
 
 
-sun.style.display="none";
+let answer=
+document.getElementById("answer");
 
 
-moon.style.display="block";
+let bar=
+document.getElementById("bar");
 
 
-}
-
-else{
-
-
-document.body.classList.remove("night");
-
-
-sun.style.display="block";
-
-
-moon.style.display="none";
-
-
-}
-
-
-
-},60000);
-
-
-
-
+let progressText=
+document.getElementById("progressText");
 
 
 

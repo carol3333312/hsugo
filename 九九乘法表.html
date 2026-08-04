@@ -1,14 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>九九乘法学习</title>
-
 
 <style>
 
@@ -16,181 +12,154 @@
 box-sizing:border-box;
 }
 
-
 body{
-
 margin:0;
-
-background:#eeeeee;
-
+min-height:100vh;
 font-family:"Microsoft YaHei",sans-serif;
-
+background:linear-gradient(#72d8ff,#e8fbff);
 }
-
 
 
 .app{
-
-width:92%;
-
-max-width:500px;
-
+width:94%;
+max-width:520px;
 margin:20px auto;
-
-background:white;
-
-padding:25px;
-
-border-radius:25px;
-
+background:rgba(255,255,255,.92);
+border-radius:30px;
+padding:20px;
 text-align:center;
-
+box-shadow:0 10px 30px rgba(0,150,255,.25);
 }
-
-
 
 
 h1{
-
-font-size:32px;
-
+color:#1565c0;
+font-size:30px;
 }
 
 
+.hero{
+background:#fff3cd;
+padding:12px;
+border-radius:20px;
+color:#ff6f00;
+font-size:18px;
+}
 
-.message{
 
-background:#f5f5f5;
-
-padding:15px;
-
-border-radius:15px;
-
+.group{
+margin:15px;
 font-size:20px;
-
+font-weight:bold;
+color:#673ab7;
 }
-
 
 
 .lesson{
-
-font-size:38px;
-
-font-weight:bold;
-
-margin:25px;
-
+background:white;
+padding:20px;
+border-radius:25px;
+box-shadow:0 5px 15px rgba(0,0,0,.08);
 }
 
+
+.chinese{
+font-size:42px;
+font-weight:bold;
+color:#ff5252;
+}
+
+
+.math{
+font-size:32px;
+margin-top:15px;
+color:#1565c0;
+}
+
+
+.progress-title{
+margin-top:15px;
+}
 
 
 .progress{
-
 height:25px;
-
-background:#ccc;
-
+background:#ddd;
 border-radius:20px;
-
 overflow:hidden;
-
 }
 
 
-
-.green{
-
+.energy{
 height:100%;
-
 width:0%;
-
-background:#4caf50;
-
+background:linear-gradient(90deg,#4caf50,#8bc34a);
 transition:.5s;
-
 }
-
 
 
 .info{
-
 font-size:20px;
-
 margin:15px;
-
 }
-
 
 
 button{
-
-width:90%;
-
-padding:15px;
-
-margin:8px;
-
-border:none;
-
+padding:9px 18px;
+margin:5px;
+border:0;
 border-radius:15px;
-
-background:#4caf50;
-
+font-size:16px;
+background:#2196f3;
 color:white;
-
-font-size:20px;
-
 }
 
+
+#submitBtn{
+background:#4caf50;
+}
+
+
+#restartBtn{
+background:#ff9800;
+}
 
 
 input{
-
-width:160px;
-
-font-size:28px;
-
-padding:10px;
-
-text-align:center;
-
+width:140px;
+font-size:26px;
+padding:8px;
 border-radius:10px;
-
-border:1px solid #ccc;
-
+border:2px solid #90caf9;
+text-align:center;
 }
 
 
-
-.result{
-
-font-size:22px;
-
-margin:20px;
-
-min-height:35px;
-
+.feedback{
+font-size:24px;
+min-height:40px;
+margin-top:15px;
+color:#ff9800;
+font-weight:bold;
 }
-
 
 
 .hide{
-
 display:none;
-
 }
 
+
+.star{
+color:#ffc107;
+}
 
 
 </style>
 
-
 </head>
 
 
-
 <body>
-
 
 <div class="app">
 
@@ -200,104 +169,82 @@ display:none;
 </h1>
 
 
-
-<div class="message" id="message">
-
-准备学习九九乘法
-
+<div class="hero">
+🚀 数学小英雄训练基地
 </div>
 
 
+<div class="group" id="group">
+第一关：1的乘法
+</div>
 
-<div class="lesson" id="lesson">
 
+<div class="lesson">
+
+<div class="chinese" id="chinese">
 一一得一
+</div>
+
+<div class="math" id="math">
+1 × 1 = 1
+</div>
 
 </div>
 
 
-
-
-<div>
-
-掌握进度
-
+<div class="progress-title">
+⚡ 能量进度
 </div>
-
 
 
 <div class="progress">
 
-<div class="green" id="bar">
+<div class="energy" id="energy"></div>
 
 </div>
-
-</div>
-
 
 
 <div class="info">
 
-<span id="count">
-
-0
-
+<span id="progressText">
+0 / 9
 </span>
-
-/45
 
 &nbsp;&nbsp;
 
-⭐
-
-<span id="stars">
-
-0
-
+<span class="star">
+⭐<span id="stars">0</span>
 </span>
 
 </div>
 
 
-
+<div id="actionArea">
 
 <button id="learnBtn">
-
-📖 学口诀
-
+📖学习
 </button>
 
+</div>
 
 
 <div id="inputArea" class="hide">
 
-
-<input id="input">
-
+<input id="inputBox">
 
 <button id="submitBtn">
-
 提交
-
 </button>
 
-
 </div>
-
 
 
 <button id="restartBtn">
-
-🔄重新开始
-
+🔄重来
 </button>
 
 
-
-<div class="result" id="result">
-
-</div>
-
+<div class="feedback" id="feedback"></div>
 
 
 </div>
@@ -305,148 +252,130 @@ display:none;
 
 <script>
   // ================================
-// 九九乘法数据
+// 九九乘法学习 V8.2
+// 数据结构
 // ================================
 
 
-const table=[
+const groups = [];
 
 
-["一一得一",1,1,1],
-["一二得二",1,2,2],
-["一三得三",1,3,3],
-["一四得四",1,4,4],
-["一五得五",1,5,5],
-["一六得六",1,6,6],
-["一七得七",1,7,7],
-["一八得八",1,8,8],
-["一九得九",1,9,9],
+// 创建1-9乘法分组
+
+for(let n=1;n<=9;n++){
+
+let list=[];
 
 
-["二二得四",2,2,4],
-["二三得六",2,3,6],
-["二四得八",2,4,8],
-["二五一十",2,5,10],
-["二六十二",2,6,12],
-["二七十四",2,7,14],
-["二八十六",2,8,16],
-["二九十八",2,9,18],
+for(let i=1;i<=9;i++){
+
+let result=n*i;
 
 
-["三三得九",3,3,9],
-["三四十二",3,4,12],
-["三五十五",3,5,15],
-["三六十八",3,6,18],
-["三七二十一",3,7,21],
-["三八二十四",3,8,24],
-["三九二十七",3,9,27],
+list.push({
+
+a:n,
+
+b:i,
+
+answer:result,
 
 
-["四四十六",4,4,16],
-["四五二十",4,5,20],
-["四六二十四",4,6,24],
-["四七二十八",4,7,28],
-["四八三十二",4,8,32],
-["四九三十六",4,9,36],
+text:
+numberToChinese(n)+
+numberToChinese(i)+
+getResultText(result),
 
-
-["五五二十五",5,5,25],
-["五六三十",5,6,30],
-["五七三十五",5,7,35],
-["五八四十",5,8,40],
-["五九四十五",5,9,45],
-
-
-["六六三十六",6,6,36],
-["六七四十二",6,7,42],
-["六八四十八",6,8,48],
-["六九五十四",6,9,54],
-
-
-["七七四十九",7,7,49],
-["七八五十六",7,8,56],
-["七九六十三",7,9,63],
-
-
-["八八六十四",8,8,64],
-["八九七十二",8,9,72],
-
-
-["九九八十一",9,9,81]
-
-
-];
-
-
-
-
-
-
-// ================================
-// 创建学习任务
-// ================================
-
-
-let lessons=table.map((item,index)=>{
-
-
-return {
-
-
-id:index,
-
-
-text:item[0],
-
-
-a:item[1],
-
-
-b:item[2],
-
-
-answer:item[3],
-
-
-
-// 掌握程度
-
-mastery:0,
-
-
-
-// 当前状态
-
-// 0 学口诀
-// 1 补全
-// 2 数字测试
-// 3 完成
 
 stage:0,
 
+mastery:0,
 
 correct:0,
 
-
 wrong:0
-
-
-};
-
 
 });
 
 
+}
+
+
+groups.push({
+
+name:n+"的乘法",
+
+number:n,
+
+lessons:list,
+
+complete:false
+
+});
+
+
+}
 
 
 
-// 当前题号
 
-let currentIndex=0;
+// ================================
+// 中文转换
+// ================================
+
+
+function numberToChinese(num){
+
+const map=[
+
+"零",
+"一",
+"二",
+"三",
+"四",
+"五",
+"六",
+"七",
+"八",
+"九",
+"十"
+
+];
+
+return map[num];
+
+}
 
 
 
-// 星星
+
+function getResultText(num){
+
+
+if(num<=10){
+
+return "得"+numberToChinese(num);
+
+}
+
+
+return numberToChinese(num);
+
+}
+
+
+
+
+
+// ================================
+// 当前进度
+// ================================
+
+
+let currentGroup=0;
+
+let currentLesson=0;
+
 
 let stars=0;
 
@@ -461,14 +390,15 @@ let locked=false;
 
 
 // ================================
-// 当前题
+// 获取当前题
 // ================================
 
 
-function currentTask(){
+function getCurrent(){
 
 
-return lessons[currentIndex];
+return groups[currentGroup]
+.lessons[currentLesson];
 
 
 }
@@ -480,19 +410,63 @@ return lessons[currentIndex];
 
 
 // ================================
-// 设置阶段
+// 显示当前内容
 // ================================
 
 
-function setStage(value){
+function render(){
 
 
-currentTask().stage=value;
+let item=getCurrent();
+
+
+
+document
+.getElementById("group")
+.innerText=
+
+"第"+
+(currentGroup+1)+
+"关："+
+
+groups[currentGroup].name;
+
+
+
+document
+.getElementById("chinese")
+.innerText=
+
+item.text;
+
+
+
+document
+.getElementById("math")
+.innerText=
+
+item.a+
+" × "+
+item.b+
+" = "+
+item.answer;
+
+
+
+updateProgress();
+
 
 
 }
+
+
+
+
+
+
+
 // ================================
-// 语音
+// 语音奖励
 // ================================
 
 
@@ -506,19 +480,17 @@ return;
 }
 
 
-speechSynthesis.cancel();
-
-
-
-let u=new SpeechSynthesisUtterance(text);
-
+let u=
+new SpeechSynthesisUtterance(text);
 
 
 u.lang="zh-CN";
 
 
-u.rate=0.75;
+u.rate=.8;
 
+
+speechSynthesis.cancel();
 
 
 speechSynthesis.speak(u);
@@ -533,32 +505,64 @@ speechSynthesis.speak(u);
 
 
 // ================================
-// 显示当前口诀
+// 音效
 // ================================
 
 
-function showTask(){
+function beep(type){
 
 
-let x=currentTask();
+let ctx=
+new AudioContext();
+
+
+let osc=
+ctx.createOscillator();
+
+
+let gain=
+ctx.createGain();
+
+
+osc.connect(gain);
+
+gain.connect(ctx.destination);
 
 
 
-document
-.getElementById("lesson")
-.innerText=x.text;
+if(type==="good"){
+
+
+osc.frequency.value=800;
+
+
+}else{
+
+
+osc.frequency.value=1200;
 
 
 }
 
 
 
+gain.gain.value=.15;
 
 
+
+osc.start();
+
+
+osc.stop(
+ctx.currentTime+0.15
+);
+
+
+}
 
 
 // ================================
-// 点击学习口诀
+// 学习按钮
 // ================================
 
 
@@ -567,13 +571,10 @@ document
 .onclick=function(){
 
 
-let x=currentTask();
+let item=getCurrent();
 
 
-
-// 防止重复点击
-
-if(x.stage!==0){
+if(item.stage!==0){
 
 return;
 
@@ -581,38 +582,33 @@ return;
 
 
 
-setStage(1);
+item.stage=1;
 
 
 
 document
-.getElementById("message")
+.getElementById("feedback")
 .innerText=
 
-"记住这个口诀";
-
-
-
-showTask();
+"记住口诀哦！";
 
 
 
 speak(
 
-x.a+
+item.a+
 "乘"+
-x.b+
+item.b+
 "等于"+
-x.answer+
-"。"+
-x.text
+item.answer+
+"，"+
+item.text
 
 );
 
 
 
-
-// 自动进入补全
+// 进入口诀补全
 
 setTimeout(()=>{
 
@@ -620,7 +616,7 @@ setTimeout(()=>{
 openInput("memory");
 
 
-},2500);
+},2000);
 
 
 
@@ -633,18 +629,18 @@ openInput("memory");
 
 
 // ================================
-// 打开输入框
+// 打开输入
 // ================================
 
 
 function openInput(type){
 
 
+
 let area=
 
 document
 .getElementById("inputArea");
-
 
 
 area.classList
@@ -655,7 +651,7 @@ area.classList
 let input=
 
 document
-.getElementById("input");
+.getElementById("inputBox");
 
 
 
@@ -667,40 +663,22 @@ if(type==="memory"){
 
 
 
-document
-.getElementById("message")
-.innerText=
-
-"补全口诀";
-
-
-
 input.placeholder=
 
-"输入缺少的字";
-
+"补全口诀";
 
 
 }
 
 
 
-if(type==="test"){
-
-
-
-document
-.getElementById("message")
-.innerText=
-
-"计算答案";
+if(type==="number"){
 
 
 
 input.placeholder=
 
 "输入数字";
-
 
 
 }
@@ -734,14 +712,13 @@ return;
 
 
 
-let x=currentTask();
-
+let item=getCurrent();
 
 
 let value=
 
 document
-.getElementById("input")
+.getElementById("inputBox")
 .value
 .trim();
 
@@ -750,55 +727,81 @@ document
 
 
 // ================================
-// 补全阶段
+// 口诀补全阶段
 // ================================
 
 
-if(x.stage===1){
+if(item.stage===1){
 
 
 
-let missing=
+let last=
 
-x.text.substring(
+item.text.substring(
 
-x.text.length-1
+item.text.length-1
 
 );
 
 
 
+// 例如：一一____
+// 输入：得一
+
+if(
+value==="得"+numberToChinese(item.answer)
+||
+value===last
+){
 
 
-if(value===missing){
+
+item.stage=2;
 
 
 
-setStage(2);
+item.mastery+=40;
 
 
 
-x.mastery+=40;
+beep("good");
 
 
 
 document
-.getElementById("result")
+.getElementById("feedback")
 .innerText=
 
-"🎉 口诀正确！";
+"🎉 口诀记住啦！";
 
 
 
 speak(
-"正确"
+"太棒了"
 );
 
 
 
-// 立即进入数字测试
+// 自动进入数字测试
 
-openInput("test");
+setTimeout(()=>{
+
+
+document
+.getElementById("math")
+.innerText=
+
+item.a+
+" × "+
+item.b+
+" = ?";
+
+
+
+openInput("number");
+
+
+},500);
 
 
 
@@ -807,21 +810,23 @@ openInput("test");
 else{
 
 
-x.wrong++;
+item.wrong++;
 
 
 document
-.getElementById("result")
+.getElementById("feedback")
 .innerText=
 
-"再试一次";
-
-
-}
+"再想一下";
 
 
 
 }
+
+
+
+}
+
 
 
 
@@ -833,11 +838,13 @@ document
 // ================================
 
 
-else if(x.stage===2){
+else if(item.stage===2){
 
 
 
-if(Number(value)===x.answer){
+if(
+Number(value)===item.answer
+){
 
 
 
@@ -845,14 +852,44 @@ locked=true;
 
 
 
-x.correct++;
+item.stage=3;
 
 
-x.mastery=100;
+item.mastery=100;
+
+
+item.correct++;
 
 
 
-finishTask();
+stars++;
+
+
+
+beep("good");
+
+
+document
+.getElementById("feedback")
+.innerText=
+
+"🎊 答对啦！ ⭐+1";
+
+
+
+speak(
+"答对啦"
+);
+
+
+
+setTimeout(()=>{
+
+
+completeLesson();
+
+
+},800);
 
 
 
@@ -861,17 +898,14 @@ finishTask();
 else{
 
 
-x.wrong++;
+item.wrong++;
 
 
 document
-.getElementById("result")
+.getElementById("feedback")
 .innerText=
 
-"答案错误";
-
-
-}
+"答案不对，再试试";
 
 
 
@@ -879,38 +913,27 @@ document
 
 
 
-update();
+}
 
-save();
+
+
+updateProgress();
+
 
 
 };
 // ================================
-// 完成当前任务
+// 完成当前题目
 // ================================
 
 
-function finishTask(){
+function completeLesson(){
 
 
-let x=currentTask();
+let item=getCurrent();
 
 
-
-x.mastery=100;
-
-
-stars+=1;
-
-
-
-document
-.getElementById("result")
-.innerText=
-
-"🎉 掌握成功 ⭐+1";
-
-
+// 隐藏输入
 
 document
 .getElementById("inputArea")
@@ -919,28 +942,28 @@ document
 
 
 
-update();
+// 恢复算式显示
 
-save();
+document
+.getElementById("math")
+.innerText=
+
+item.a+
+" × "+
+item.b+
+" = "+
+item.answer;
 
 
 
-// 唯一下一题入口
 
-setTimeout(()=>{
+// 判断当前组是否完成
 
-
-nextTask();
-
-
-},300);
+checkGroupComplete();
 
 
 
 }
-
-
-
 
 
 
@@ -950,30 +973,40 @@ nextTask();
 // ================================
 
 
-function nextTask(){
+function nextLesson(){
 
 
 
-// 当前题号递增
-
-currentIndex++;
+currentLesson++;
 
 
 
-// 到最后重新开始
+// 当前组结束
 
-if(currentIndex>=lessons.length){
+if(
+currentLesson>=
+groups[currentGroup].lessons.length
+){
 
 
-currentIndex=0;
 
+groups[currentGroup].complete=true;
+
+
+
+groupFinish();
+
+
+
+return;
 
 }
 
 
 
 
-resetTask();
+resetState();
+
 
 
 }
@@ -985,41 +1018,170 @@ resetTask();
 
 
 // ================================
-// 重置新任务
+// 组完成
 // ================================
 
 
-function resetTask(){
-
-
-let x=currentTask();
+function groupFinish(){
 
 
 
-x.stage=0;
+stars+=5;
+
+
+
+beep("good");
+
+
+
+document
+.getElementById("feedback")
+.innerText=
+
+"🎉 第"+
+(currentGroup+1)+
+"关完成！ ⭐+5";
+
+
+
+speak(
+"这一关完成了，太棒了"
+);
+
+
+
+
+setTimeout(()=>{
+
+
+currentGroup++;
+
+
+currentLesson=0;
+
+
+
+// 全部完成
+
+if(
+currentGroup>=groups.length
+){
+
+
+
+currentGroup=0;
+
+
+document
+.getElementById("feedback")
+.innerText=
+
+"🏆 全部九九乘法完成！";
+
+
+speak(
+"恭喜你完成全部九九乘法"
+);
+
+
+}
+
+
+
+
+resetState();
+
+
+
+},1500);
+
+
+
+}
+
+
+
+
+
+
+
+// ================================
+// 检查组完成
+// ================================
+
+
+function checkGroupComplete(){
+
+
+let list=
+
+groups[currentGroup]
+.lessons;
+
+
+
+let done=
+
+list.every(x=>{
+
+
+return x.mastery>=90;
+
+
+});
+
+
+
+if(done){
+
+
+groupFinish();
+
+
+}
+else{
+
+
+setTimeout(()=>{
+
+
+nextLesson();
+
+
+},800);
+
+
+
+}
+
+
+
+}
+
+
+
+
+
+
+
+// ================================
+// 重置状态
+// ================================
+
+
+function resetState(){
+
+
+
+let item=getCurrent();
+
+
+
+item.stage=0;
 
 
 
 locked=false;
-
-
-
-document
-.getElementById("message")
-.innerText=
-
-"准备学习";
-
-
-document
-.getElementById("result")
-.innerText="";
-
-
-
-document
-.getElementById("input")
-.value="";
 
 
 
@@ -1030,7 +1192,32 @@ document
 
 
 
-showTask();
+document
+.getElementById("learnBtn")
+.classList
+.remove("hide");
+
+
+
+document
+.getElementById("math")
+.innerText=
+
+item.a+
+" × "+
+item.b+
+" = "+
+item.answer;
+
+
+
+document
+.getElementById("feedback")
+.innerText="";
+
+
+
+render();
 
 
 
@@ -1042,19 +1229,24 @@ showTask();
 
 
 
-
 // ================================
-// 更新进度
+// 进度更新
 // ================================
 
 
-function update(){
+function updateProgress(){
 
 
 
-let mastered=
+let group=
 
-lessons.filter(x=>{
+groups[currentGroup];
+
+
+
+let count=
+
+group.lessons.filter(x=>{
 
 
 return x.mastery>=90;
@@ -1064,37 +1256,14 @@ return x.mastery>=90;
 
 
 
-let total=0;
-
-
-
-lessons.forEach(x=>{
-
-
-total+=x.mastery;
-
-
-});
-
-
-
 let percent=
 
-Math.round(
-
-total/
-
-lessons.length
-
-);
+count/group.lessons.length*100;
 
 
-
-
-// 绿色进度条
 
 document
-.getElementById("bar")
+.getElementById("energy")
 .style.width=
 
 percent+"%";
@@ -1102,10 +1271,11 @@ percent+"%";
 
 
 document
-.getElementById("count")
+.getElementById("progressText")
 .innerText=
 
-mastered;
+count+
+" / 9";
 
 
 
@@ -1118,115 +1288,6 @@ stars;
 
 
 }
-
-
-
-
-
-
-
-
-// ================================
-// 保存
-// ================================
-
-
-function save(){
-
-
-
-localStorage.setItem(
-
-"jiujiu_v7_lessons",
-
-JSON.stringify(lessons)
-
-);
-
-
-
-localStorage.setItem(
-
-"jiujiu_v7_stars",
-
-stars
-
-);
-
-
-}
-// ================================
-// 读取数据
-// ================================
-
-
-function load(){
-
-
-try{
-
-
-let data=
-
-localStorage.getItem(
-"jiujiu_v7_lessons"
-);
-
-
-
-if(data){
-
-
-lessons=
-
-JSON.parse(data);
-
-
-}
-
-
-
-
-let starData=
-
-localStorage.getItem(
-"jiujiu_v7_stars"
-);
-
-
-
-if(starData){
-
-
-stars=
-
-Number(starData);
-
-
-}
-
-
-
-}catch(e){
-
-
-console.log(
-"读取数据失败"
-);
-
-
-}
-
-
-}
-
-
-
-
-
-
-
-
 // ================================
 // 重新开始
 // ================================
@@ -1254,27 +1315,37 @@ return;
 
 
 
-lessons.forEach(x=>{
+groups.forEach(group=>{
 
 
-x.mastery=0;
+group.complete=false;
 
-x.stage=0;
 
-x.correct=0;
 
-x.wrong=0;
+group.lessons.forEach(item=>{
+
+
+item.stage=0;
+
+item.mastery=0;
+
+item.correct=0;
+
+item.wrong=0;
+
+
+});
 
 
 });
 
 
 
+currentGroup=0;
+
+currentLesson=0;
+
 stars=0;
-
-
-currentIndex=0;
-
 
 locked=false;
 
@@ -1284,18 +1355,16 @@ save();
 
 
 
-resetTask();
-
-
-update();
+resetState();
 
 
 
 document
-.getElementById("message")
+.getElementById("feedback")
 .innerText=
 
-"重新开始学习";
+"🚀 重新开始训练";
+
 
 
 };
@@ -1308,39 +1377,186 @@ document
 
 
 // ================================
-// 初始化
+// 本地保存
 // ================================
 
 
-function init(){
+function save(){
 
 
-load();
+localStorage.setItem(
 
+"jiujiu_v82_groups",
 
+JSON.stringify(groups)
 
-currentIndex=0;
-
-
-locked=false;
-
-
-
-showTask();
-
-
-update();
+);
 
 
 
-document
-.getElementById("message")
-.innerText=
+localStorage.setItem(
 
-"开始学习九九乘法";
+"jiujiu_v82_stars",
+
+stars
+
+);
+
+
+
+localStorage.setItem(
+
+"jiujiu_v82_group",
+
+currentGroup
+
+);
+
+
+
+localStorage.setItem(
+
+"jiujiu_v82_lesson",
+
+currentLesson
+
+);
+
 
 
 }
+
+
+
+
+
+
+// ================================
+// 读取数据
+// ================================
+
+
+function load(){
+
+
+
+try{
+
+
+let data=
+
+localStorage.getItem(
+"jiujiu_v82_groups"
+);
+
+
+
+if(data){
+
+
+let old=
+
+JSON.parse(data);
+
+
+
+old.forEach((g,index)=>{
+
+
+if(groups[index]){
+
+
+g.lessons.forEach((item,i)=>{
+
+
+if(groups[index].lessons[i]){
+
+
+groups[index].lessons[i]=item;
+
+
+}
+
+
+});
+
+
+groups[index].complete=g.complete;
+
+
+}
+
+
+
+});
+
+
+}
+
+
+
+let s=
+
+localStorage.getItem(
+"jiujiu_v82_stars"
+);
+
+
+
+if(s){
+
+stars=Number(s);
+
+}
+
+
+
+
+let cg=
+
+localStorage.getItem(
+"jiujiu_v82_group"
+);
+
+
+
+let cl=
+
+localStorage.getItem(
+"jiujiu_v82_lesson"
+);
+
+
+
+if(cg){
+
+currentGroup=Number(cg);
+
+}
+
+
+if(cl){
+
+currentLesson=Number(cl);
+
+}
+
+
+
+}catch(e){
+
+
+console.log(
+"读取失败"
+);
+
+
+}
+
+
+
+}
+
 
 
 
@@ -1378,16 +1594,19 @@ save();
 
 
 
-// 启动程序
+// ================================
+// 初始化
+// ================================
 
-init();
+
+load();
 
 
+render();
 
+updateProgress();
 </script>
 
-
 </body>
-
 
 </html>

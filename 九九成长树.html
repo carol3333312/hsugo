@@ -1,593 +1,445 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-
-<title>九九成长树 V3.4</title>
-
+<title>九九成长树 V4.0</title>
 
 <style>
 
 *{
-box-sizing:border-box;
+box-sizing:border-box
 }
-
 
 html,body{
-
 margin:0;
-
 height:100%;
-
 overflow:hidden;
-
-font-family:"Microsoft YaHei",sans-serif;
-
+font-family:"Microsoft YaHei",sans-serif
 }
-
-
 
 body{
-
-background:
-linear-gradient(
-#9edcff,
-#fff3b0,
-#b9e8a0
-);
-
+background:linear-gradient(
+#8ed7ff 0%,
+#fff3b0 58%,
+#a9df91 100%
+)
 }
-
-
 
 .app{
-
 height:100dvh;
-
-max-width:390px;
-
+max-width:430px;
 margin:auto;
-
 padding:8px;
-
-padding-bottom:
-env(safe-area-inset-bottom);
-
+padding-bottom:env(safe-area-inset-bottom)
 }
-
-
 
 .world{
-
 height:100%;
-
-background:
-rgba(255,255,255,.45);
-
-border-radius:25px;
-
+background:rgba(255,255,255,.48);
+border-radius:26px;
 padding:10px;
-
 overflow:hidden;
-
 display:flex;
-
 flex-direction:column;
-
+box-shadow:0 8px 30px #0001
 }
-
-
-
-
 
 .top{
-
 display:flex;
-
 justify-content:space-between;
-
-font-size:16px;
-
-font-weight:bold;
-
+font-size:15px;
+font-weight:bold
 }
 
 
-
+/* =========================
+   场景
+========================= */
 
 .scene{
-
-height:190px;
-
+height:210px;
 position:relative;
-
 display:flex;
-
 justify-content:center;
-
-align-items:center;
-
+align-items:flex-end;
 overflow:hidden;
-
-}
-
-
-
-
-.sun{
-
-position:absolute;
-
-right:20px;
-
-top:5px;
-
-font-size:35px;
-
-}
-
-
-
-.moon{
-
-display:none;
-
-position:absolute;
-
-right:20px;
-
-top:5px;
-
-font-size:35px;
-
-}
-
-
-
-
-
-.tree{
-
-width:150px;
-
-height:170px;
-
-}
-
-
-
-.tree svg{
-
-width:100%;
-
-height:100%;
-
-transition:.5s;
-
-transform-origin:center bottom;
-
-}
-
-
-
-
-/* 树成长 */
-
-.tree.seed svg{
-
-transform:scale(.45);
-
-}
-
-
-
-.tree.small svg{
-
-transform:scale(.7);
-
-}
-
-
-
-.tree.big svg{
-
-transform:scale(1);
-
-}
-
-
-
-
-/* 树摇 */
-
-.tree.grow svg{
-
-animation:
-
-treeSway 1s ease;
-
-}
-
-
-
-
-@keyframes treeSway{
-
-
-0%{
-
-transform:rotate(0);
-
-}
-
-
-25%{
-
-transform:rotate(-3deg);
-
-}
-
-
-50%{
-
-transform:rotate(2deg);
-
-}
-
-
-75%{
-
-transform:rotate(-1deg);
-
-}
-
-
-100%{
-
-transform:rotate(0);
-
-}
-
-
-}
-
-
-
-
-
-#leaf{
-
-transform-origin:center bottom;
-
-}
-
-
-
-.tree.wind #leaf{
-
-animation:
-
-leafSway 3s infinite ease-in-out;
-
-}
-
-
-
-
-@keyframes leafSway{
-
-
-50%{
-
-transform:rotate(3deg);
-
-}
-
-
-}
-
-
-
-
-
-#fruitSvg{
-
-display:none;
-
-}
-
-
-
-.tree.fruit #fruitSvg{
-
-display:block;
-
-}
-
-
-
-
-
-.fruits{
-
-position:absolute;
-
-width:150px;
-
-height:120px;
-
-top:20px;
-
-}
-
-
-
-.fruits.swing{
-
-animation:
-
-fruitSwing 1s;
-
-}
-
-
-
-@keyframes fruitSwing{
-
-
-50%{
-
-transform:rotate(3deg);
-
-}
-
-
-}
-
-
-
-
-.water{
-
-position:absolute;
-
-top:15px;
-
-font-size:28px;
-
-animation:
-
-waterDrop 1s forwards;
-
-}
-
-
-
-@keyframes waterDrop{
-
-
-to{
-
-transform:translateY(100px);
-
-opacity:0;
-
-}
-
-
-}
-
-
-
-
-.score{
-
-text-align:center;
-
-}
-
-
-
-.progress{
-
-height:10px;
-
-background:#ffffffaa;
-
 border-radius:20px;
 
-overflow:hidden;
+background:linear-gradient(
+#9bddff 0%,
+#d8f3ff 63%,
+#9ad16f 64%,
+#78bd5c 100%
+)
+}
+
+.sun{
+position:absolute;
+right:18px;
+top:6px;
+font-size:34px;
+filter:drop-shadow(0 2px 3px #7775)
+}
+
+.cloud{
+position:absolute;
+font-size:34px;
+opacity:.75;
+animation:cloudMove 14s linear infinite
+}
+
+.c1{
+left:-50px;
+top:28px
+}
+
+.c2{
+left:45%;
+top:60px;
+animation-duration:19s
+}
+
+.ground{
+position:absolute;
+bottom:0;
+width:100%;
+height:45px;
+background:#76b957;
+border-radius:50% 50% 0 0/30% 30% 0 0
+}
+
+
+/* =========================
+   成长树
+========================= */
+
+.tree{
+width:185px;
+height:195px;
+position:relative;
+z-index:2;
+transform-origin:center bottom
+}
+
+.tree svg{
+width:100%;
+height:100%;
+overflow:visible
+}
+
+.tree .crown,
+.tree .trunk,
+.tree .branch,
+.tree .fruit{
+transition:all .8s ease
+}
+
+
+/* 五个成长阶段 */
+
+.tree.stage1{
+transform:scale(.43) translateY(92px)
+}
+
+.tree.stage2{
+transform:scale(.62) translateY(55px)
+}
+
+.tree.stage3{
+transform:scale(.80) translateY(27px)
+}
+
+.tree.stage4{
+transform:scale(.96) translateY(7px)
+}
+
+.tree.stage5{
+transform:scale(1) translateY(0)
+}
+
+
+/* 浇水后的摇摆 */
+
+.tree.watered{
+animation:sway .85s ease
+}
+
+@keyframes sway{
+
+0%,100%{
+transform:var(--base);
+transform-origin:center bottom
+}
+
+30%{
+transform:var(--base) rotate(-4deg)
+}
+
+65%{
+transform:var(--base) rotate(3deg)
+}
 
 }
 
 
+/* 保证摇摆时保留成长阶段 */
+
+.tree.stage1{
+--base:scale(.43) translateY(92px)
+}
+
+.tree.stage2{
+--base:scale(.62) translateY(55px)
+}
+
+.tree.stage3{
+--base:scale(.80) translateY(27px)
+}
+
+.tree.stage4{
+--base:scale(.96) translateY(7px)
+}
+
+.tree.stage5{
+--base:scale(1) translateY(0)
+}
+
+
+/* 叶子轻微随风摆动 */
+
+.leaf{
+transform-origin:center bottom;
+animation:leafBreath 4s ease-in-out infinite
+}
+
+@keyframes leafBreath{
+
+50%{
+transform:translateX(2px) rotate(1.5deg)
+}
+
+}
+
+
+/* =========================
+   浇水动画
+========================= */
+
+.waterdrop{
+position:absolute;
+z-index:5;
+font-size:24px;
+top:35px;
+animation:waterFall .9s ease-in forwards
+}
+
+@keyframes waterFall{
+
+to{
+transform:translateY(125px) rotate(15deg);
+opacity:0
+}
+
+}
+
+
+/* =========================
+   小树反馈动画
+========================= */
+
+.flower{
+position:absolute;
+z-index:4;
+font-size:20px;
+animation:flowerPop .7s ease-out forwards
+}
+
+@keyframes flowerPop{
+
+0%{
+transform:scale(.2);
+opacity:0
+}
+
+70%{
+transform:scale(1.2)
+}
+
+100%{
+transform:scale(1);
+opacity:1
+}
+
+}
+
+
+/* =========================
+   成长值
+========================= */
+
+.score{
+text-align:center;
+margin-top:3px;
+font-size:14px
+}
+
+.progress{
+height:9px;
+background:#ffffffaa;
+border-radius:20px;
+overflow:hidden;
+margin:3px 0 2px
+}
 
 .bar{
-
 height:100%;
-
 width:0;
-
 background:#43a047;
+transition:width .35s
+}
 
+.progressText{
+text-align:center;
+font-size:12px
 }
 
 
-
-
+/* =========================
+   口诀
+========================= */
 
 .kou{
-
-font-size:32px;
-
+font-size:25px;
 font-weight:bold;
-
 text-align:center;
+min-height:33px
+}
 
+.examTitle{
+text-align:center;
+font-size:12px;
+color:#666
 }
 
 
-
-
+/* =========================
+   考试题
+========================= */
 
 .question{
-
-font-size:32px;
-
+font-size:35px;
 font-weight:bold;
-
 text-align:center;
+min-height:46px;
+margin-top:2px
+}
 
-} input{
-
+input{
 display:block;
-
-width:110px;
-
-height:42px;
-
-margin:3px auto;
-
-font-size:25px;
-
+width:125px;
+height:44px;
+margin:0 auto 4px;
+font-size:27px;
 text-align:center;
-
 border-radius:12px;
-
 border:1px solid #aaa;
-
+background:#fff
 }
 
 
+/* =========================
+   数字键盘
+========================= */
 
 .keys{
-
 display:grid;
-
-grid-template-columns:
-repeat(3,1fr);
-
-gap:5px;
-
+grid-template-columns:repeat(3,1fr);
+gap:5px
 }
-
-
 
 button{
-
 border:0;
-
-border-radius:25px;
-
+border-radius:22px;
 font-size:16px;
-
-height:38px;
-
+height:37px;
+box-shadow:0 2px 4px #0001
 }
-
-
 
 button:active{
-
-transform:scale(.95);
-
+transform:scale(.95)
 }
-
-
 
 .key{
-
-background:white;
-
+background:#fff
 }
 
 
-
-.start{
-
-width:100%;
-
-height:40px;
-
-background:white;
-
-margin-top:4px;
-
-}
-
-
+/* =========================
+   操作按钮
+========================= */
 
 .actionBox{
-
 display:flex;
-
-gap:15px;
-
-margin-top:12px;
-
+gap:8px;
+margin-top:7px;
+align-items:stretch
 }
 
 
-
-.submit,
-.restart{
-
-flex:1;
-
-height:50px;
-
-font-size:17px;
-
-}
-
-
+/* 提交答案更大 */
 
 .submit{
-
+flex:1.65;
+height:48px;
+font-size:18px;
 background:#43a047;
-
 color:white;
-
+font-weight:bold
 }
 
 
+/* 重新开始缩小 */
 
 .restart{
-
-background:white;
-
+flex:.7;
+height:48px;
+font-size:14px;
+background:#fff;
+color:#666
 }
 
 
-
+/* =========================
+   提示
+========================= */
 
 .msg{
-
-height:20px;
-
+height:19px;
 text-align:center;
-
 color:#388e3c;
+font-size:13px
+}
 
+.examMode{
+font-size:11px;
+color:#777;
+text-align:center;
+margin-bottom:1px
 }
 
 </style>
-
 </head>
 
 
-
 <body>
-
 
 <div class="app">
 
 <div class="world">
 
+
+<!-- 顶部 -->
 
 <div class="top">
 
@@ -600,23 +452,30 @@ color:#388e3c;
 </div>
 
 
+<!-- =========================
+     成长场景
+========================= -->
 
 <div class="scene" id="scene">
 
-
-<div class="sun" id="sun">
+<div class="sun">
 ☀️
 </div>
 
-
-<div class="moon" id="moon">
-🌙
+<div class="cloud c1">
+☁️
 </div>
 
+<div class="cloud c2">
+☁️
+</div>
+
+<div class="ground"></div>
 
 
-<div class="tree seed wind grow" id="tree">
+<!-- 树 -->
 
+<div class="tree stage1" id="tree">
 
 <svg viewBox="0 0 200 220">
 
@@ -624,280 +483,307 @@ color:#388e3c;
 <!-- 树干 -->
 
 <path
-
-d="M100 210 Q95 150 100 100"
-
-stroke="#8b5a2b"
-
-stroke-width="18"
-
+class="trunk"
+d="M100 210 Q91 155 99 105 Q100 85 99 62"
+stroke="#74461f"
+stroke-width="15"
 fill="none"
-
+stroke-linecap="round"
 />
-
 
 
 <!-- 树枝 -->
 
 <path
-
-d="M100 130 L60 90"
-
-stroke="#8b5a2b"
-
-stroke-width="8"
-
+class="branch"
+d="M99 132 L55 91 M100 118 L145 77 M99 101 L79 62 M101 97 L122 54"
+stroke="#74461f"
+stroke-width="7"
+fill="none"
+stroke-linecap="round"
 />
 
 
-<path
+<!-- 树冠 -->
 
-d="M100 120 L140 80"
-
-stroke="#8b5a2b"
-
-stroke-width="8"
-
-/>
-
-
-
-<!-- 叶冠 -->
-
-<g id="leaf">
-
+<g class="crown leaf">
 
 <circle
-
-cx="70"
-
-cy="80"
-
-r="45"
-
-fill="#4caf50"
-
+cx="63"
+cy="82"
+r="40"
+fill="#3d9148"
 />
-
 
 <circle
-
-cx="125"
-
-cy="70"
-
-r="50"
-
-fill="#66bb6a"
-
+cx="128"
+cy="74"
+r="47"
+fill="#51a958"
 />
-
 
 <circle
-
-cx="100"
-
-cy="40"
-
-r="38"
-
-fill="#81c784"
-
+cx="99"
+cy="43"
+r="40"
+fill="#72bd68"
 />
 
+<circle
+cx="102"
+cy="92"
+r="46"
+fill="#4da554"
+/>
+
+<circle
+cx="53"
+cy="119"
+r="28"
+fill="#368a42"
+/>
+
+<circle
+cx="145"
+cy="116"
+r="30"
+fill="#3d9348"
+/>
 
 </g>
-
 
 
 <!-- 果实 -->
 
-<g id="fruitSvg">
-
-
-<circle
-
-cx="70"
-
-cy="80"
-
-r="8"
-
-fill="red"
-
-/>
-
+<g class="fruit">
 
 <circle
-
-cx="135"
-
-cy="90"
-
-r="8"
-
-fill="red"
-
+cx="65"
+cy="86"
+r="7"
+fill="#e53935"
 />
-
 
 <circle
-
-cx="105"
-
-cy="55"
-
-r="8"
-
-fill="red"
-
+cx="134"
+cy="83"
+r="7"
+fill="#e53935"
 />
 
+<circle
+cx="102"
+cy="49"
+r="7"
+fill="#e53935"
+/>
+
+<circle
+cx="145"
+cy="120"
+r="7"
+fill="#e53935"
+/>
 
 </g>
 
-
-
 </svg>
 
+</div>
 
 </div>
 
 
-
-<div class="fruits" id="fruits"></div>
-
-
-</div>
-
-
-
-
+<!-- =========================
+     成长值
+========================= -->
 
 <div class="score">
 
 ⭐成长值
 
 <span id="score">
-
 0
-
 </span>
 
 </div>
 
 
-
-<div id="progressText"></div>
-
+<div
+class="progressText"
+id="progressText">
+</div>
 
 
 <div class="progress">
 
-<div id="bar"></div>
+<div
+class="bar"
+id="bar">
+</div>
 
 </div>
 
 
+<!-- =========================
+     考试模式
+========================= -->
 
+<div class="examMode">
 
-<div style="text-align:center">
-
-📖口诀
+📖 按组复习 · 顺序出题 · 每组 9 题
 
 </div>
 
 
+<!-- 口诀 -->
+
+<div
+class="kou"
+id="kou">
+</div>
 
 
-<div id="kou" class="kou"></div>
+<!-- 题目 -->
+
+<div
+class="question"
+id="question">
+</div>
 
 
+<!-- 答案 -->
+
+<input
+id="answer"
+inputmode="numeric"
+readonly
+>
 
 
-<button class="start" onclick="startVoice()">
-
-🌱开始学习
-
-</button>
-
-
-
-
-<div id="question" class="question"></div>
-
-
-
-
-<input id="answer" readonly>
-
-
-
+<!-- =========================
+     数字键盘
+========================= -->
 
 <div class="keys">
 
+<button
+class="key"
+onclick="add(1)">
+1
+</button>
 
-<button class="key" onclick="add(1)">1</button>
+<button
+class="key"
+onclick="add(2)">
+2
+</button>
 
-<button class="key" onclick="add(2)">2</button>
-
-<button class="key" onclick="add(3)">3</button>
-
-
-<button class="key" onclick="add(4)">4</button>
-
-<button class="key" onclick="add(5)">5</button>
-
-<button class="key" onclick="add(6)">6</button>
-
-
-<button class="key" onclick="add(7)">7</button>
-
-<button class="key" onclick="add(8)">8</button>
-
-<button class="key" onclick="add(9)">9</button>
+<button
+class="key"
+onclick="add(3)">
+3
+</button>
 
 
-<button class="key" onclick="add(0)">0</button>
+<button
+class="key"
+onclick="add(4)">
+4
+</button>
 
-<button class="key" onclick="delA()">⌫</button>
+<button
+class="key"
+onclick="add(5)">
+5
+</button>
 
+<button
+class="key"
+onclick="add(6)">
+6
+</button>
+
+
+<button
+class="key"
+onclick="add(7)">
+7
+</button>
+
+<button
+class="key"
+onclick="add(8)">
+8
+</button>
+
+<button
+class="key"
+onclick="add(9)">
+9
+</button>
+
+
+<button
+class="key"
+onclick="add(0)">
+0
+</button>
+
+<button
+class="key"
+onclick="delA()">
+⌫
+</button>
+
+<button
+class="key"
+onclick="clearA()">
+C
+</button>
 
 </div>
 
 
+<!-- =========================
+     操作按钮
+========================= -->
 
 <div class="actionBox">
 
-
-<button class="submit" onclick="check()">
-
-✅提交答案
-
-</button>
-
-
-<button class="restart" onclick="restart()">
-
+<button
+class="restart"
+onclick="restart()">
 🔄重新开始
-
 </button>
 
+<button
+class="submit"
+onclick="check()">
+✅提交答案
+</button>
 
 </div>
 
 
+<!-- 提示 -->
 
-<div id="msg" class="msg"></div>
+<div
+id="msg"
+class="msg">
+</div>
 
 
 </div>
 
 </div>
-
 
 
 <script>
+
+/* =========================
+   基础数据
+========================= */
 
 const nums=[
 "",
@@ -921,66 +807,36 @@ let done=0;
 
 let score=0;
 
-let fruit=0;
-
-
-let autoVoice=false;
-
 let audioCtx=null;
-
-
 
 
 const tree=
 document.getElementById("tree");
 
-
 const scene=
 document.getElementById("scene");
-
-
-const fruits=
-document.getElementById("fruits");
-
 
 const answer=
 document.getElementById("answer");
 
 
-
-
-
+/* =========================
+   中文数字
+========================= */
 
 function cnNum(n){
 
-
-if(n<=9){
-
+if(n<=9)
 return nums[n];
 
-}
-
-
-if(n===10){
-
+if(n===10)
 return "十";
 
-}
-
-
-if(n<20){
-
+if(n<20)
 return "十"+nums[n%10];
 
-}
-
-
-if(n%10===0){
-
+if(n%10===0)
 return nums[n/10]+"十";
-
-}
-
 
 return nums[Math.floor(n/10)]
 +"十"
@@ -989,306 +845,256 @@ return nums[Math.floor(n/10)]
 }
 
 
-
+/* =========================
+   口诀
+========================= */
 
 function kouText(a,b){
 
-
 let r=a*b;
 
-
-if(r<10){
-
-return nums[a]+nums[b]+"得"+nums[r];
-
-}
-
-
-return nums[a]+nums[b]+cnNum(r);
-
+return nums[a]
++
+nums[b]
++
+(r<10?"得":"")
++
+cnNum(r);
 
 }
 
 
+/* =========================
+   树木成长阶段
+========================= */
+
+function stage(){
+
+if(score<30)
+return 1;
+
+if(score<80)
+return 2;
+
+if(score<150)
+return 3;
+
+if(score<250)
+return 4;
+
+return 5;
+
+}
 
 
+/* =========================
+   页面刷新
+========================= */
 
 function render(){
 
-
 document.getElementById("chapter")
-.innerHTML=
-"第"+group+"组："+nums[group]+"的乘法村";
-
+.textContent=
+"第"
++
+group
++
+"组："
++
+nums[group]
++
+"的乘法";
 
 
 document.getElementById("kou")
-.innerHTML=
+.textContent=
 kouText(group,index);
 
 
-
 document.getElementById("question")
-.innerHTML=
-group+" × "+index+" = ?";
-
+.textContent=
+group
++
+" × "
++
+index
++
+" = ?";
 
 
 document.getElementById("progressText")
-.innerHTML=
-"第"+group+"组 "+done+"/9";
-
+.textContent=
+"本组进度："
++
+done
++
+"/9";
 
 
 document.getElementById("bar")
 .style.width=
-(done/9*100)+"%";
-
+(done/9*100)
++
+"%";
 
 
 document.getElementById("score")
-.innerHTML=
+.textContent=
 score;
 
 
-
-updateTree();
-
-
-}
-
-
-
-
-
-
-function updateTree(){
-
-
-tree.classList.remove(
-"seed",
-"small",
-"big",
-"fruit"
-);
-
-
-
-if(score<30){
-
-
-tree.classList.add("seed");
-
+tree.className=
+"tree stage"
++
+stage();
 
 }
 
 
-else if(score<80){
+/* =========================
+   答题音效
+========================= */
 
+function sound(ok=true){
 
-tree.classList.add("small");
+try{
 
-
-}
-
-
-else if(score<160){
-
-
-tree.classList.add("big");
-
-
-}
-
-
-else{
-
-
-tree.classList.add("fruit");
-
-
-}
-
-
-
-}
-
-
-
-
-
-function startVoice(){
-
-
-autoVoice=true;
-
-
-voice();
-
-
-}
-
-
-
-
-
-
-function voice(){
-
-
-let u=
-new SpeechSynthesisUtterance(
-kouText(group,index)
-);
-
-
-
-u.lang="zh-CN";
-
-u.rate=.8;
-
-
-speechSynthesis.cancel();
-
-
-speechSynthesis.speak(u);
-
-
-}
-
-
-
-
-
-
-
-function playSound(type){
-
-
-if(!audioCtx){
-
-audioCtx=
+audioCtx ??=
 new(
-window.AudioContext||
+window.AudioContext
+||
 window.webkitAudioContext
 )();
 
-}
 
-
-
-let osc=
+let o=
 audioCtx.createOscillator();
 
-
-let gain=
+let g=
 audioCtx.createGain();
 
 
-osc.connect(gain);
+o.connect(g);
 
-gain.connect(audioCtx.destination);
-
-
-
-if(type==="ok"){
-
-osc.frequency.value=900;
-
-}
-
-else if(type==="win"){
-
-osc.frequency.value=1300;
-
-}
-
-else{
-
-osc.frequency.value=300;
-
-}
-
-
-
-gain.gain.value=.08;
-
-
-osc.start();
-
-
-osc.stop(
-audioCtx.currentTime+.2
+g.connect(
+audioCtx.destination
 );
 
 
+o.frequency.value=
+ok?880:260;
+
+
+g.gain.value=.06;
+
+
+o.start();
+
+
+o.stop(
+audioCtx.currentTime+.12
+);
+
+}
+
+catch(e){}
+
 }
 
 
+/* =========================
+   浇水动画
+========================= */
 
+function water(){
 
+/* 树摇摆 */
 
-
-
-function growEffect(){
-
-
-tree.classList.remove("grow");
-
+tree.classList.remove("watered");
 
 void tree.offsetWidth;
 
-
-tree.classList.add("grow");
-
+tree.classList.add("watered");
 
 
-let water=
+/* 水滴 */
+
+let d=
 document.createElement("div");
 
+d.className=
+"waterdrop";
 
-water.className="water";
+d.textContent=
+"💧";
+
+d.style.left=
+(48+Math.random()*8)
++
+"%";
+
+scene.appendChild(d);
 
 
-water.innerHTML="💧";
+setTimeout(
+()=>d.remove(),
+900
+);
 
 
-scene.appendChild(water);
+/* 小苗反馈 */
+
+for(
+let i=0;
+i<2;
+i++
+){
+
+let f=
+document.createElement("div");
+
+f.className=
+"flower";
+
+f.textContent=
+"🌱";
+
+f.style.left=
+(35+Math.random()*30)
++
+"%";
+
+f.style.bottom=
+(30+Math.random()*25)
++
+"px";
+
+scene.appendChild(f);
 
 
+setTimeout(
+()=>f.remove(),
+900
+);
 
-setTimeout(()=>{
-
-water.remove();
-
-},1000);
-
+}
 
 }
 
 
-
-
-
-
+/* =========================
+   数字输入
+========================= */
 
 function add(n){
 
-
-if(answer.value.length<2){
-
+if(answer.value.length<2)
 answer.value+=n;
 
 }
 
 
-}
-
-
-
-
 function delA(){
-
 
 answer.value=
 answer.value.slice(0,-1);
@@ -1296,56 +1102,70 @@ answer.value.slice(0,-1);
 }
 
 
+function clearA(){
+
+answer.value="";
+
+}
 
 
-
-
+/* =========================
+   提交答案
+========================= */
 
 function check(){
 
+if(answer.value===""){
+
+document.getElementById("msg")
+.textContent=
+"请输入答案";
+
+return;
+
+}
 
 
 let user=
 Number(answer.value);
 
 
+/* 答对 */
 
-if(user===group*index){
-
+if(
+user===
+group*index
+){
 
 score+=10;
 
 done++;
 
 
-playSound("ok");
+sound(true);
 
-
-growEffect();
-
-
-
-document.getElementById("msg")
-.innerHTML=
-"🌱 小树喝到水啦";
-
-
-
-
-if(done>=9){
-
-
-playSound("win");
-
-
-celebrate();
-
+water();
 
 
 document.getElementById("msg")
-.innerHTML=
-"🎉 通关啦！";
+.textContent=
+"🌱 答对了，给小树浇水！";
 
+
+/* 一组完成 */
+
+if(done===9){
+
+sound(true);
+
+
+document.getElementById("msg")
+.textContent=
+"🎉 第"
++
+group
++
+"组完成！";
 
 
 group++;
@@ -1355,131 +1175,59 @@ done=0;
 index=1;
 
 
+/* 九组完成 */
+
 if(group>9){
 
 group=1;
 
-}
+document.getElementById("msg")
+.textContent=
+"🏆 九九乘法全部完成！重新开始一轮复习";
 
+}
 
 }
 
 else{
-
 
 index++;
 
 }
 
-
-
-
-
-if(autoVoice){
-
-
-setTimeout(()=>{
-
-voice();
-
-},500);
-
-
 }
 
 
-
-
-}
-
-
+/* 答错 */
 
 else{
 
-
-playSound("bad");
-
-
-
-if(fruit>0){
-
-fruit--;
-
-}
-
+sound(false);
 
 
 document.getElementById("msg")
-.innerHTML=
-"🍎果实掉落，再看看口诀";
-
+.textContent=
+"❌ 再想一想："
++
+kouText(group,index)
++
+"；本题不扣成长值";
 
 }
-
 
 
 answer.value="";
 
-
 render();
 
-
 }
 
 
-
-
-
-
-function celebrate(){
-
-
-for(let i=0;i<12;i++){
-
-
-let f=
-document.createElement("div");
-
-
-f.innerHTML="🌸";
-
-
-f.style.position="absolute";
-
-f.style.left=
-Math.random()*300+"px";
-
-
-f.style.top="0";
-
-
-f.style.animation=
-"drop 2s";
-
-
-scene.appendChild(f);
-
-
-
-setTimeout(()=>{
-
-f.remove();
-
-},2000);
-
-
-}
-
-
-}
-
-
-
-
-
+/* =========================
+   重新开始
+========================= */
 
 function restart(){
-
 
 group=1;
 
@@ -1489,22 +1237,24 @@ done=0;
 
 score=0;
 
-fruit=0;
+
+document.getElementById("msg")
+.textContent=
+"重新开始第1组";
 
 
 render();
 
-
 }
 
 
-
-
+/* =========================
+   初始化
+========================= */
 
 render();
 
 </script>
 
 </body>
-
 </html>

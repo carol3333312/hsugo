@@ -3,27 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>九九成长树 V4.0</title>
+
+<title>九九成长森林 V5.0</title>
 
 <style>
 
+/* =========================
+   基础
+========================= */
+
 *{
-box-sizing:border-box
+box-sizing:border-box;
 }
 
-html,body{
+html,
+body{
 margin:0;
 height:100%;
 overflow:hidden;
-font-family:"Microsoft YaHei",sans-serif
+font-family:"Microsoft YaHei",sans-serif;
 }
 
 body{
-background:linear-gradient(
-#8ed7ff 0%,
-#fff3b0 58%,
-#a9df91 100%
-)
+background:#10213b;
 }
 
 .app{
@@ -31,25 +33,31 @@ height:100dvh;
 max-width:430px;
 margin:auto;
 padding:8px;
-padding-bottom:env(safe-area-inset-bottom)
+padding-bottom:env(safe-area-inset-bottom);
 }
 
 .world{
 height:100%;
-background:rgba(255,255,255,.48);
+background:rgba(255,255,255,.14);
 border-radius:26px;
 padding:10px;
 overflow:hidden;
 display:flex;
 flex-direction:column;
-box-shadow:0 8px 30px #0001
+box-shadow:0 8px 30px #0005;
 }
+
+
+/* =========================
+   顶部
+========================= */
 
 .top{
 display:flex;
 justify-content:space-between;
 font-size:15px;
-font-weight:bold
+font-weight:bold;
+color:#17301d;
 }
 
 
@@ -58,217 +66,473 @@ font-weight:bold
 ========================= */
 
 .scene{
-height:210px;
+height:220px;
 position:relative;
-display:flex;
-justify-content:center;
-align-items:flex-end;
 overflow:hidden;
 border-radius:20px;
 
-background:linear-gradient(
-#9bddff 0%,
-#d8f3ff 63%,
-#9ad16f 64%,
-#78bd5c 100%
-)
+background:
+linear-gradient(
+#8bd8ff 0%,
+#dff5ff 62%,
+#9bd875 63%,
+#63ad4f 100%
+);
+
+transition:background 2s;
 }
+
+.sky{
+position:absolute;
+inset:0;
+overflow:hidden;
+}
+
+
+/* 太阳 */
 
 .sun{
 position:absolute;
+font-size:42px;
 right:18px;
-top:6px;
-font-size:34px;
-filter:drop-shadow(0 2px 3px #7775)
+top:7px;
+transition:all 2s;
 }
+
+
+/* 月亮 */
+
+.moon{
+position:absolute;
+font-size:42px;
+right:18px;
+top:7px;
+
+opacity:0;
+
+transform:translateY(20px);
+
+transition:all 2s;
+}
+
+
+/* =========================
+   星星
+========================= */
+
+.star{
+position:absolute;
+color:#fff;
+font-size:14px;
+opacity:0;
+transition:opacity 2s;
+}
+
+.star1{
+right:65px;
+top:25px;
+}
+
+.star2{
+right:102px;
+top:48px;
+}
+
+.star3{
+right:135px;
+top:27px;
+}
+
+
+/* =========================
+   云
+========================= */
 
 .cloud{
 position:absolute;
-font-size:34px;
-opacity:.75;
-animation:cloudMove 14s linear infinite
+font-size:31px;
+opacity:.72;
+
+animation:
+cloudMove 18s linear infinite;
 }
 
 .c1{
-left:-50px;
-top:28px
+left:-55px;
+top:28px;
 }
 
 .c2{
 left:45%;
-top:60px;
-animation-duration:19s
+top:65px;
+
+animation-duration:24s;
 }
+
+@keyframes cloudMove{
+
+to{
+transform:translateX(480px);
+}
+
+}
+
+
+/* =========================
+   草地
+========================= */
 
 .ground{
 position:absolute;
 bottom:0;
+
 width:100%;
-height:45px;
-background:#76b957;
-border-radius:50% 50% 0 0/30% 30% 0 0
+height:62px;
+
+background:#68ae4f;
+
+border-radius:
+50% 50% 0 0 /
+25% 25% 0 0;
 }
 
 
 /* =========================
-   成长树
+   森林
+========================= */
+
+.forest{
+position:absolute;
+
+left:0;
+right:0;
+bottom:22px;
+
+height:150px;
+
+z-index:2;
+}
+
+
+/* =========================
+   单棵树
 ========================= */
 
 .tree{
-width:185px;
-height:195px;
-position:relative;
-z-index:2;
-transform-origin:center bottom
-}
+position:absolute;
 
-.tree svg{
-width:100%;
-height:100%;
-overflow:visible
-}
+bottom:0;
 
-.tree .crown,
-.tree .trunk,
-.tree .branch,
-.tree .fruit{
-transition:all .8s ease
+width:72px;
+height:105px;
+
+transform-origin:center bottom;
+
+transition:
+transform 1s ease;
 }
 
 
-/* 五个成长阶段 */
+/* 9棵树的位置 */
 
-.tree.stage1{
-transform:scale(.43) translateY(92px)
+.t1{
+left:2%;
 }
 
-.tree.stage2{
-transform:scale(.62) translateY(55px)
+.t2{
+left:12%;
 }
 
-.tree.stage3{
-transform:scale(.80) translateY(27px)
+.t3{
+left:23%;
 }
 
-.tree.stage4{
-transform:scale(.96) translateY(7px)
+.t4{
+left:34%;
 }
 
-.tree.stage5{
-transform:scale(1) translateY(0)
+.t5{
+left:46%;
+}
+
+.t6{
+left:58%;
+}
+
+.t7{
+left:69%;
+}
+
+.t8{
+left:80%;
+}
+
+.t9{
+left:90%;
 }
 
 
-/* 浇水后的摇摆 */
+/* =========================
+   树木成长阶段
+========================= */
+
+.tree.seed{
+transform:
+scale(.15)
+translateY(65px);
+}
+
+.tree.s1{
+transform:
+scale(.28)
+translateY(35px);
+}
+
+.tree.s2{
+transform:
+scale(.42)
+translateY(20px);
+}
+
+.tree.s3{
+transform:
+scale(.57)
+translateY(8px);
+}
+
+.tree.s4{
+transform:
+scale(.72);
+}
+
+.tree.s5{
+transform:
+scale(.88);
+}
+
+.tree.forestTree{
+transform:
+scale(1);
+}
+
+
+/* =========================
+   叶子随风
+========================= */
+
+.leaves{
+transform-origin:center bottom;
+
+animation:
+leafWind 4s ease-in-out infinite;
+}
+
+@keyframes leafWind{
+
+50%{
+transform:
+rotate(2deg)
+translateX(1px);
+}
+
+}
+
+
+/* =========================
+   浇水后树木摇摆
+========================= */
 
 .tree.watered{
-animation:sway .85s ease
+animation:
+treeWater .8s ease;
 }
 
-@keyframes sway{
-
-0%,100%{
-transform:var(--base);
-transform-origin:center bottom
-}
+@keyframes treeWater{
 
 30%{
-transform:var(--base) rotate(-4deg)
+transform:
+var(--grow)
+rotate(-4deg);
 }
 
 65%{
-transform:var(--base) rotate(3deg)
-}
-
-}
-
-
-/* 保证摇摆时保留成长阶段 */
-
-.tree.stage1{
---base:scale(.43) translateY(92px)
-}
-
-.tree.stage2{
---base:scale(.62) translateY(55px)
-}
-
-.tree.stage3{
---base:scale(.80) translateY(27px)
-}
-
-.tree.stage4{
---base:scale(.96) translateY(7px)
-}
-
-.tree.stage5{
---base:scale(1) translateY(0)
-}
-
-
-/* 叶子轻微随风摆动 */
-
-.leaf{
-transform-origin:center bottom;
-animation:leafBreath 4s ease-in-out infinite
-}
-
-@keyframes leafBreath{
-
-50%{
-transform:translateX(2px) rotate(1.5deg)
+transform:
+var(--grow)
+rotate(3deg);
 }
 
 }
 
 
 /* =========================
-   浇水动画
+   水滴
 ========================= */
 
-.waterdrop{
+.wdrop{
 position:absolute;
-z-index:5;
+
+z-index:7;
+
 font-size:24px;
-top:35px;
-animation:waterFall .9s ease-in forwards
+
+top:28px;
+
+animation:
+drop .8s forwards;
 }
 
-@keyframes waterFall{
+@keyframes drop{
 
 to{
-transform:translateY(125px) rotate(15deg);
-opacity:0
+transform:
+translateY(120px);
+
+opacity:0;
 }
 
 }
 
 
 /* =========================
-   小树反馈动画
+   兔子
 ========================= */
 
-.flower{
+.rabbit{
 position:absolute;
-z-index:4;
-font-size:20px;
-animation:flowerPop .7s ease-out forwards
+
+z-index:6;
+
+bottom:37px;
+
+left:-45px;
+
+font-size:31px;
+
+display:none;
 }
 
-@keyframes flowerPop{
+.rabbit.run{
+display:block;
+
+animation:
+rabbitRun 3.8s linear forwards;
+}
+
+@keyframes rabbitRun{
 
 0%{
-transform:scale(.2);
-opacity:0
+left:-45px;
+transform:scaleX(1);
 }
 
-70%{
-transform:scale(1.2)
+48%{
+left:48%;
+transform:scaleX(1);
+}
+
+52%{
+left:52%;
+transform:scaleX(-1);
 }
 
 100%{
-transform:scale(1);
-opacity:1
+left:110%;
+transform:scaleX(-1);
+}
+
+}
+
+
+/* =========================
+   野狗
+========================= */
+
+.dog{
+position:absolute;
+
+z-index:6;
+
+bottom:35px;
+
+left:-55px;
+
+font-size:30px;
+
+display:none;
+}
+
+.dog.run{
+display:block;
+
+animation:
+dogRun 3.1s linear forwards;
+}
+
+@keyframes dogRun{
+
+0%{
+left:-55px;
+}
+
+55%{
+left:40%;
+}
+
+100%{
+left:110%;
+}
+
+}
+
+
+/* =========================
+   动物提示
+========================= */
+
+.msgAnimal{
+position:absolute;
+
+z-index:8;
+
+left:50%;
+top:82px;
+
+transform:
+translateX(-50%);
+
+font-size:12px;
+
+background:#ffffffbb;
+
+padding:4px 8px;
+
+border-radius:10px;
+
+opacity:0;
+}
+
+.msgAnimal.show{
+
+animation:
+pop .8s forwards;
+}
+
+@keyframes pop{
+
+20%{
+opacity:1;
+
+transform:
+translateX(-50%)
+translateY(-5px);
+}
+
+100%{
+opacity:0;
+
+transform:
+translateX(-50%)
+translateY(-18px);
 }
 
 }
@@ -280,28 +544,60 @@ opacity:1
 
 .score{
 text-align:center;
+
 margin-top:3px;
-font-size:14px
+
+font-size:14px;
 }
+
+
+/* =========================
+   进度条
+========================= */
 
 .progress{
 height:9px;
+
 background:#ffffffaa;
+
 border-radius:20px;
+
 overflow:hidden;
-margin:3px 0 2px
+
+margin:
+3px 0 2px;
 }
 
 .bar{
 height:100%;
+
 width:0;
+
 background:#43a047;
-transition:width .35s
+
+transition:
+width .35s;
 }
 
 .progressText{
 text-align:center;
-font-size:12px
+
+font-size:12px;
+}
+
+
+/* =========================
+   考试模式
+========================= */
+
+.examMode{
+text-align:center;
+
+font-size:11px;
+
+color:#666;
+
+margin-bottom:1px;
 }
 
 
@@ -311,40 +607,60 @@ font-size:12px
 
 .kou{
 font-size:25px;
-font-weight:bold;
-text-align:center;
-min-height:33px
-}
 
-.examTitle{
+font-weight:bold;
+
 text-align:center;
-font-size:12px;
-color:#666
+
+min-height:33px;
+
+color:#17301d;
 }
 
 
 /* =========================
-   考试题
+   题目
 ========================= */
 
 .question{
 font-size:35px;
+
 font-weight:bold;
+
 text-align:center;
+
 min-height:46px;
-margin-top:2px
+
+margin-top:2px;
+
+color:#13251a;
 }
+
+
+/* =========================
+   答案输入框
+========================= */
 
 input{
 display:block;
+
 width:125px;
+
 height:44px;
-margin:0 auto 4px;
+
+margin:
+0 auto 4px;
+
 font-size:27px;
+
 text-align:center;
+
 border-radius:12px;
-border:1px solid #aaa;
-background:#fff
+
+border:
+1px solid #aaa;
+
+background:#fff;
 }
 
 
@@ -354,24 +670,32 @@ background:#fff
 
 .keys{
 display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:5px
+
+grid-template-columns:
+repeat(3,1fr);
+
+gap:5px;
 }
 
 button{
 border:0;
+
 border-radius:22px;
+
 font-size:16px;
+
 height:37px;
-box-shadow:0 2px 4px #0001
+
+box-shadow:
+0 2px 4px #0002;
 }
 
 button:active{
-transform:scale(.95)
+transform:scale(.95);
 }
 
 .key{
-background:#fff
+background:#fff;
 }
 
 
@@ -381,32 +705,44 @@ background:#fff
 
 .actionBox{
 display:flex;
+
 gap:8px;
+
 margin-top:7px;
-align-items:stretch
+
+align-items:stretch;
 }
 
 
-/* 提交答案更大 */
+/* 重新开始 */
 
 .submit{
 flex:1.65;
+
 height:48px;
+
 font-size:18px;
+
 background:#43a047;
-color:white;
-font-weight:bold
+
+color:#fff;
+
+font-weight:bold;
 }
 
 
-/* 重新开始缩小 */
+/* 提交 */
 
 .restart{
 flex:.7;
+
 height:48px;
+
 font-size:14px;
+
 background:#fff;
-color:#666
+
+color:#666;
 }
 
 
@@ -416,16 +752,91 @@ color:#666
 
 .msg{
 height:19px;
+
 text-align:center;
+
 color:#388e3c;
-font-size:13px
+
+font-size:13px;
 }
 
-.examMode{
-font-size:11px;
-color:#777;
-text-align:center;
-margin-bottom:1px
+
+/* =========================
+   夜晚
+========================= */
+
+.night .scene{
+
+background:
+linear-gradient(
+#17294b 0%,
+#293c62 62%,
+#385b38 63%,
+#25482c 100%
+);
+}
+
+.night .ground{
+background:#31562f;
+}
+
+.night .sun{
+opacity:0;
+
+transform:
+translateY(25px);
+}
+
+.night .moon{
+opacity:1;
+
+transform:
+translateY(0);
+}
+
+.night .star{
+opacity:1;
+}
+
+.night .top,
+.night .kou,
+.night .question{
+color:#fff;
+}
+
+.night .examMode,
+.night .progressText{
+color:#ddd;
+}
+
+
+/* =========================
+   夕阳
+========================= */
+
+.dusk .scene{
+
+background:
+linear-gradient(
+#f28d6a 0%,
+#f6c17d 50%,
+#8d9f67 63%,
+#557642 100%
+);
+}
+
+.dusk .sun{
+top:66px;
+
+right:35px;
+}
+
+.dusk .cloud{
+opacity:.35;
+}
+
+.dusk .moon{
+opacity:0;
 }
 
 </style>
@@ -436,15 +847,20 @@ margin-bottom:1px
 
 <div class="app">
 
-<div class="world">
+<div
+class="world"
+id="world"
+>
 
 
-<!-- 顶部 -->
+<!-- =========================
+     顶部
+========================= -->
 
 <div class="top">
 
 <div>
-🌱 九九成长树
+🌱 九九成长森林
 </div>
 
 <div id="chapter"></div>
@@ -453,14 +869,51 @@ margin-bottom:1px
 
 
 <!-- =========================
-     成长场景
+     场景
 ========================= -->
 
-<div class="scene" id="scene">
+<div
+class="scene"
+id="scene"
+>
 
-<div class="sun">
+
+<div class="sky">
+
+
+<!-- 太阳 -->
+
+<div
+class="sun"
+id="sun"
+>
 ☀️
 </div>
+
+
+<!-- 月亮 -->
+
+<div class="moon">
+🌙
+</div>
+
+
+<!-- 星星 -->
+
+<div class="star star1">
+★
+</div>
+
+<div class="star star2">
+★
+</div>
+
+<div class="star star3">
+★
+</div>
+
+
+<!-- 云 -->
 
 <div class="cloud c1">
 ☁️
@@ -470,126 +923,49 @@ margin-bottom:1px
 ☁️
 </div>
 
-<div class="ground"></div>
-
-
-<!-- 树 -->
-
-<div class="tree stage1" id="tree">
-
-<svg viewBox="0 0 200 220">
-
-
-<!-- 树干 -->
-
-<path
-class="trunk"
-d="M100 210 Q91 155 99 105 Q100 85 99 62"
-stroke="#74461f"
-stroke-width="15"
-fill="none"
-stroke-linecap="round"
-/>
-
-
-<!-- 树枝 -->
-
-<path
-class="branch"
-d="M99 132 L55 91 M100 118 L145 77 M99 101 L79 62 M101 97 L122 54"
-stroke="#74461f"
-stroke-width="7"
-fill="none"
-stroke-linecap="round"
-/>
-
-
-<!-- 树冠 -->
-
-<g class="crown leaf">
-
-<circle
-cx="63"
-cy="82"
-r="40"
-fill="#3d9148"
-/>
-
-<circle
-cx="128"
-cy="74"
-r="47"
-fill="#51a958"
-/>
-
-<circle
-cx="99"
-cy="43"
-r="40"
-fill="#72bd68"
-/>
-
-<circle
-cx="102"
-cy="92"
-r="46"
-fill="#4da554"
-/>
-
-<circle
-cx="53"
-cy="119"
-r="28"
-fill="#368a42"
-/>
-
-<circle
-cx="145"
-cy="116"
-r="30"
-fill="#3d9348"
-/>
-
-</g>
-
-
-<!-- 果实 -->
-
-<g class="fruit">
-
-<circle
-cx="65"
-cy="86"
-r="7"
-fill="#e53935"
-/>
-
-<circle
-cx="134"
-cy="83"
-r="7"
-fill="#e53935"
-/>
-
-<circle
-cx="102"
-cy="49"
-r="7"
-fill="#e53935"
-/>
-
-<circle
-cx="145"
-cy="120"
-r="7"
-fill="#e53935"
-/>
-
-</g>
-
-</svg>
 
 </div>
+
+
+<!-- 森林 -->
+
+<div
+class="forest"
+id="forest">
+</div>
+
+
+<!-- 草地 -->
+
+<div class="ground">
+</div>
+
+
+<!-- 兔子 -->
+
+<div
+class="rabbit"
+id="rabbit">
+🐇
+</div>
+
+
+<!-- 野狗 -->
+
+<div
+class="dog"
+id="dog">
+🐕
+</div>
+
+
+<!-- 动物提示 -->
+
+<div
+class="msgAnimal"
+id="msgAnimal">
+</div>
+
 
 </div>
 
@@ -608,6 +984,10 @@ fill="#e53935"
 
 </div>
 
+
+<!-- =========================
+     本组进度
+========================= -->
 
 <div
 class="progressText"
@@ -636,7 +1016,9 @@ id="bar">
 </div>
 
 
-<!-- 口诀 -->
+<!-- =========================
+     口诀
+========================= -->
 
 <div
 class="kou"
@@ -644,7 +1026,9 @@ id="kou">
 </div>
 
 
-<!-- 题目 -->
+<!-- =========================
+     题目
+========================= -->
 
 <div
 class="question"
@@ -652,7 +1036,9 @@ id="question">
 </div>
 
 
-<!-- 答案 -->
+<!-- =========================
+     答案
+========================= -->
 
 <input
 id="answer"
@@ -669,76 +1055,88 @@ readonly
 
 <button
 class="key"
-onclick="add(1)">
+onclick="add(1)"
+>
 1
 </button>
 
 <button
 class="key"
-onclick="add(2)">
+onclick="add(2)"
+>
 2
 </button>
 
 <button
 class="key"
-onclick="add(3)">
+onclick="add(3)"
+>
 3
 </button>
 
 
 <button
 class="key"
-onclick="add(4)">
+onclick="add(4)"
+>
 4
 </button>
 
 <button
 class="key"
-onclick="add(5)">
+onclick="add(5)"
+>
 5
 </button>
 
 <button
 class="key"
-onclick="add(6)">
+onclick="add(6)"
+>
 6
 </button>
 
 
 <button
 class="key"
-onclick="add(7)">
+onclick="add(7)"
+>
 7
 </button>
 
 <button
 class="key"
-onclick="add(8)">
+onclick="add(8)"
+>
 8
 </button>
 
 <button
 class="key"
-onclick="add(9)">
+onclick="add(9)"
+>
 9
 </button>
 
 
 <button
 class="key"
-onclick="add(0)">
+onclick="add(0)"
+>
 0
 </button>
 
 <button
 class="key"
-onclick="delA()">
+onclick="delA()"
+>
 ⌫
 </button>
 
 <button
 class="key"
-onclick="clearA()">
+onclick="clearA()"
+>
 C
 </button>
 
@@ -753,20 +1151,24 @@ C
 
 <button
 class="restart"
-onclick="restart()">
+onclick="restart()"
+>
 🔄重新开始
 </button>
 
 <button
 class="submit"
-onclick="check()">
+onclick="check()"
+>
 ✅提交答案
 </button>
 
 </div>
 
 
-<!-- 提示 -->
+<!-- =========================
+     提示
+========================= -->
 
 <div
 id="msg"
@@ -782,7 +1184,7 @@ class="msg">
 <script>
 
 /* =========================
-   基础数据
+   九九乘法基础数据
 ========================= */
 
 const nums=[
@@ -809,15 +1211,123 @@ let score=0;
 
 let audioCtx=null;
 
+let locked=false;
 
-const tree=
-document.getElementById("tree");
+
+const world=
+document.getElementById("world");
 
 const scene=
 document.getElementById("scene");
 
+const forest=
+document.getElementById("forest");
+
 const answer=
 document.getElementById("answer");
+
+
+/* =========================
+   创建树
+========================= */
+
+function treeSVG(){
+
+return `
+
+<svg viewBox="0 0 100 145">
+
+<path
+d="M50 140 Q47 105 50 72"
+stroke="#71431f"
+stroke-width="9"
+fill="none"
+stroke-linecap="round"
+/>
+
+
+<path
+d="M50 100 L27 75
+M50 91 L73 66
+M50 78 L39 57
+M51 76 L62 51"
+stroke="#71431f"
+stroke-width="4"
+fill="none"
+stroke-linecap="round"
+/>
+
+
+<g class="leaves">
+
+<circle
+cx="30"
+cy="72"
+r="23"
+fill="#3b9145"
+/>
+
+<circle
+cx="67"
+cy="65"
+r="27"
+fill="#55aa59"
+/>
+
+<circle
+cx="49"
+cy="45"
+r="25"
+fill="#75c16c"
+/>
+
+<circle
+cx="51"
+cy="78"
+r="25"
+fill="#4da554"
+/>
+
+</g>
+
+</svg>
+
+`;
+
+}
+
+
+/* =========================
+   创建九棵树
+========================= */
+
+function makeForest(){
+
+forest.innerHTML="";
+
+
+for(
+let i=0;
+i<9;
+i++
+){
+
+let t=
+document.createElement("div");
+
+t.className=
+"tree seed t"
++
+(i+1);
+
+t.innerHTML=
+treeSVG();
+
+forest.appendChild(t);
+
+}
+
+}
 
 
 /* =========================
@@ -833,14 +1343,22 @@ if(n===10)
 return "十";
 
 if(n<20)
-return "十"+nums[n%10];
+return "十"
++
+nums[n%10];
 
 if(n%10===0)
-return nums[n/10]+"十";
+return nums[n/10]
++
+"十";
 
-return nums[Math.floor(n/10)]
-+"十"
-+nums[n%10];
+return nums[
+Math.floor(n/10)
+]
++
+"十"
++
+nums[n%10];
 
 }
 
@@ -851,13 +1369,20 @@ return nums[Math.floor(n/10)]
 
 function kouText(a,b){
 
-let r=a*b;
+let r=
+a*b;
 
 return nums[a]
 +
 nums[b]
 +
-(r<10?"得":"")
+(
+r<10
+?
+"得"
+:
+""
+)
 +
 cnNum(r);
 
@@ -865,35 +1390,144 @@ cnNum(r);
 
 
 /* =========================
-   树木成长阶段
+   时间阶段
 ========================= */
 
-function stage(){
+function timePhase(){
 
-if(score<30)
-return 1;
+let p=
+(group-1)*9
++
+done;
 
-if(score<80)
-return 2;
 
-if(score<150)
-return 3;
+/*
+  前18题：
+  白天
+*/
 
-if(score<250)
-return 4;
+if(
+p<18
+){
 
-return 5;
+world.classList.remove(
+"dusk",
+"night"
+);
+
+}
+
+
+/*
+  18～44题：
+  夕阳
+*/
+
+else if(
+p<45
+){
+
+world.classList.add(
+"dusk"
+);
+
+world.classList.remove(
+"night"
+);
+
+}
+
+
+/*
+  45题以后：
+  夜晚
+*/
+
+else{
+
+world.classList.add(
+"night"
+);
+
+world.classList.remove(
+"dusk"
+);
+
+}
 
 }
 
 
 /* =========================
-   页面刷新
+   森林成长
+========================= */
+
+function forestStage(){
+
+let completed=
+score/10;
+
+let trees=
+[
+...forest.children
+];
+
+
+trees.forEach(
+(t,i)=>{
+
+let growth=
+Math.max(
+0,
+Math.min(
+5,
+Math.floor(
+(completed-i)/2
+)
++
+1
+)
+);
+
+
+t.className=
+"tree t"
++
+(i+1)
++
+" "
++
+(
+[
+"seed",
+"s1",
+"s2",
+"s3",
+"s4",
+"s5"
+][growth]
+);
+
+
+t.style.setProperty(
+"--grow",
+getComputedStyle(t).transform
+);
+
+}
+);
+
+}
+
+
+/* =========================
+   刷新界面
 ========================= */
 
 function render(){
 
-document.getElementById("chapter")
+document
+.getElementById("chapter")
 .textContent=
 "第"
 +
@@ -906,12 +1540,17 @@ nums[group]
 "的乘法";
 
 
-document.getElementById("kou")
+document
+.getElementById("kou")
 .textContent=
-kouText(group,index);
+kouText(
+group,
+index
+);
 
 
-document.getElementById("question")
+document
+.getElementById("question")
 .textContent=
 group
 +
@@ -922,7 +1561,8 @@ index
 " = ?";
 
 
-document.getElementById("progressText")
+document
+.getElementById("progressText")
 .textContent=
 "本组进度："
 +
@@ -931,22 +1571,23 @@ done
 "/9";
 
 
-document.getElementById("bar")
+document
+.getElementById("bar")
 .style.width=
 (done/9*100)
 +
 "%";
 
 
-document.getElementById("score")
+document
+.getElementById("score")
 .textContent=
 score;
 
 
-tree.className=
-"tree stage"
-+
-stage();
+forestStage();
+
+timePhase();
 
 }
 
@@ -955,7 +1596,9 @@ stage();
    答题音效
 ========================= */
 
-function sound(ok=true){
+function sound(
+ok=true
+){
 
 try{
 
@@ -968,10 +1611,13 @@ window.webkitAudioContext
 
 
 let o=
-audioCtx.createOscillator();
+audioCtx
+.createOscillator();
+
 
 let g=
-audioCtx.createGain();
+audioCtx
+.createGain();
 
 
 o.connect(g);
@@ -982,17 +1628,24 @@ audioCtx.destination
 
 
 o.frequency.value=
-ok?880:260;
+ok
+?
+880
+:
+260;
 
 
-g.gain.value=.06;
+g.gain.value=
+.06;
 
 
 o.start();
 
 
 o.stop(
-audioCtx.currentTime+.12
+audioCtx.currentTime
++
+.12
 );
 
 }
@@ -1003,35 +1656,34 @@ catch(e){}
 
 
 /* =========================
-   浇水动画
+   浇水
 ========================= */
 
 function water(){
 
-/* 树摇摆 */
-
-tree.classList.remove("watered");
-
-void tree.offsetWidth;
-
-tree.classList.add("watered");
-
-
-/* 水滴 */
-
 let d=
-document.createElement("div");
+document.createElement(
+"div"
+);
+
 
 d.className=
-"waterdrop";
+"wdrop";
+
 
 d.textContent=
 "💧";
 
+
 d.style.left=
-(48+Math.random()*8)
+(
+48
++
+Math.random()*8
+)
 +
 "%";
+
 
 scene.appendChild(d);
 
@@ -1042,42 +1694,181 @@ setTimeout(
 );
 
 
-/* 小苗反馈 */
+/* 更新森林 */
 
-for(
-let i=0;
-i<2;
-i++
-){
-
-let f=
-document.createElement("div");
-
-f.className=
-"flower";
-
-f.textContent=
-"🌱";
-
-f.style.left=
-(35+Math.random()*30)
-+
-"%";
-
-f.style.bottom=
-(30+Math.random()*25)
-+
-"px";
-
-scene.appendChild(f);
+forestStage();
 
 
-setTimeout(
-()=>f.remove(),
-900
+/* 让一棵已经成长的树摇摆 */
+
+let grown=
+[
+...forest.children
+]
+.find(
+t=>
+!t.classList.contains(
+"seed"
+)
+);
+
+
+if(grown){
+
+grown.classList.remove(
+"watered"
+);
+
+
+void grown.offsetWidth;
+
+
+grown.classList.add(
+"watered"
 );
 
 }
+
+}
+
+
+/* =========================
+   动物事件
+========================= */
+
+function animalEvent(){
+
+let r=
+Math.random();
+
+
+/*
+  普通兔子
+*/
+
+if(
+r<.48
+){
+
+let rabbit=
+document.getElementById(
+"rabbit"
+);
+
+
+rabbit.classList.remove(
+"run"
+);
+
+
+void rabbit.offsetWidth;
+
+
+rabbit.classList.add(
+"run"
+);
+
+
+showAnimal(
+"🐇 小兔子跑过森林！"
+);
+
+}
+
+
+/*
+  兔子 + 野狗追逐
+*/
+
+else if(
+r<.62
+&&
+(
+group>=5
+||
+world.classList.contains(
+"night"
+)
+)
+){
+
+let rabbit=
+document.getElementById(
+"rabbit"
+);
+
+
+let dog=
+document.getElementById(
+"dog"
+);
+
+
+rabbit.classList.remove(
+"run"
+);
+
+dog.classList.remove(
+"run"
+);
+
+
+void rabbit.offsetWidth;
+
+void dog.offsetWidth;
+
+
+rabbit.classList.add(
+"run"
+);
+
+
+setTimeout(
+()=>dog.classList.add(
+"run"
+),
+450
+);
+
+
+showAnimal(
+"🐕 野狗追着小兔子跑过！"
+);
+
+}
+
+}
+
+
+/* =========================
+   动物提示
+========================= */
+
+function showAnimal(
+text
+){
+
+let m=
+document.getElementById(
+"msgAnimal"
+);
+
+
+m.textContent=
+text;
+
+
+m.classList.remove(
+"show"
+);
+
+
+void m.offsetWidth;
+
+
+m.classList.add(
+"show"
+);
 
 }
 
@@ -1088,23 +1879,41 @@ setTimeout(
 
 function add(n){
 
-if(answer.value.length<2)
+if(
+!locked
+&&
+answer.value.length<2
+){
+
 answer.value+=n;
+
+}
 
 }
 
 
 function delA(){
 
+if(!locked){
+
 answer.value=
-answer.value.slice(0,-1);
+answer.value.slice(
+0,
+-1
+);
+
+}
 
 }
 
 
 function clearA(){
 
+if(!locked){
+
 answer.value="";
+
+}
 
 }
 
@@ -1115,9 +1924,17 @@ answer.value="";
 
 function check(){
 
-if(answer.value===""){
+if(locked)
+return;
 
-document.getElementById("msg")
+
+if(
+answer.value===
+""
+){
+
+document
+.getElementById("msg")
 .textContent=
 "请输入答案";
 
@@ -1127,15 +1944,22 @@ return;
 
 
 let user=
-Number(answer.value);
+Number(
+answer.value
+);
 
 
-/* 答对 */
+/* =========================
+   答对
+========================= */
 
 if(
 user===
 group*index
 ){
+
+locked=true;
+
 
 score+=10;
 
@@ -1147,19 +1971,64 @@ sound(true);
 water();
 
 
-document.getElementById("msg")
+/*
+  答对以后停留，
+  强化口诀
+*/
+
+document
+.getElementById("kou")
 .textContent=
-"🌱 答对了，给小树浇水！";
+kouText(
+group,
+index
+);
+
+
+document
+.getElementById("question")
+.textContent=
+group
++
+" × "
++
+index
++
+" = "
++
+user;
+
+
+document
+.getElementById("msg")
+.textContent=
+"🌱 答对了！ "
++
+kouText(
+group,
+index
+);
+
+
+/*
+  0.9秒后进入下一题
+*/
+
+setTimeout(
+()=>{
 
 
 /* 一组完成 */
 
-if(done===9){
+if(
+done===9
+){
 
 sound(true);
 
 
-document.getElementById("msg")
+document
+.getElementById("msg")
 .textContent=
 "🎉 第"
 +
@@ -1177,17 +2046,24 @@ index=1;
 
 /* 九组完成 */
 
-if(group>9){
+if(
+group>9
+){
 
 group=1;
 
-document.getElementById("msg")
+
+document
+.getElementById("msg")
 .textContent=
-"🏆 九九乘法全部完成！重新开始一轮复习";
+"🏆 九九乘法全部完成！";
 
 }
 
 }
+
+
+/* 下一题 */
 
 else{
 
@@ -1195,30 +2071,62 @@ index++;
 
 }
 
+
+answer.value="";
+
+locked=false;
+
+
+render();
+
+
+/*
+  偶尔触发动物
+*/
+
+if(
+Math.random()<.24
+){
+
+animalEvent();
+
+}
+
+},
+900
+);
+
 }
 
 
-/* 答错 */
+/* =========================
+   答错
+========================= */
 
 else{
 
 sound(false);
 
 
-document.getElementById("msg")
+document
+.getElementById("msg")
 .textContent=
 "❌ 再想一想："
 +
-kouText(group,index)
+kouText(
+group,
+index
+)
 +
 "；本题不扣成长值";
-
-}
 
 
 answer.value="";
 
+
 render();
+
+}
 
 }
 
@@ -1237,11 +2145,16 @@ done=0;
 
 score=0;
 
+locked=false;
 
-document.getElementById("msg")
+
+document
+.getElementById("msg")
 .textContent=
 "重新开始第1组";
 
+
+makeForest();
 
 render();
 
@@ -1251,6 +2164,8 @@ render();
 /* =========================
    初始化
 ========================= */
+
+makeForest();
 
 render();
 
